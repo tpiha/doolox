@@ -17,12 +17,22 @@ Route::get('/', array(
     'uses' => 'DooloxController@dashboard',
 ));
 
-Route::get('login', array(
+Route::post('login', array(
     'as' => 'user.login',
     'uses' => 'UserController@login',
 ));
 
-Route::post('login', array(
+Route::get('login', array(
     'as' => 'user.login',
-    'uses' => 'UserController@login',
+    function() {
+        return View::make('login');
+    }
+));
+
+Route::get('logout', array(
+    'as' => 'user.logout',
+    function () {
+        Auth::logout();
+        return Redirect::route('user.login');
+    }
 ));

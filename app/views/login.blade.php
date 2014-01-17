@@ -13,17 +13,19 @@
     <div class="col-lg-6">
         {{ Form::open(array('url' => 'login', 'method' => 'post', 'role' => 'form')) }}
 
-            <div class="form-group">
+            <div class="form-group @if ($errors->has('email')) has-error @endif">
                 <label>Email</label>
-                <input class="form-control" />
+                <input class="form-control" name="email" />
+                @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 
-            <div class="form-group">
+            <div class="form-group @if ($errors->has('email')) has-error @endif">
                 <label>Password</label>
-                <input class="form-control" type="password" />
+                <input class="form-control" type="password" name="password" />
+                @if ($errors->has('password'))<p class="help-block">{{ $errors->first('password') }}</p>@endif
             </div>
 
-            <button type="submit" class="btn btn-default">Login</button>
+            <input type="submit" class="btn btn-default" value="login" />
 
         {{ Form::close() }}
     </div>

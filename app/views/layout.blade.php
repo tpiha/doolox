@@ -42,6 +42,9 @@
                         <li><a href="charts.html"><i class="fa fa-cog"></i> Settings</a></li>
                         <li><a href="charts.html"><i class="fa fa-user"></i> Account</a></li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right navbar-user">
+                        <li><a href="{{ route('user.logout') }}"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
                 </div><!-- /.navbar-collapse -->
             </nav>
 
@@ -54,8 +57,8 @@
         </div><!-- /#wrapper -->
 
         <!-- JavaScript -->
-        <script src="js/jquery-1.10.2.js"></script>
-        <script src="js/bootstrap.js"></script>
+        <script src="{{ url() }}/js/jquery-1.10.2.js"></script>
+        <script src="{{ url() }}/js/bootstrap.js"></script>
 
         <!-- Page Specific Plugins
         <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
