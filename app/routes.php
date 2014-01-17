@@ -11,7 +11,18 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', array(
+    'as' => 'doolox.dashboard',
+    'before' => 'auth',
+    'uses' => 'DooloxController@dashboard',
+));
+
+Route::get('login', array(
+    'as' => 'user.login',
+    'uses' => 'UserController@login',
+));
+
+Route::post('login', array(
+    'as' => 'user.login',
+    'uses' => 'UserController@login',
+));
