@@ -14,6 +14,7 @@ class Install extends Migration {
 
         Schema::create('users', function($table) {
             $table->increments('id');
+            $table->integer('parent_id')->unsigned()->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('superuser');

@@ -2,7 +2,8 @@
 
 class UserController extends BaseController {
 
-	public function login() {
+	public function login()
+    {
         $email = Input::get('email');
         $password = Input::get('password');
 
@@ -24,7 +25,8 @@ class UserController extends BaseController {
         return View::make('login')->withErrors($validator);
 	}
 
-    public function account() {
+    public function account()
+    {
         $user = Auth::user();
 
         $rules = array(
@@ -56,12 +58,22 @@ class UserController extends BaseController {
         return View::make('account')->with('user', $user)->withErrors($validator);
     }
 
-    public function manage_users() {
-        $users = User::all();
+    public function manage_users()
+    {
+        $user = Auth::user();
+        if ($user->superuser) {
+            $users = User::all();
+        }
+        else {
+            $users = User::where('parent_id', $user->id)->get();
+        }
         return View::make('manage_users')->with('users', $users);
     }
 
-    public function user_new() {
+    public function user_new()
+    {
+        $user = Auth::user();
+
         $rules = array(
             'email' => 'required|email|unique:users',
             'password1' => 'required|same:password2',
@@ -71,12 +83,61 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            $user = User::create(array('email' => Input::get('email'), 'password' => Hash::make(Input::get('password1')), 'superuser' => 0));
+            User::create(array('email' => Input::get('email'), 'password' => Hash::make(Input::get('password1')), 'superuser' => 0, 'parent_id' => $user->id));
             Session::flash('success', 'New user successfully added.');
-            return Redirect::route('doolox.dashboard');
+            return Redirect::route('user.manage_users');
         }
 
         return View::make('user_new')->withErrors($validator);
+    }
+
+    public function user_delete($id)
+    {
+        $user = User::findOrFail((int) $id);
+        $auth_user = Auth::user();
+
+        if ($auth_user->superuser || $auth_user->id == $user->parent_id) {
+            $wpusersites = WPUserSite::where('user_id', (int) $id)->get();
+            foreach ($wpusersites as $wpusersite) {
+                $wpusersite->delete();
+            }
+            $user->delete();
+            Session::flash('success', 'User successfully deleted.');
+            return Redirect::route('user.manage_users');
+        }
+        else {
+            Session::flash('error', 'You don\'t have permissions to manage this user.');
+            return Redirect::route('user.manage_users');
+        }
+    }
+
+    public function user_update($id)
+    {
+        $user = User::findOrFail((int) $id);
+        $auth_user = Auth::user();
+
+        if ($auth_user->superuser || $auth_user->id == $user->parent_id) {
+            $rules = array(
+                'email' => 'required|email',
+                'password1' => 'same:password2',
+                'password2' => 'same:password1',
+            );
+
+            $validator = Validator::make(Input::all(), $rules);
+
+            if ($validator->passes()) {
+                $user->fill(array('email' => Input::get('email'), 'password' => Input::get('password1')));
+                $user->save();
+                Session::flash('success', 'User successfully updated.');
+                return Redirect::route('user.manage_users');
+            }
+
+            return View::make('user_update')->with('user', $user)->withErrors($validator);
+        }
+        else {
+            Session::flash('error', 'You don\'t have permissions to manage this user.');
+            return Redirect::route('user.manage_users');
+        }
     }
 
 }

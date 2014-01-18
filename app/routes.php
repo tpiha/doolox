@@ -97,13 +97,13 @@ Route::post('wpsite-adduser/{id}', array(
 
 Route::get('users', array(
     'as' => 'user.manage_users',
-    'before' => 'auth',
+    'before' => 'user-management',
     'uses' => 'UserController@manage_users',
 ));
 
 Route::get('user-new', array(
     'as' => 'user.user_new',
-    'before' => 'auth',
+    'before' => 'user-management',
     function() {
         return View::make('user_new');
     }
@@ -111,6 +111,26 @@ Route::get('user-new', array(
 
 Route::post('user-new', array(
     'as' => 'user.user_new',
-    'before' => 'auth',
+    'before' => 'user-management',
     'uses' => 'UserController@user_new',
+));
+
+Route::get('user-delete/{id}', array(
+    'as' => 'user.user_delete',
+    'before' => 'user-management',
+    'uses' => 'UserController@user_delete',
+));
+
+Route::get('user-update/{id}', array(
+    'as' => 'user.user_update',
+    'before' => 'user-management',
+    function($id) {
+        return View::make('user_update')->with('user', User::findOrFail((int) $id));
+    }
+));
+
+Route::post('user-update/{id}', array(
+    'as' => 'user.user_update',
+    'before' => 'user-management',
+    'uses' => 'UserController@user_update',
 ));

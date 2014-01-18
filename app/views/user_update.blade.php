@@ -12,7 +12,7 @@
 </div>
 <div class="row">
     <div class="col-lg-6">
-        {{ Form::open(array('route' => 'user.user_new', 'role' => 'form')) }}
+        {{ Form::model($user, array('route' => array('user.user_update', $user->id), 'role' => 'form')) }}
 
             <p class="help-block">required fields are marked with *</p>
 
@@ -23,18 +23,18 @@
             </div>
 
             <div class="form-group @if ($errors->has('password1')) has-error @endif">
-                {{ Form::label('password1', 'Password *') }}
+                {{ Form::label('password1', 'Password') }}
                 {{ Form::password('password1', array('class' => 'form-control')) }}
                 @if ($errors->has('password1'))<p class="help-block">{{ $errors->first('password1') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password2')) has-error @endif">
-                {{ Form::label('password2', 'Password Repeat *') }}
+                {{ Form::label('password2', 'Password Repeat') }}
                 {{ Form::password('password2', array('class' => 'form-control')) }}
                 @if ($errors->has('password2'))<p class="help-block">{{ $errors->first('password2') }}</p>@endif
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Add User" />
+            <input type="submit" class="btn btn-primary" value="Update User" />&nbsp;&nbsp;or&nbsp;&nbsp;<a class="text-danger" href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this user?', function(result) { if (result) { window.location.href = '{{ route('user.user_delete', $user->id) }}'; }});">Delete</a>
 
         {{ Form::close() }}
     </div>

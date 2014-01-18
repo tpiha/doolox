@@ -53,6 +53,30 @@ Route::filter('owner', function()
     }
 });
 
+Route::filter('user-management', function()
+{
+    $user = Auth::user();
+    $allow_user_management = Config::get('doolox.allow_user_management');
+    $redirect = false;
+
+    if (!$user) {
+        $redirect = true;
+    }
+    else if (!$allow_user_management && !$user->superuser) {
+        $redirect = true;
+    }
+
+    if ($redirect) {
+            Session::flash('error', 'You don\'t have permissions to access this link.');
+            if (Auth::guest()) {
+                return Redirect::route('user.login');
+            }
+            else {
+                return Redirect::route('doolox.dashboard');
+            }
+        }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter

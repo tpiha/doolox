@@ -8,6 +8,18 @@
             <li><i class="fa fa-dashboard"></i> <a href="{{ url() }}">Dashboard</a></li>
             <li class="active"><i class="fa fa-users"></i> User Management</li>
         </ol>
+@if(Session::has('success'))
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('success') }}
+        </div>
+@endif
+@if(Session::has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('error') }}
+        </div>
+@endif
     </div>
 </div>
 <div class="row">
@@ -25,8 +37,8 @@
 @foreach($users as $user)
                     <tr>
                         <td>{{ $user->email }}</td>
-                        <td align="center"><a href="#"><i class="fa fa-pencil-square"></i></a></td>
-                        <td align="center"><a href="#"><i class="fa fa-minus-square"></i></a></td>
+                        <td align="center"><a href="{{ route('user.user_update', array('id' => $user->id)) }}"><i class="fa fa-pencil-square"></i></a></td>
+                        <td align="center">@if (Auth::user()->email != $user->email)<a href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this user?', function(result) { if (result) { window.location.href = '{{ route('user.user_delete', array('id' => $user->id)) }}'; }});"><i class="fa fa-minus-square"></i></a>@endif</td>
                     </tr>
 @endforeach
                 </tbody>
@@ -35,10 +47,4 @@
         <a href="{{ route('user.user_new') }}" class="btn btn-primary">Add New User</a>
     </div>
 </div>
-@stop
-
-@section('specific')
-<script type="text/javascript">
-    $('.dropdown-menu').show();
-</script>
 @stop

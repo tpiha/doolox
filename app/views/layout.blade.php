@@ -16,6 +16,12 @@
         <link rel="stylesheet" href="{{ url() }}/font-awesome/css/font-awesome.min.css">
         <!-- Page Specific CSS -->
         <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+        <!-- JavaScript -->
+        <script src="{{ url() }}/js/jquery-1.10.2.js"></script>
+        <script src="{{ url() }}/js/bootstrap.js"></script>
+        <script src="{{ url() }}/js/jquery-cookie/jquery.cookie.js"></script>
+        <script src="{{ url() }}/js/bootbox.min.js"></script>
+        <script src="{{ url() }}/js/doolox.js"></script>
     </head>
 
     <body>
@@ -43,16 +49,15 @@
                         </li>
 @if (Auth::check())
                         <li class="dropdown">
-                            <a href="javascript: void null;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-@if (Auth::user()->superuser)
+@if (Auth::user()->superuser || Config::get('doolox.allow_user_management'))
+                            <a href="javascript: void null;" onclick="toggle_dropdown('dropdown1');"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
+                            <ul class="dropdown-menu" id="dropdown1">
                                 @if(Route::currentRouteName() == 'user.manage_users' || Route::currentRouteName() == 'user.user_new')<li class="active">@else<li>@endif
                                     <a href="{{ route('user.manage_users') }}">Users</a>
                                 </li>
-@endif
-                                <li><a href="{{ url() }}">FTP Servers</a></li>
                             </ul>
                         </li>
+@endif
                         @if(Route::currentRouteName() == 'user.account')<li class="active">@else<li>@endif
                             <a href="{{ route('user.account') }}"><i class="fa fa-user"></i> Account</a>
                         </li>
@@ -71,10 +76,6 @@
             </div><!-- /#page-wrapper -->
 
         </div><!-- /#wrapper -->
-
-        <!-- JavaScript -->
-        <script src="{{ url() }}/js/jquery-1.10.2.js"></script>
-        <script src="{{ url() }}/js/bootstrap.js"></script>
 
         @yield('specific')
 

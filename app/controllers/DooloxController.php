@@ -2,13 +2,15 @@
 
 class DooloxController extends BaseController {
 
-	public function dashboard(){
+	public function dashboard()
+    {
         $user = Auth::user();
         $wpsites = $user->getWPSites()->get();
 		return View::make('dashboard')->with('wpsites', $wpsites);
 	}
 
-    public function wpsite($id){
+    public function wpsite($id)
+    {
         $validator = null;
         $wpsite = WPSite::findOrFail((int) $id);
 
@@ -29,7 +31,8 @@ class DooloxController extends BaseController {
         return View::make('wpsite')->with('wpsite', $wpsite)->withErrors($validator);
     }
 
-    public function wpsite_new() {
+    public function wpsite_new()
+    {
         $rules = array(
             'name' => 'required',
             'url' => 'required',
@@ -50,7 +53,8 @@ class DooloxController extends BaseController {
         return View::make('wpsite_new')->withErrors($validator);
     }
 
-    public function wpsite_delete($id) {
+    public function wpsite_delete($id)
+    {
         $wpsite = WPSite::findOrFail((int) $id);
         $wpusersites = WPUserSite::where('wpsite_id', (int) $id)->get();
         foreach ($wpusersites as $wpusersite) {
@@ -62,7 +66,8 @@ class DooloxController extends BaseController {
         return Redirect::route('doolox.dashboard');
     }
 
-    public function wpsite_rmuser($id, $user_id) {
+    public function wpsite_rmuser($id, $user_id)
+    {
         $wpsite = WPSite::find($id);
         $wpsite->getUsers()->detach($user_id);
         $wpsite->save();
@@ -70,7 +75,8 @@ class DooloxController extends BaseController {
         return Redirect::route('doolox.dashboard');
     }
 
-    public function wpsite_adduser($id) {
+    public function wpsite_adduser($id)
+    {
         if (Input::get('email')) {
             $user = User::where('email', Input::get('email'))->first();
             if ($user) {

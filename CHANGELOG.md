@@ -7,3 +7,8 @@ Doolox Changelog
 * Custom filter for checking ownership
 * Account management
 * User management on project
+* User management for superuser
+* User management security
+* User management settings
+* Fix dropdown menu - show when it needs to be shown
+* Bootbox dialogs

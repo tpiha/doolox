@@ -4,7 +4,6 @@ Doolox Todo List
 ### v1.0 ###
 
 * Login to WordPress on server side and pass cookie
-* User management for superuser
 
 ### v1.1 ###
 

@@ -36,7 +36,7 @@
                 {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Update Website" />&nbsp;&nbsp;or&nbsp;&nbsp;<a class="text-danger" href="{{ route('doolox.wpsite_delete', $wpsite->id) }}">Delete</a>
+            <input type="submit" class="btn btn-primary" value="Update Website" />&nbsp;&nbsp;or&nbsp;&nbsp;<a class="text-danger" href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this website?', function(result) { if (result) { window.location.href = '{{ route('doolox.wpsite_delete', $wpsite->id) }}'; }});">Delete</a>
 
         {{ Form::close() }}
     </div>
