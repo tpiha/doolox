@@ -40,7 +40,15 @@
                     <ul class="nav navbar-nav side-nav">
                         <li class="active"><a href="{{ url() }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
 @if (Auth::check())
-                        <li><a href="{{ url() }}"><i class="fa fa-cog"></i> Settings</a></li>
+                        <li class="dropdown">
+                            <a href="javascript: void null;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+@if (Auth::user()->superuser)
+                                <li><a href="{{ url() }}">Users</a></li>
+@endif
+                                <li><a href="{{ url() }}">FTP Servers</a></li>
+                            </ul>
+                        </li>
                         <li><a href="{{ url() }}"><i class="fa fa-user"></i> Account</a></li>
 @endif
                     </ul>

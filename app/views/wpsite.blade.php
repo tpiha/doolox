@@ -19,14 +19,16 @@
 
             <p class="help-block">required fields are marked with *</p>
 
-            <div class="form-group @if ($errors->has('email')) has-error @endif">
+            <div class="form-group @if ($errors->has('name')) has-error @endif">
                 {{ Form::label('name', 'Name *') }}
                 {{ Form::text('name', null, array('class' => 'form-control')) }}
+                @if ($errors->has('name'))<p class="help-block">{{ $errors->first('name') }}</p>@endif
             </div>
 
-            <div class="form-group @if ($errors->has('email')) has-error @endif">
+            <div class="form-group @if ($errors->has('url')) has-error @endif">
                 {{ Form::label('url', 'URL *') }}
                 {{ Form::text('url', null, array('class' => 'form-control')) }}
+                @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
@@ -34,7 +36,7 @@
                 {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Update Website" />
+            <input type="submit" class="btn btn-primary" value="Update Website" />&nbsp;&nbsp;or&nbsp;&nbsp;<a class="text-danger" href="{{ route('doolox.wpsite_delete', $wpsite->id) }}">Delete</a>
 
         {{ Form::close() }}
     </div>

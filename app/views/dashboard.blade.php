@@ -19,6 +19,7 @@
 
 <div class="row">
     <div class="col-lg-12">
+@if($wpsites->count())
         <h2>Websites</h2>
         <div class="table-responsive">
             <table class="table table-hover table-striped tablesorter">
@@ -47,6 +48,15 @@
             </table>
         </div>
         <a href="{{ route('doolox.wpsite_new') }}" class="btn btn-primary">Add New Website</a>
+@else
+<div class="bs-example">
+              <div class="jumbotron">
+                <h1>Welcome!</h1>
+                <p>Welcome to your Doolox dashboard! Use a button below to add your first WordPress website.</p>
+                <p><a class="btn btn-primary btn-lg" href="{{ route('doolox.wpsite_new') }}">Add New Website</a></p>
+              </div>
+            </div>
+@endif
     </div>
 </div>
 

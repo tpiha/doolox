@@ -22,7 +22,7 @@ class UserSeeder extends Seeder {
     {
         DB::table('users')->delete();
 
-        User::create(array('email' => 'tpiha@naklikaj.com', 'password' => Hash::make('admin')));
+        User::create(array('email' => 'tpiha@naklikaj.com', 'password' => Hash::make('admin'), 'superuser' => true));
     }
 
 }

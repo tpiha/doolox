@@ -44,6 +44,15 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('owner', function()
+{
+    $user = Auth::user();
+    $id = Route::input('id');
+    if (!$user->getWPSites()->get()->contains((int) $id)) {
+        return Redirect::route('doolox.dashboard');
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter

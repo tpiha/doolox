@@ -39,7 +39,7 @@ Route::get('logout', array(
 
 Route::get('wpsite/{id}', array(
     'as' => 'doolox.wpsite',
-    'before' => 'auth',
+    'before' => 'owner',
     'uses' => 'DooloxController@wpsite',
 ));
 
@@ -61,4 +61,10 @@ Route::post('wpsite-new', array(
     'as' => 'doolox.wpsite_new',
     'before' => 'auth',
     'uses' => 'DooloxController@wpsite_new',
+));
+
+Route::get('wpsite-delete/{id}', array(
+    'as' => 'doolox.wpsite_delete',
+    'before' => 'auth',
+    'uses' => 'DooloxController@wpsite_delete',
 ));
