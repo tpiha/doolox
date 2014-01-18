@@ -38,9 +38,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
-                        <li class="active"><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                        <li><a href="charts.html"><i class="fa fa-cog"></i> Settings</a></li>
-                        <li><a href="charts.html"><i class="fa fa-user"></i> Account</a></li>
+                        <li class="active"><a href="./"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                        <li><a href="./"><i class="fa fa-cog"></i> Settings</a></li>
+                        <li><a href="./"><i class="fa fa-user"></i> Account</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right navbar-user">
                         <li><a href="{{ route('user.logout') }}"><i class="fa fa-power-off"></i> Log Out</a></li>
@@ -60,12 +60,7 @@
         <script src="{{ url() }}/js/jquery-1.10.2.js"></script>
         <script src="{{ url() }}/js/bootstrap.js"></script>
 
-        <!-- Page Specific Plugins
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
-        <script src="js/morris/chart-data-morris.js"></script>
-        <script src="js/tablesorter/jquery.tablesorter.js"></script>
-        <script src="js/tablesorter/tables.js"></script> -->
+        @yield('specific')
 
     </body>
 </html>

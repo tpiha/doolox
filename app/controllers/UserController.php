@@ -13,8 +13,13 @@ class UserController extends BaseController {
         );
 
         $validator = Validator::make(Input::all(), $rules);
-        if ($validator->passes() && Auth::attempt(array('email' => $email, 'password' => $password), true)) {
-            return Redirect::intended();
+        if ($validator->passes()) {
+            if (Auth::attempt(array('email' => $email, 'password' => $password), true)) {
+                return Redirect::intended();
+            }
+            else {
+                Session::flash('error', 'Login failed. Check yout email and password.');
+            }
         }
 
         return View::make('login')->withErrors($validator);

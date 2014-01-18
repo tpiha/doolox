@@ -49,4 +49,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->email;
 	}
 
+    /**
+     * Get all owned WPSites
+     *
+     * @return array
+     */
+    public function getWPSites()
+    {
+        return $this->belongsToMany('WPSite', 'user_wpsite', 'user_id', 'wpsite_id');
+    }
+
 }

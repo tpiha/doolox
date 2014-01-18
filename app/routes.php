@@ -36,3 +36,9 @@ Route::get('logout', array(
         return Redirect::route('user.login');
     }
 ));
+
+Route::get('wplogin', array(
+    'as' => 'doolox.wplogin',
+    'before' => 'auth',
+    'uses' => 'DooloxController@wplogin',
+));
