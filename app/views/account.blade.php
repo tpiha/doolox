@@ -1,0 +1,41 @@
+@extends('layout')
+
+@section('content')
+<div class="row">
+    <div class="col-lg-12">
+        <h1>Doolox Accout <small>Manage Your Account Data</small></h1>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-dashboard"></i> <a href="{{ url() }}">Dashboard</a></li>
+            <li class="active"><i class="fa fa-edit"></i> Update Account</li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        {{ Form::model($user, array('route' => 'user.account', 'role' => 'form')) }}
+
+            <p class="help-block">required fields are marked with *</p>
+
+            <div class="form-group @if ($errors->has('email')) has-error @endif">
+                {{ Form::label('email', 'Email *') }}
+                {{ Form::text('email', null, array('class' => 'form-control')) }}
+                @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
+            </div>
+
+            <div class="form-group @if(Session::has('error')) has-error @endif">
+                <label>Password</label>
+                <input class="form-control" type="password" name="password1" tabindex="2" />
+            </div>
+
+            <div class="form-group @if(Session::has('error')) has-error @endif">
+                <label>Password Repeat</label>
+                <input class="form-control" type="password" name="password2" tabindex="3" />
+                @if(Session::has('error'))<p class="help-block">{{ Session::get('error') }}</p>@endif
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Update Account" />
+
+        {{ Form::close() }}
+    </div>
+</div>
+@stop

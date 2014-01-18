@@ -3,12 +3,10 @@ Doolox Todo List
 
 ### v1.0 ###
 
-* Account management
-* User management (superuser)
+* User management (superuser, on project)
 
 ### v1.1 ###
 
-* Ask before deleting a website
 * Installation wizard
 * Tools (Install New WordPress website on FTP server)
 * Ftp servers management

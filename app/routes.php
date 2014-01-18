@@ -68,3 +68,17 @@ Route::get('wpsite-delete/{id}', array(
     'before' => 'auth',
     'uses' => 'DooloxController@wpsite_delete',
 ));
+
+Route::get('account', array(
+    'as' => 'user.account',
+    'before' => 'auth',
+    function() {
+        return View::make('account')->with('user', Auth::user());
+    }
+));
+
+Route::post('account', array(
+    'as' => 'user.account',
+    'before' => 'auth',
+    'uses' => 'UserController@account',
+));

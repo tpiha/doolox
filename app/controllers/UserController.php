@@ -25,4 +25,37 @@ class UserController extends BaseController {
         return View::make('login')->withErrors($validator);
 	}
 
+    public function account()
+    {
+        $user = Auth::user();
+
+        $rules = array(
+            'email' => 'required',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->passes()) {
+            $user = Auth::user();
+
+            if (Input::get('password1') != Input::get('password2')) {
+                Session::flash('error', 'Passwords don\'t match.');
+            }
+            else {
+                if ($user->email != Input::get('email')) {
+                    $user->email = Input::get('email');
+                    $user->save();
+                }
+
+                if (strlen(Input::get('password1'))) {
+                    $user->password = Hash::make(Input::get('password1'));
+                    $user->save();
+                }
+
+                Session::flash('success', 'Account successfully updated.');
+                return Redirect::route('doolox.dashboard');
+            }
+        }
+
+        return View::make('account')->with('user', $user)->withErrors($validator);
+    }
+
 }
