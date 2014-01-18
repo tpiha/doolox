@@ -24,4 +24,14 @@ class WPSite extends Eloquent {
      */
     public $timestamps = false;
 
+    /**
+     * Get all owners
+     *
+     * @return array
+     */
+    public function getUsers()
+    {
+        return $this->belongsToMany('User', 'user_wpsite', 'wpsite_id', 'user_id');
+    }
+
 }

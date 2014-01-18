@@ -82,3 +82,15 @@ Route::post('account', array(
     'before' => 'auth',
     'uses' => 'UserController@account',
 ));
+
+Route::get('wpsite-rmuser/{id}/{user_id}', array(
+    'as' => 'doolox.wpsite_rmuser',
+    'before' => 'owner',
+    'uses' => 'DooloxController@wpsite_rmuser',
+));
+
+Route::post('wpsite-adduser/{id}', array(
+    'as' => 'doolox.wpsite_adduser',
+    'before' => 'owner',
+    'uses' => 'DooloxController@wpsite_adduser',
+));

@@ -22,8 +22,8 @@ class Install extends Migration {
 
         Schema::create('wpsites', function($table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('url')->unique();
+            $table->string('name');
+            $table->string('url');
             $table->string('username');
             $table->string('password');
             $table->string('admin_url')->nullable();

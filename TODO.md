@@ -3,6 +3,7 @@ Doolox Todo List
 
 ### v1.0 ###
 
+* Login to WordPress on server side and pass cookie
 * User management (superuser, on project)
 
 ### v1.1 ###

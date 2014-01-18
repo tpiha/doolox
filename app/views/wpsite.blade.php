@@ -40,6 +40,38 @@
 
         {{ Form::close() }}
     </div>
+
+    <div class="col-lg-6">
+        <h4>Users</h4>
+        <div class="well">
+            {{ Form::open(array('route' => array('doolox.wpsite_adduser', $wpsite->id), 'method' => 'post', 'role' => 'form')) }}
+            <div class="form-group @if(Session::has('error')) has-error @endif">
+                {{ Form::label('email', 'User Email *') }}
+                {{ Form::text('email', null, array('class' => 'form-control')) }}
+                @if(Session::has('error'))<p class="help-block">{{ Session::get('error') }}</p>@endif
+            </div>
+            <input type="hidden" name="id" value="{{ $wpsite->id }}" />
+            <input type="submit" class="btn btn-primary" value="Add User" />
+            {{ Form::close() }}
+            <table class="table table-hover tablesorter">
+                <thead>
+                    <tr>
+                        <th class="header">User</th>
+                        <th class="header" style="text-align: center;">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+@foreach($wpsite->getUsers as $user)
+                    <tr>
+                        <td>{{ $user->email }}</td>
+                        <td align="center">@if(Auth::user()->email != $user->email)<a href="{{ route('doolox.wpsite_rmuser', array('id' => $wpsite->id,'user_id' => $user->id)) }}"><i class="fa fa-minus-square"></i></a>@endif</td>
+                    </tr>
+@endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 @stop
