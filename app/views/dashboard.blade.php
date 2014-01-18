@@ -7,6 +7,12 @@
         <ol class="breadcrumb">
             <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
         </ol>
+@if(Session::has('success'))
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('success') }}
+        </div>
+@endif
     </div>
 </div><!-- /.row -->
 
@@ -32,7 +38,7 @@
                             {{ Form::open(array('url' => $wpsite->url . 'wp-login.php', 'method' => 'post', 'id' => 'login-form-' . (string) $wpsite->id, 'target' => 'blank')) }}
                                 <input type="hidden" name="log" value="{{ $wpsite->username }}" />
                                 <input type="hidden" name="pwd" value="{{ $wpsite->password }}" />
-                                <a href="javascript: void null;" onclick="$('#login-form-{{ $wpsite->id }}').submit();">Login</a>
+                                <a href="javascript: void null;" onclick="$('#login-form-{{ $wpsite->id }}').submit();" class="btn btn-primary btn-xs">Login</a>
                             {{ Form::close() }}
                         </td>
                     </tr>
@@ -40,7 +46,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="/" class="btn btn-primary">Add New Website</a>
+        <a href="{{ route('doolox.wpsite_new') }}" class="btn btn-primary">Add New Website</a>
     </div>
 </div>
 

@@ -9,4 +9,19 @@ class WPSite extends Eloquent {
 	 */
 	protected $table = 'wpsites';
 
+    /**
+     * Allow mass assignment without utilizing the fillable array
+     *
+     * @var boolean
+     */
+    public static $unguarded = true;
+
+
+    /**
+     * Remove updated_at
+     *
+     * @var boolean
+     */
+    public $timestamps = false;
+
 }

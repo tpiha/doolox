@@ -31,7 +31,7 @@
                 @if ($errors->has('password'))<p class="help-block">{{ $errors->first('password') }}</p>@endif
             </div>
 
-            <input type="submit" class="btn btn-default" value="login" />
+            <input type="submit" class="btn btn-primary" value="Login" />
 
         {{ Form::close() }}
     </div>

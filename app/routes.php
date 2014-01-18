@@ -42,3 +42,23 @@ Route::get('wpsite/{id}', array(
     'before' => 'auth',
     'uses' => 'DooloxController@wpsite',
 ));
+
+Route::post('wpsite/{id}', array(
+    'as' => 'doolox.wpsite',
+    'before' => 'auth',
+    'uses' => 'DooloxController@wpsite',
+));
+
+Route::get('wpsite-new', array(
+    'as' => 'doolox.wpsite_new',
+    'before' => 'auth',
+    function () {
+        return View::make('wpsite_new');
+    }
+));
+
+Route::post('wpsite-new', array(
+    'as' => 'doolox.wpsite_new',
+    'before' => 'auth',
+    'uses' => 'DooloxController@wpsite_new',
+));

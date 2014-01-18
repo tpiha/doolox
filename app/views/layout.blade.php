@@ -32,15 +32,17 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="./">Doolox</a>
+                    <a class="navbar-brand" href="{{ url() }}"><img src="{{ url('images/doolox-logo.png') }}" alt="" /> <div>Doolox</div></a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
                         <li class="active"><a href="{{ url() }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                        <li><a href="./"><i class="fa fa-cog"></i> Settings</a></li>
-                        <li><a href="./"><i class="fa fa-user"></i> Account</a></li>
+@if (Auth::check())
+                        <li><a href="{{ url() }}"><i class="fa fa-cog"></i> Settings</a></li>
+                        <li><a href="{{ url() }}"><i class="fa fa-user"></i> Account</a></li>
+@endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right navbar-user">
                         <li><a href="{{ route('user.logout') }}"><i class="fa fa-power-off"></i> Log Out</a></li>

@@ -5,7 +5,8 @@
     <div class="col-lg-12">
         <h1>Update <small>Update Your WordPress Website</small></h1>
         <ol class="breadcrumb">
-            <li class="active"><i class="fa fa-dashboard"></i> Update Website</li>
+            <li><i class="fa fa-dashboard"></i> <a href="{{ url() }}">Dashboard</a></li>
+            <li class="active"><i class="fa fa-edit"></i> Update Website</li>
         </ol>
     </div>
 </div><!-- /.row -->
@@ -16,18 +17,20 @@
     <div class="col-lg-6">
         {{ Form::model($wpsite, array('route' => array('doolox.wpsite', $wpsite->id), 'role' => 'form')) }}
 
+            <p class="help-block">required fields are marked with *</p>
+
             <div class="form-group @if ($errors->has('email')) has-error @endif">
-                {{ Form::label('name', 'Website Name') }}
+                {{ Form::label('name', 'Name *') }}
                 {{ Form::text('name', null, array('class' => 'form-control')) }}
             </div>
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
-                {{ Form::label('url', 'Website URL') }}
+                {{ Form::label('url', 'URL *') }}
                 {{ Form::text('url', null, array('class' => 'form-control')) }}
             </div>
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
-                {{ Form::label('admin_url', 'Website Admin URL') }}
+                {{ Form::label('admin_url', 'Admin URL') }}
                 {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
             </div>
 
