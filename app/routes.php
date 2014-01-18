@@ -37,8 +37,8 @@ Route::get('logout', array(
     }
 ));
 
-Route::get('wplogin', array(
-    'as' => 'doolox.wplogin',
+Route::get('wpsite/{id}', array(
+    'as' => 'doolox.wpsite',
     'before' => 'auth',
-    'uses' => 'DooloxController@wplogin',
+    'uses' => 'DooloxController@wpsite',
 ));

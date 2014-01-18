@@ -26,7 +26,7 @@
                 <tbody>
 @foreach($wpsites as $wpsite)
                     <tr>
-                        <td>{{ $wpsite->name }}</td>
+                        <td><a href="{{ url('wpsite', array('id' => $wpsite->id)) }}">{{ $wpsite->name }}</a></td>
                         <td>{{ str_replace('http://', '', str_replace('https://', '', $wpsite->url)) }}</td>
                         <td>
                             {{ Form::open(array('url' => $wpsite->url . 'wp-login.php', 'method' => 'post', 'id' => 'login-form-' . (string) $wpsite->id, 'target' => 'blank')) }}

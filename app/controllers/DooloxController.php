@@ -9,11 +9,10 @@ class DooloxController extends BaseController {
 		return View::make('dashboard')->with('wpsites', $wpsites);
 	}
 
-    public function wplogin()
+    public function wpsite($id)
     {
-        $encrypted = Crypt::encrypt('moj test');
-        $decrypted = Crypt::decrypt($encrypted);
-        die($decrypted);
+        $wpsite = WPSite::findOrFail((int) $id);
+        return View::make('wpsite')->with('wpsite', $wpsite);
     }
 
 }
