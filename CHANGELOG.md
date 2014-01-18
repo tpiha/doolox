@@ -6,3 +6,4 @@ Doolox Changelog
 * First version
 * Custom filter for checking ownership
 * Account management
+* User management on project

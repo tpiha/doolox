@@ -2,8 +2,7 @@
 
 class UserController extends BaseController {
 
-	public function login()
-	{
+	public function login() {
         $email = Input::get('email');
         $password = Input::get('password');
 
@@ -25,8 +24,7 @@ class UserController extends BaseController {
         return View::make('login')->withErrors($validator);
 	}
 
-    public function account()
-    {
+    public function account() {
         $user = Auth::user();
 
         $rules = array(
@@ -56,6 +54,29 @@ class UserController extends BaseController {
         }
 
         return View::make('account')->with('user', $user)->withErrors($validator);
+    }
+
+    public function manage_users() {
+        $users = User::all();
+        return View::make('manage_users')->with('users', $users);
+    }
+
+    public function user_new() {
+        $rules = array(
+            'email' => 'required|email|unique:users',
+            'password1' => 'required|same:password2',
+            'password2' => 'required|same:password1',
+        );
+
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->passes()) {
+            $user = User::create(array('email' => Input::get('email'), 'password' => Hash::make(Input::get('password1')), 'superuser' => 0));
+            Session::flash('success', 'New user successfully added.');
+            return Redirect::route('doolox.dashboard');
+        }
+
+        return View::make('user_new')->withErrors($validator);
     }
 
 }

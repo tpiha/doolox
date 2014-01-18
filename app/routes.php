@@ -94,3 +94,23 @@ Route::post('wpsite-adduser/{id}', array(
     'before' => 'owner',
     'uses' => 'DooloxController@wpsite_adduser',
 ));
+
+Route::get('users', array(
+    'as' => 'user.manage_users',
+    'before' => 'auth',
+    'uses' => 'UserController@manage_users',
+));
+
+Route::get('user-new', array(
+    'as' => 'user.user_new',
+    'before' => 'auth',
+    function() {
+        return View::make('user_new');
+    }
+));
+
+Route::post('user-new', array(
+    'as' => 'user.user_new',
+    'before' => 'auth',
+    'uses' => 'UserController@user_new',
+));

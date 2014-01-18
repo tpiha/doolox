@@ -103,7 +103,7 @@ table.tablesorter thead tr th:hover {
 	left: 225px;
 	width: 225px;
 	position: fixed;
-	top: 50px;
+	top: 51px;
 	height: 100%;
 	border-radius: 0;
 	border: none;
@@ -128,6 +128,11 @@ table.tablesorter thead tr th:hover {
   .side-nav>li.dropdown>ul.dropdown-menu>li>a {
 	color: #999999;
 	padding: 15px 15px 15px 25px;
+  }
+
+  .side-nav>li.dropdown>ul.dropdown-menu>li.active>a {
+    color: #ffffff;
+    background-color: #080808;
   }
 
   .side-nav>li.dropdown>ul.dropdown-menu>li>a:hover,
@@ -166,3 +171,5 @@ table.tablesorter thead tr th:hover {
 .navbar-brand { padding: 9px 15px; }
 .navbar-brand img { width: 32px; float: left; }
 .navbar-brand div { float: left; font-size: 23px; padding: 7px 0 0 10px; font-weight: bold; }
+
+.navbar-nav > li > a { padding-top: 16px; padding-bottom: 14px; }

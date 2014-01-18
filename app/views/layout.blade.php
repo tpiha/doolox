@@ -46,7 +46,9 @@
                             <a href="javascript: void null;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
                             <ul class="dropdown-menu">
 @if (Auth::user()->superuser)
-                                <li><a href="{{ url() }}">Users</a></li>
+                                @if(Route::currentRouteName() == 'user.manage_users' || Route::currentRouteName() == 'user.user_new')<li class="active">@else<li>@endif
+                                    <a href="{{ route('user.manage_users') }}">Users</a>
+                                </li>
 @endif
                                 <li><a href="{{ url() }}">FTP Servers</a></li>
                             </ul>
