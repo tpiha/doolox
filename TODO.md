@@ -3,13 +3,17 @@ Doolox Todo List
 
 ### v1.1 ###
 
+* Option to remember logged in user
+* Registration
+* Self hosted WordPress installations (LaraHost integration)
+
+### v1.2 ###
+
 * Installation wizard
 * Tools (Install New WordPress website on FTP server)
 * Ftp servers management
-* Option to remember logged in user
-* Registration
 * Recovering forgotten password
 * Monitoring
 * Backup
 * Depolyment (Synkee integration)
-* Self hosted WordPress installations (LaraHost integration)
+* Domain renewal reminder
