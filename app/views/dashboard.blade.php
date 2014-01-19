@@ -42,11 +42,10 @@
                         <td><a href="{{ url('wpsite', array('id' => $wpsite->id)) }}">{{ $wpsite->name }}</a></td>
                         <td>{{ str_replace('http://', '', str_replace('https://', '', $wpsite->url)) }}</td>
                         <td>
-                            {{ Form::open(array('url' => $wpsite->url . 'wp-login.php', 'method' => 'post', 'id' => 'login-form-' . (string) $wpsite->id, 'target' => 'blank')) }}
-                                <input type="hidden" name="log" value="{{ $wpsite->username }}" />
-                                <input type="hidden" name="pwd" value="{{ $wpsite->password }}" />
-                                <a href="javascript: void null;" onclick="$('#login-form-{{ $wpsite->id }}').submit();" class="btn btn-primary btn-xs">Login</a>
-                            {{ Form::close() }}
+                                <input type="hidden" value="{{ $wpsite->url }}wp-login.php" id="url-{{ $wpsite->id }}" />
+                                <input type="hidden" value="{{ $wpsite->username }}" id="username-{{ $wpsite->id }}" />
+                                <input type="hidden" value="{{ $wpsite->password }}" id="password-{{ $wpsite->id }}" />
+                                <a href="javascript: void null;" onclick="wplogin({{ $wpsite->id }});" class="btn btn-primary btn-xs">Login</a>
                         </td>
                     </tr>
 @endforeach
@@ -65,5 +64,8 @@
 @endif
     </div>
 </div>
-
+<form method="POST" action="" id="wploginform" target="blank">
+    <input type="hidden" name="log" value="" id="log" />
+    <input type="hidden" name="pwd" value="" id="pwd" />
+</form>
 @stop

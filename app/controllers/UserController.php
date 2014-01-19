@@ -15,7 +15,10 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
             if (Auth::attempt(array('email' => $email, 'password' => $password), true)) {
-                return Redirect::intended();
+                $user = Auth::user();
+                $user->key = DooloxController::generate_key();
+                $user->save();
+                return Redirect::intended()->with('key', $user->key);
             }
             else {
                 Session::flash('error', 'Login failed. Check yout email and password.');

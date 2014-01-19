@@ -1,10 +1,6 @@
 Doolox Todo List
 ================
 
-### v1.0 ###
-
-* Login to WordPress on server side and pass cookie
-
 ### v1.1 ###
 
 * Installation wizard

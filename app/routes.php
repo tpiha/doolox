@@ -134,3 +134,15 @@ Route::post('user-update/{id}', array(
     'before' => 'user-management',
     'uses' => 'UserController@user_update',
 ));
+
+Route::get('wplogin', array(
+    'as' => 'doolox.wplogin',
+    'before' => 'auth',
+    'uses' => 'DooloxController@wplogin',
+));
+
+Route::get('getk', array(
+    'as' => 'doolox.get_key',
+    'before' => 'auth',
+    'uses' => 'DooloxController@get_key',
+));

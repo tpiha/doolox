@@ -6,6 +6,11 @@ class DooloxController extends BaseController {
     {
         $user = Auth::user();
         $wpsites = $user->getWPSites()->get();
+        // $wpsites = array();
+        foreach ($wpsites as $wpsite) {
+            $wpsite->password = self::rc4($user->key, $wpsite->password);
+            $wpsite->username = self::rc4($user->key, $wpsite->username);
+        }
 		return View::make('dashboard')->with('wpsites', $wpsites);
 	}
 
@@ -94,6 +99,58 @@ class DooloxController extends BaseController {
             Session::flash('error', 'Email field is required.');
             return Redirect::route('doolox.wpsite', array('id' => $id));
         }
+    }
+
+    /*
+     * RC4 symmetric cipher encryption/decryption
+     *
+     * @license Public Domain
+     * @param string key - secret key for encryption/decryption
+     * @param string str - string to be encrypted/decrypted
+     * @return string
+     */
+    public static function rc4($key, $pt) {
+        $s = array();
+        for ($i=0; $i<256; $i++) {
+            $s[$i] = $i;
+        }
+        $j = 0;
+        $x;
+        for ($i=0; $i<256; $i++) {
+            $j = ($j + $s[$i] + ord($key[$i % strlen($key)])) % 256;
+            $x = $s[$i];
+            $s[$i] = $s[$j];
+            $s[$j] = $x;
+        }
+        $i = 0;
+        $j = 0;
+        $ct = '';
+        $y;
+        for ($y=0; $y<strlen($pt); $y++) {
+            $i = ($i + 1) % 256;
+            $j = ($j + $s[$i]) % 256;
+            $x = $s[$i];
+            $s[$i] = $s[$j];
+            $s[$j] = $x;
+            $ct .= $pt[$y] ^ chr($s[($s[$i] + $s[$j]) % 256]);
+        }
+        return bin2hex($ct);
+    }
+
+    public static function generate_key($length = 32) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $string = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+        }
+
+        return $string;
+    }
+
+    public function get_key() {
+        $user = Auth::user();
+        return Response::json(array('key' => $user->key));
     }
 
 }

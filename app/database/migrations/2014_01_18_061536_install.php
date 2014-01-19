@@ -17,6 +17,7 @@ class Install extends Migration {
             $table->integer('parent_id')->unsigned()->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('key')->nullable();
             $table->boolean('superuser');
             $table->timestamps();
         });
