@@ -1,6 +1,10 @@
 Doolox Changelog
 ================
 
+### v1.1 ###
+
+* Option to remember logged in user
+
 ### v1.0 (Jan 19 2014) ###
 
 * First version

@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*"
+        // "stevemo/cpanel": "dev-develop"
 	},
 	"autoload": {
 		"classmap": [

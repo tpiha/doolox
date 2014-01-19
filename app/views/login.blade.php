@@ -31,6 +31,12 @@
                 @if ($errors->has('password'))<p class="help-block">{{ $errors->first('password') }}</p>@endif
             </div>
 
+            <div class="checkbox">
+                <label>
+                    <input name="rememberme" value="1" type="checkbox"> Remember me
+                </label>
+            </div>
+
             <input type="submit" class="btn btn-primary" value="Login" />
 
         {{ Form::close() }}

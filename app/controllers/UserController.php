@@ -6,6 +6,7 @@ class UserController extends BaseController {
     {
         $email = Input::get('email');
         $password = Input::get('password');
+        $rememberme = Input::get('rememberme');
 
         $rules = array(
             'email' => 'required|email',
@@ -14,11 +15,12 @@ class UserController extends BaseController {
 
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
-            if (Auth::attempt(array('email' => $email, 'password' => $password), true)) {
+            if (Auth::attempt(array('email' => $email, 'password' => $password), $rememberme)) {
                 $user = Auth::user();
                 $user->key = DooloxController::generate_key();
                 $user->save();
-                return Redirect::intended()->with('key', $user->key);
+                return Redirect::route('doolox.dashboard')->with('key', $user->key);
+                return Redirect::route('doolox.dashboard');
             }
             else {
                 Session::flash('error', 'Login failed. Check yout email and password.');
