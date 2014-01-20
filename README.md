@@ -11,3 +11,5 @@ Doolox is an Open Source WordPress manager tool written in Laravel PHP framework
 * php artisan migrate:install
 * php artisan migrate
 * php artisan cpanel:user
+
+You can now login on http://localhost/doolox/
