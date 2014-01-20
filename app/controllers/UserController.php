@@ -15,14 +15,16 @@ class UserController extends BaseController {
 
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
-            if ($user = Sentry::authenticate(array('email' => $email, 'password' => $password), $rememberme)) {
+            try {
+                $user = Sentry::authenticate(array('email' => $email, 'password' => $password), $rememberme);
                 $user = Sentry::getUser();
                 $user->key = DooloxController::generate_key();
                 $user->save();
                 return Redirect::route('doolox.dashboard')->with('key', $user->key);
-                return Redirect::route('doolox.dashboard');
+                // return Redirect::route('doolox.dashboard');
             }
-            else {
+            catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
+            {
                 Session::flash('error', 'Login failed. Check yout email and password.');
             }
         }
