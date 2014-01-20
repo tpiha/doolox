@@ -3,7 +3,9 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* Self hosted WordPress installations (LaraHost integration)
+* Self hosted WordPress installation
+* Domain management (over name.com API)
+* WordPress move tool
 * Registration
 * Installation wizard
 
@@ -15,4 +17,3 @@ Doolox Todo List
 * Monitoring
 * Backup
 * Depolyment (Synkee integration)
-* Domain renewal reminder

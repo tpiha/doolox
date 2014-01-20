@@ -27,6 +27,12 @@ class Install extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('domains', function($table) {
+            $table->increments('id');
+            $table->string('url');
+            $table->timestamps();
+        });
+
 	}
 
 	/**

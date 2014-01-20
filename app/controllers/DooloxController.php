@@ -165,56 +165,56 @@ class DooloxController extends BaseController {
         return Response::json(array('free' => false, 'status' => 2));
     }
 
-    // public static function is_domain_available($domain, $user)
-    // {
-    //     $taken = array('blog', 'wiki', 'admin', '');
-    //     $domain = explode('.', $domain);
-    //     try {
-    //         $subdomain = $domain[2];
-    //         $tld = $subdomain;
-    //         $subdomain = $domain[0];
-    //     }
-    //     catch {
-    //         $subdomain = '';
-    //         try {
-    //             $tld = $domain[1];
-    //         }
-    //         catch {
-    //             return array(false, 1);
-    //         }
-    //     }
-    //     if (DooloxController::is_valid_host($domain) && $subdomain == Str::slug($subdomain)) {
-    //         // system domain
-    //         if ($domain == Config::get('system_domain')) {
+    public static function is_domain_available($domain, $user)
+    {
+        $taken = array('blog', 'wiki', 'admin', '');
+        $domain = explode('.', $domain);
+        try {
+            $subdomain = $domain[2];
+            $tld = $subdomain;
+            $subdomain = $domain[0];
+        }
+        catch {
+            $subdomain = '';
+            try {
+                $tld = $domain[1];
+            }
+            catch {
+                return array(false, 1);
+            }
+        }
+        if (DooloxController::is_valid_host($domain) && $subdomain == Str::slug($subdomain)) {
+            // system domain
+            if ($domain == Config::get('doolox.system_domain')) {
                 
-    //         }
-    //         // not system, but in database
-    //         else if () {
-    //         }
-    //         // not system, not in database, com, net, org
-    //         else if (in_array($tld, array('com', 'net', 'org'))) {
-    //             if (self::namecom_is_available($domain)) {
-    //                 return array(true, 0);
-    //             }
-    //             else {
-    //                 return array(false, 2);
-    //             }
-    //         }
-    //         // other top level domains
-    //         else {
-    //             $ip = gethostbyname($domain);
-    //             if ($ip == $domain) {
-    //                 return array(false, 2);
-    //             }
-    //             else {
-    //                 return array(true, 0);
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         return array(false, 1);
-    //     }
-    // }
+            }
+            // not system, but in database
+            else if () {
+            }
+            // not system, not in database, com, net, org
+            else if (in_array($tld, array('com', 'net', 'org'))) {
+                if (self::namecom_is_available($domain)) {
+                    return array(true, 0);
+                }
+                else {
+                    return array(false, 2);
+                }
+            }
+            // other top level domains
+            else {
+                $ip = gethostbyname($domain);
+                if ($ip == $domain) {
+                    return array(false, 2);
+                }
+                else {
+                    return array(true, 0);
+                }
+            }
+        }
+        else {
+            return array(false, 1);
+        }
+    }
 
     public static function namecom_is_available() {
         return true;

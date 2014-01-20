@@ -9,7 +9,7 @@ Doolox is an Open Source website builder and WordPress manager tool written in L
 git clone https://github.com/tpiha/doolox.git
 ```
 
-Now setup app/config/database.php file.
+Now setup app/config/database.php file and run this in the shell:
 
 ```
 composer update
