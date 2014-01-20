@@ -14,4 +14,31 @@ return array(
 
 	'allow_user_management' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Registration For New Users
+    |--------------------------------------------------------------------------
+    |
+    | If set to true new users can register by themselves. If set to false,
+    | only existing users (or superuser) can add new users.
+    |
+    */
+
+    'registration' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Hosting Features
+    |--------------------------------------------------------------------------
+    |
+    | If set to true, Doolox users can install WordPress websites on the Doolox
+    | server, activate domains for them etc. This way Doolox serves as a website
+    | builder. Needs an extra setup.
+    |
+    */
+
+    'hosting' => true,
+
+    'system_domain' => 'doolox.loc',
+
 );

@@ -11,17 +11,6 @@ class Install extends Migration {
 	 */
 	public function up()
 	{
-
-        Schema::create('user_profiles', function($table) {
-            $table->increments('id');
-            $table->integer('parent_id')->unsigned()->nullable();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('key')->nullable();
-            $table->boolean('superuser');
-            $table->timestamps();
-        });
-
         Schema::create('wpsites', function($table) {
             $table->increments('id');
             $table->string('name');

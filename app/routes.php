@@ -140,3 +140,17 @@ Route::get('getk', array(
     'before' => 'auth.doolox:doolox.view',
     'uses' => 'DooloxController@get_key',
 ));
+
+Route::get('wpsite-install', array(
+    'as' => 'doolox.wpsite_install',
+    'before' => 'auth.doolox:doolox.view',
+    function() {
+        return View::make('wpsite_install');
+    }
+));
+
+Route::get('check-domain/{domain}', array(
+    'as' => 'doolox.check_domain',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@check_domain',
+));

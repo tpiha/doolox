@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://localhost/doolox/public',
+	'url' => 'http://www.doolox.loc',
 
 	/*
 	|--------------------------------------------------------------------------

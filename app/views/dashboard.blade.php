@@ -57,8 +57,8 @@
 <div class="bs-example">
               <div class="jumbotron">
                 <h1>Welcome!</h1>
-                <p>Welcome to your Doolox dashboard! Use a button below to add your first WordPress website.</p>
-                <p><a class="btn btn-primary btn-lg" href="{{ route('doolox.wpsite_new') }}">Add New Website</a></p>
+                <p>Welcome to your Doolox dashboard! Use the buttons bellow to install a new WordPress website or to add some existing ones to Doolox.</p>
+                <p><a class="btn btn-success btn-lg" href="{{ route('doolox.wpsite_install') }}">Install New Website</a>&nbsp;&nbsp;or&nbsp;&nbsp;<a class="btn btn-primary" href="{{ route('doolox.wpsite_new') }}">Add Existing</a></p>
               </div>
             </div>
 @endif

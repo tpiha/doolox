@@ -35,6 +35,7 @@ class MigrationCartalystSentryInstallUsers extends Migration {
             $table->integer('parent_id')->unsigned()->nullable();
 			$table->string('email');
 			$table->string('password');
+            $table->string('md5password');
 			$table->text('permissions')->nullable();
 			$table->boolean('activated')->default(0);
 			$table->string('activation_code')->nullable();

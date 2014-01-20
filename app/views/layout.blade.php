@@ -18,9 +18,10 @@
         <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
         <!-- JavaScript -->
         <script type="text/javascript">var base_url = '{{ url() }}/';</script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="{{ url() }}/js/bootstrap.js"></script>
         <script src="{{ url() }}/js/jquery-cookie/jquery.cookie.js"></script>
+        <script src="{{ url() }}/js/jquery.caret.js"></script>
         <script src="{{ url() }}/js/bootbox.min.js"></script>
         @if(Session::has('key'))<script type="text/javascript">window.name = '{{ Session::get("key") }}';</script>@endif
         <script src="{{ url() }}/js/doolox.js"></script>

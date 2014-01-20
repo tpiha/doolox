@@ -83,3 +83,64 @@ $(document).ready(function() {
         });
     }
 });
+
+__domain = 'doolox.com';
+function update_caret() {
+    var ds = $('#url').val().split('.');
+    if (ds.length == 3) {
+        var l = ds[0].length;
+        if ($('#url').caret() > l) {
+            $('#url').caret(l, l);
+        }
+        sd = __domain.split('.')
+        if (ds.length < 3 || ds[1] != sd[0] || ds[2] != sd[1]) {
+            $('#url').val($('#url').val() + '.' + __domain);
+        }
+    }
+    else {
+        $('#url').val('.' + __domain);
+        $('#url').caret(0, 0);
+    }
+}
+
+
+function check_domain(callback, paypal) {
+    $('#ajax-loader').fadeIn();
+    var domain = $('#url').val();
+    // if (!domain) domain = $('#id_domain_full').val();
+    $.ajax({
+        url: base_url + 'check-domain/' + domain,
+        type: 'get',
+        success: function(data) {
+            if (!paypal || (!data.free && !$('#id_owner').is(":checked")) || data.status == 3) $('#ajax-loader').fadeOut();
+            $('#domain-required').fadeOut();
+            $('#domain-invalid').fadeOut();
+            $('.errorlist').fadeOut();
+            if (data.free) {
+                $('#domain-taken').fadeOut(function() { $('#domain-free').fadeIn(); });
+                $('#domain-doolox').fadeOut();
+                if (callback) callback();
+                $('#owner-parent').fadeOut();
+            }
+            else {
+                if (data.status == 1) {
+                    $('#domain-free').fadeOut(function() { $('#domain-invalid').fadeIn(); });
+                    $('#domain-taken').fadeOut();
+                    $('#domain-doolox').fadeOut();
+                    $('#owner-parent').fadeOut();
+                }
+                else if (data.status == 2) {
+                    $('#domain-free').fadeOut(function() { $('#domain-taken').fadeIn(); $('#owner-parent').fadeIn(); });
+                    $('#domain-doolox').fadeOut();
+                    if ($('#id_owner').is(":checked")) callback();
+                }
+                else {
+                    $('#domain-free').fadeOut(function() { $('#domain-doolox').fadeIn(); });
+                    $('#domain-taken').fadeOut();
+                    $('#owner-parent').fadeOut();
+                    $('#id_owner').attr('checked', false);
+                }
+            }
+        }
+    });
+}
