@@ -38,7 +38,7 @@
                     <tr>
                         <td>{{ $user->email }}</td>
                         <td align="center"><a href="{{ route('user.user_update', array('id' => $user->id)) }}"><i class="fa fa-pencil-square"></i></a></td>
-                        <td align="center">@if (Auth::user()->email != $user->email)<a href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this user?', function(result) { if (result) { window.location.href = '{{ route('user.user_delete', array('id' => $user->id)) }}'; }});"><i class="fa fa-minus-square"></i></a>@endif</td>
+                        <td align="center">@if (Sentry::getUser()->email != $user->email)<a href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this user?', function(result) { if (result) { window.location.href = '{{ route('user.user_delete', array('id' => $user->id)) }}'; }});"><i class="fa fa-minus-square"></i></a>@endif</td>
                     </tr>
 @endforeach
                 </tbody>

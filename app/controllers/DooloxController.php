@@ -4,7 +4,7 @@ class DooloxController extends BaseController {
 
 	public function dashboard()
     {
-        $user = Auth::user();
+        $user = Sentry::getUser();
         $wpsites = $user->getWPSites()->get();
         // $wpsites = array();
         foreach ($wpsites as $wpsite) {
@@ -49,7 +49,7 @@ class DooloxController extends BaseController {
 
         if ($validator->passes()) {
             $wpsite = WPSite::create(Input::except('_token'));
-            $user = Auth::user();
+            $user = Sentry::getUser();
             $user->getWPSites()->attach($wpsite);
             Session::flash('success', 'New website successfully added.');
             return Redirect::route('doolox.dashboard');
@@ -149,7 +149,7 @@ class DooloxController extends BaseController {
     }
 
     public function get_key() {
-        $user = Auth::user();
+        $user = Sentry::getUser();
         return Response::json(array('key' => $user->key));
     }
 

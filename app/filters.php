@@ -46,7 +46,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('owner', function()
 {
-    $user = Auth::user();
+    $user = Sentry::getUser();
     $id = Route::input('id');
     if (!$user->getWPSites()->get()->contains((int) $id)) {
         return Redirect::route('doolox.dashboard');
@@ -55,14 +55,14 @@ Route::filter('owner', function()
 
 Route::filter('user-management', function()
 {
-    $user = Auth::user();
+    $user = Sentry::getUser();
     $allow_user_management = Config::get('doolox.allow_user_management');
     $redirect = false;
 
     if (!$user) {
         $redirect = true;
     }
-    else if (!$allow_user_management && !$user->superuser) {
+    else if (!$allow_user_management && !$user->isSuperUser()) {
         $redirect = true;
     }
 
@@ -75,6 +75,66 @@ Route::filter('user-management', function()
                 return Redirect::route('doolox.dashboard');
             }
         }
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin auth filter
+|--------------------------------------------------------------------------
+| You need to give your routes a name before using this filter.
+| I assume you are using resource. so the route for the UsersController index method
+| will be admin.users.index then the filter will look for permission on users.view
+| You can provide your own rule by passing a argument to the filter
+|
+*/
+Route::filter('auth.doolox', function($route, $request, $userRule = null)
+{
+    if (! Sentry::check())
+    {
+        Session::put('url.intended', URL::full());
+        return Redirect::route('user.login');
+    }
+
+    // no special route name passed, use the current name route
+    if ( is_null($userRule) )
+    {
+        list($prefix, $module, $rule) = explode('.', Route::currentRouteName());
+        switch ($rule)
+        {
+            case 'index':
+            case 'show':
+                $userRule = $module.'.view';
+                break;
+            case 'create':
+            case 'store':
+                $userRule = $module.'.create';
+                break;
+            case 'edit':
+            case 'update':
+                $userRule = $module.'.update';
+                break;
+            case 'destroy':
+                $userRule = $module.'.delete';
+                break;
+            default:
+                $userRule = Route::currentRouteName();
+                break;
+        }
+    }
+    // // no access to the request page and request page not the root admin page
+    // if ( ! Sentry::hasAccess($userRule) and $userRule !== 'cpanel.view' )
+    // {
+    //     return Redirect::route('cpanel.home')
+    //         ->with('error', Lang::get('cpanel::permissions.access_denied'));
+    // }
+    // // no access to the request page and request page is the root admin page
+    // else if( ! Sentry::hasAccess($userRule) and $userRule === 'cpanel.view' )
+    // {
+    //     //can't see the admin home page go back to home site page
+    //     return Redirect::to('/')
+    //         ->with('error', Lang::get('cpanel::permissions.access_denied'));
+    // }
+
 });
 
 /*

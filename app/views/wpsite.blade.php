@@ -64,7 +64,7 @@
 @foreach($wpsite->getUsers as $user)
                     <tr>
                         <td>{{ $user->email }}</td>
-                        <td align="center">@if(Auth::user()->email != $user->email)<a href="{{ route('doolox.wpsite_rmuser', array('id' => $wpsite->id,'user_id' => $user->id)) }}"><i class="fa fa-minus-square"></i></a>@endif</td>
+                        <td align="center">@if(Sentry::getUser()->email != $user->email)<a href="{{ route('doolox.wpsite_rmuser', array('id' => $wpsite->id,'user_id' => $user->id)) }}"><i class="fa fa-minus-square"></i></a>@endif</td>
                     </tr>
 @endforeach
                 </tbody>

@@ -12,7 +12,7 @@ class Install extends Migration {
 	public function up()
 	{
 
-        Schema::create('users', function($table) {
+        Schema::create('user_profiles', function($table) {
             $table->increments('id');
             $table->integer('parent_id')->unsigned()->nullable();
             $table->string('email')->unique();
@@ -47,7 +47,7 @@ class Install extends Migration {
 	 */
 	public function down()
 	{
-        Schema::drop('users');
+        Schema::drop('user_profiles');
         Schema::drop('wpsites');
         Schema::drop('user_wpsite');
 	}

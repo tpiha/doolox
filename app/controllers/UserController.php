@@ -15,8 +15,8 @@ class UserController extends BaseController {
 
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
-            if (Auth::attempt(array('email' => $email, 'password' => $password), $rememberme)) {
-                $user = Auth::user();
+            if ($user = Sentry::authenticate(array('email' => $email, 'password' => $password), $rememberme)) {
+                $user = Sentry::getUser();
                 $user->key = DooloxController::generate_key();
                 $user->save();
                 return Redirect::route('doolox.dashboard')->with('key', $user->key);
@@ -32,14 +32,14 @@ class UserController extends BaseController {
 
     public function account()
     {
-        $user = Auth::user();
+        $user = Sentry::getUser();
 
         $rules = array(
             'email' => 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
-            $user = Auth::user();
+            $user = Sentry::getUser();
 
             if (Input::get('password1') != Input::get('password2')) {
                 Session::flash('error', 'Passwords don\'t match.');
@@ -51,7 +51,7 @@ class UserController extends BaseController {
                 }
 
                 if (strlen(Input::get('password1'))) {
-                    $user->password = Hash::make(Input::get('password1'));
+                    $user->password = Input::get('password1');
                     $user->save();
                 }
 
@@ -65,8 +65,8 @@ class UserController extends BaseController {
 
     public function manage_users()
     {
-        $user = Auth::user();
-        if ($user->superuser) {
+        $user = Sentry::getUser();
+        if ($user->isSuperUser()) {
             $users = User::all();
         }
         else {
@@ -77,7 +77,7 @@ class UserController extends BaseController {
 
     public function user_new()
     {
-        $user = Auth::user();
+        $user = Sentry::getUser();
 
         $rules = array(
             'email' => 'required|email|unique:users',
@@ -88,7 +88,7 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            User::create(array('email' => Input::get('email'), 'password' => Hash::make(Input::get('password1')), 'superuser' => 0, 'parent_id' => $user->id));
+            Sentry::createUser(array('email' => Input::get('email'), 'password' => Input::get('password1'), 'activated' => 1, 'parent_id' => $user->id));
             Session::flash('success', 'New user successfully added.');
             return Redirect::route('user.manage_users');
         }
@@ -99,9 +99,9 @@ class UserController extends BaseController {
     public function user_delete($id)
     {
         $user = User::findOrFail((int) $id);
-        $auth_user = Auth::user();
+        $auth_user = Sentry::getUser();
 
-        if ($auth_user->superuser || $auth_user->id == $user->parent_id) {
+        if ($auth_user->isSuperUser() || $auth_user->id == $user->parent_id) {
             $wpusersites = WPUserSite::where('user_id', (int) $id)->get();
             foreach ($wpusersites as $wpusersite) {
                 $wpusersite->delete();
@@ -119,9 +119,9 @@ class UserController extends BaseController {
     public function user_update($id)
     {
         $user = User::findOrFail((int) $id);
-        $auth_user = Auth::user();
+        $auth_user = Sentry::getUser();
 
-        if ($auth_user->superuser || $auth_user->id == $user->parent_id) {
+        if ($auth_user->isSuperUser() || $auth_user->id == $user->parent_id) {
             $rules = array(
                 'email' => 'required|email',
                 'password1' => 'same:password2',

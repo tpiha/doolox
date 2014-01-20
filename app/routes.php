@@ -13,7 +13,7 @@
 
 Route::get('/', array(
     'as' => 'doolox.dashboard',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.view',
     'uses' => 'DooloxController@dashboard',
 ));
 
@@ -32,7 +32,7 @@ Route::get('login', array(
 Route::get('logout', array(
     'as' => 'user.logout',
     function () {
-        Auth::logout();
+        Sentry::logout();
         return Redirect::route('user.login');
     }
 ));
@@ -45,13 +45,13 @@ Route::get('wpsite/{id}', array(
 
 Route::post('wpsite/{id}', array(
     'as' => 'doolox.wpsite',
-    'before' => 'auth',
+    'before' => 'owner',
     'uses' => 'DooloxController@wpsite',
 ));
 
 Route::get('wpsite-new', array(
     'as' => 'doolox.wpsite_new',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.update',
     function () {
         return View::make('wpsite_new');
     }
@@ -59,27 +59,27 @@ Route::get('wpsite-new', array(
 
 Route::post('wpsite-new', array(
     'as' => 'doolox.wpsite_new',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.update',
     'uses' => 'DooloxController@wpsite_new',
 ));
 
 Route::get('wpsite-delete/{id}', array(
     'as' => 'doolox.wpsite_delete',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.delete',
     'uses' => 'DooloxController@wpsite_delete',
 ));
 
 Route::get('account', array(
     'as' => 'user.account',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.view',
     function() {
-        return View::make('account')->with('user', Auth::user());
+        return View::make('account')->with('user', Sentry::getUser());
     }
 ));
 
 Route::post('account', array(
     'as' => 'user.account',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.view',
     'uses' => 'UserController@account',
 ));
 
@@ -135,14 +135,8 @@ Route::post('user-update/{id}', array(
     'uses' => 'UserController@user_update',
 ));
 
-Route::get('wplogin', array(
-    'as' => 'doolox.wplogin',
-    'before' => 'auth',
-    'uses' => 'DooloxController@wplogin',
-));
-
 Route::get('getk', array(
     'as' => 'doolox.get_key',
-    'before' => 'auth',
+    'before' => 'auth.doolox:doolox.view',
     'uses' => 'DooloxController@get_key',
 ));

@@ -49,9 +49,9 @@
                         @if(Route::currentRouteName() == 'doolox.dashboard')<li class="active">@else<li>@endif
                             <a href="{{ url() }}"><i class="fa fa-dashboard"></i> Dashboard</a>
                         </li>
-@if (Auth::check())
+@if (Sentry::check())
                         <li class="dropdown">
-@if (Auth::user()->superuser || Config::get('doolox.allow_user_management'))
+@if (Sentry::getUser()->isSuperUser() || Config::get('doolox.allow_user_management'))
                             <a href="javascript: void null;" onclick="toggle_dropdown('dropdown1');"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
                             <ul class="dropdown-menu" id="dropdown1">
                                 @if(Route::currentRouteName() == 'user.manage_users' || Route::currentRouteName() == 'user.user_new')<li class="active">@else<li>@endif
