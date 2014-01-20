@@ -1,7 +1,7 @@
 Doolox
 ======
 
-Doolox is an Open Source WordPress manager tool written in Laravel PHP framework.
+Doolox is an Open Source website builder and WordPress manager tool written in Laravel PHP framework.
 
 ## Installation ##
 
