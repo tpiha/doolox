@@ -33,7 +33,8 @@
                     <tr>
                         <th class="header">Name <i class="fa"></i></th>
                         <th class="header">URL <i class="fa"></i></th>
-                        <th class="header">Login <i class="fa"></i></th>
+                        <th class="header">Type <i class="fa"></i></th>
+                        <th class="header" style="text-align: center;">Login <i class="fa"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,7 +42,8 @@
                     <tr>
                         <td><a href="{{ url('site', array('id' => $site->id)) }}">{{ $site->name }}</a></td>
                         <td>{{ str_replace('http://', '', str_replace('https://', '', $site->url)) }}</td>
-                        <td>
+                        <td>@if ($site->local)<span class="label label-success">Local</span>@else<span class="label label-danger">Remote</span>@endif</td>
+                        <td align="center">
                                 <input type="hidden" value="{{ $site->url }}wp-login.php" id="url-{{ $site->id }}" />
                                 <input type="hidden" value="{{ $site->username }}" id="username-{{ $site->id }}" />
                                 <input type="hidden" value="{{ $site->password }}" id="password-{{ $site->id }}" />

@@ -6,7 +6,8 @@
 	"require": {
 		"laravel/framework": "4.1.*",
         "stevemo/cpanel": "dev-develop",
-        "rmccue/requests": ">=1.0"
+        "rmccue/requests": ">=1.0",
+        "rjkip/ftp-php"
 	},
 	"autoload": {
 		"classmap": [

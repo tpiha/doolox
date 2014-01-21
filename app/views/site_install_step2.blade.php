@@ -21,13 +21,13 @@
 
             <div class="form-group @if ($errors->has('title')) has-error @endif">
                 {{ Form::label('title', 'Site Title *') }}
-                {{ Form::text('title', null, array('class' => 'form-control')) }}
+                {{ Form::text('title', Input::old('title'), array('class' => 'form-control')) }}
                 @if ($errors->has('title'))<p class="help-block">{{ $errors->first('title') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('username')) has-error @endif">
                 {{ Form::label('username', 'Username *') }}
-                {{ Form::text('username', null, array('class' => 'form-control')) }}
+                {{ Form::text('username', Input::old('username'), array('class' => 'form-control')) }}
                 @if ($errors->has('username'))<p class="help-block">{{ $errors->first('username') }}</p>@endif
             </div>
 
@@ -45,7 +45,7 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('email', 'Email *') }}
-                {{ Form::text('email', Sentry::getUser()->email, array('class' => 'form-control')) }}
+                {{ Form::text('email', Input::old('username') ? Input::old('username') : Sentry::getUser()->email, array('class' => 'form-control')) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 

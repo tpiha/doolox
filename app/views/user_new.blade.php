@@ -18,7 +18,7 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('email', 'Email *') }}
-                {{ Form::text('email', null, array('class' => 'form-control')) }}
+                {{ Form::text('email', Input::old('email'), array('class' => 'form-control')) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 

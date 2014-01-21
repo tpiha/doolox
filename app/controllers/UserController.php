@@ -96,6 +96,8 @@ class UserController extends BaseController {
             return Redirect::route('user.manage_users');
         }
 
+        Input::flash();
+
         return View::make('user_new')->withErrors($validator);
     }
 

@@ -21,19 +21,19 @@
 
             <div class="form-group @if ($errors->has('name')) has-error @endif">
                 {{ Form::label('name', 'Name *') }}
-                {{ Form::text('name', null, array('class' => 'form-control')) }}
+                {{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
                 @if ($errors->has('name'))<p class="help-block">{{ $errors->first('name') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('url')) has-error @endif">
                 {{ Form::label('url', 'URL *') }}
-                {{ Form::text('url', null, array('class' => 'form-control')) }}
+                {{ Form::text('url', Input::old('url'), array('class' => 'form-control')) }}
                 @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('username')) has-error @endif">
                 {{ Form::label('username', 'Username *') }}
-                {{ Form::text('username', null, array('class' => 'form-control')) }}
+                {{ Form::text('username', Input::old('username'), array('class' => 'form-control')) }}
                 @if ($errors->has('username'))<p class="help-block">{{ $errors->first('username') }}</p>@endif
             </div>
 
@@ -45,7 +45,7 @@
 
             <div class="form-group @if ($errors->has('admin_url')) has-error @endif">
                 {{ Form::label('admin_url', 'Admin URL') }}
-                {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
+                {{ Form::text('admin_url', Input::old('admin_url'), array('class' => 'form-control')) }}
             </div>
 
             <input type="hidden" name="user_id" value="{{ Sentry::getUser()->id }}" />

@@ -3,6 +3,7 @@ Doolox Todo List
 
 ### v1.1 ###
 
+* Add favicon
 * Missing domains funcions (+ namecom API)
 * Domain management (using name.com API)
 * WordPress move tool

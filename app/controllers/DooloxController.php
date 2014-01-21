@@ -57,6 +57,8 @@ class DooloxController extends BaseController {
             return Redirect::route('doolox.dashboard');
         }
 
+        Input::flash();
+
         return View::make('site_new')->withErrors($validator);
     }
 
@@ -147,6 +149,9 @@ class DooloxController extends BaseController {
             Session::flash('success', 'New Doolox website successfully installed.');
             return Redirect::route('doolox.dashboard');
         }
+
+        Input::flash();
+
         return View::make('site_install_step2')->withErrors($validator)->with('domain', $domain);
     }
 
