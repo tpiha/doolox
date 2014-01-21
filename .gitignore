@@ -6,5 +6,7 @@ composer.lock
 Thumbs.db
 /app/storage/*
 /app/config/database.php
+/app/config/mail.php
+/app/config/doolox.php
 /users/*
 /websites/*

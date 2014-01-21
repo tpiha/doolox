@@ -5,6 +5,10 @@ Doolox Changelog
 
 * Option to remember logged in user
 * Integrated Laravel Cpanel
+* Self hosted WordPress installation
+* Add "Install New" button on dashboard with existing sites
+* Fill in md5password for user when creating
+* Create user directory when creating user (and delete when deleting)
 
 ### v1.0 (Jan 19 2014) ###
 

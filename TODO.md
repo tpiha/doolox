@@ -3,11 +3,13 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* Self hosted WordPress installation
+* Remove all sensitive data from the Git
+* Missing domains funcions (+ namecom API)
 * Domain management (using name.com API)
 * WordPress move tool
 * Registration
 * Installation wizard
+* Switch features on and off depending on the doolox.hosting parameter
 
 ### v1.2 ###
 

@@ -52,7 +52,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="{{ route('doolox.site_new') }}" class="btn btn-primary">Add New Website</a>
+        <a class="btn btn-success" href="{{ route('doolox.site_install') }}">Install New Website</a>&nbsp;&nbsp;or&nbsp;&nbsp;<a href="{{ route('doolox.site_new') }}" class="btn btn-primary">Add Existing</a>
 @else
 <div class="bs-example">
               <div class="jumbotron">

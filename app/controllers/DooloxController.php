@@ -217,23 +217,35 @@ class DooloxController extends BaseController {
     //         $subdomain = $domain[2];
     //         $tld = $subdomain;
     //         $subdomain = $domain[0];
+    //         $domain = $domain[1];
     //     }
     //     catch {
     //         $subdomain = '';
     //         try {
     //             $tld = $domain[1];
+    //             $domain = $domain[0];
     //         }
     //         catch {
     //             return array(false, 1);
     //         }
     //     }
+    //     $domain = join(array($domain, $tld));
+
     //     if (DooloxController::is_valid_host($domain) && $subdomain == Str::slug($subdomain)) {
     //         // system domain
     //         if ($domain == Config::get('doolox.system_domain')) {
-                
+    //             if (in_array($subdomain, $taken) && !$user->isSuperUser()) {
+    //                 return array(false, 4);
+    //             }
+    //             if () {
+
+    //             }
+    //             else {
+    //                 return array(true, 0);
+    //             }
     //         }
     //         // not system, but in database
-    //         else if () {
+    //         else if (Domain.:where('url', $domain)) {
     //         }
     //         // not system, not in database, com, net, org
     //         else if (in_array($tld, array('com', 'net', 'org'))) {
@@ -260,9 +272,13 @@ class DooloxController extends BaseController {
     //     }
     // }
 
-    public static function namecom_is_available()
+    public static function namecom_is_available($domain)
     {
-        return true;
+        require_once(base_path() . "/namecom_api.php");
+        $api = new NameComApi();
+        $api->login(Config::get('doolox.namecom_user'), Config::get('doolox.namecom_token'));
+        $response = $api->check_domain($domain);
+        return $response;
     }
 
     public static function is_valid_host()

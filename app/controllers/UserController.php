@@ -54,6 +54,7 @@ class UserController extends BaseController {
 
                 if (strlen(Input::get('password1'))) {
                     $user->password = Input::get('password1');
+                    $user->md5password = md5(Input::get('password1'));
                     $user->save();
                 }
 
@@ -90,7 +91,7 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            Sentry::createUser(array('email' => Input::get('email'), 'password' => Input::get('password1'), 'activated' => 1, 'parent_id' => $user->id));
+            Sentry::createUser(array('email' => Input::get('email'), 'password' => Input::get('password1'), 'md5password' => md5(Input::get('password1')), 'activated' => 1, 'parent_id' => $user->id));
             Session::flash('success', 'New user successfully added.');
             return Redirect::route('user.manage_users');
         }
@@ -133,7 +134,7 @@ class UserController extends BaseController {
             $validator = Validator::make(Input::all(), $rules);
 
             if ($validator->passes()) {
-                $user->fill(array('email' => Input::get('email'), 'password' => Input::get('password1')));
+                $user->fill(array('email' => Input::get('email'), 'password' => Input::get('password1'), 'md5password' => Input::get('password1')));
                 $user->save();
                 Session::flash('success', 'User successfully updated.');
                 return Redirect::route('user.manage_users');

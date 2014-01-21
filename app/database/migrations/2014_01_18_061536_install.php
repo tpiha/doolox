@@ -49,8 +49,8 @@ class Install extends Migration {
 	 */
 	public function down()
 	{
-        Schema::drop('sites');
         Schema::drop('site_user');
+        Schema::drop('sites');
         Schema::drop('domains');
 	}
 

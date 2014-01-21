@@ -16,4 +16,31 @@ class User extends SentryUserModel {
         return $this->belongsToMany('Site', 'site_user', 'user_id', 'site_id');
     }
 
+    public static function boot()
+    {
+        parent::boot();
+
+        User::creating(function($user) {
+            try {
+                mkdir(base_path() . '/users/' . $user->email);
+            }
+            catch (Exception $e) {
+                Log::error("Couldn't create user dir for user: $user->email");
+            }
+        });
+
+        User::deleting(function($user) {
+            try {
+                $dirPath = base_path() . '/users/' . $user->email;
+                foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+                    $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+                }
+                rmdir($dirPath);
+            }
+            catch (Exception $e) {
+                Log::error("Couldn't delete user dir for user: $user->email");
+            }
+        });
+    }
+
 }

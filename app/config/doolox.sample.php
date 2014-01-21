@@ -52,4 +52,10 @@ return array(
 
     'system_domain' => 'doolox.loc',
 
+    'namecom_user' => '',
+
+    'namecom_token' => '',
+
+    'namecom_url' => 'https://api.dev.name.com/api',
+
 );
