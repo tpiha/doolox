@@ -11,24 +11,31 @@ class Install extends Migration {
 	 */
 	public function up()
 	{
-        Schema::create('wpsites', function($table) {
+        Schema::create('sites', function($table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->string('name');
             $table->string('url');
             $table->string('username');
             $table->string('password');
             $table->string('admin_url')->nullable();
+            $table->boolean('local');
         });
 
-        Schema::create('user_wpsite', function($table) {
+        Schema::create('site_user', function($table) {
             $table->increments('id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->integer('wpsite_id')->unsigned();
+            $table->integer('site_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');;
             $table->timestamps();
         });
 
         Schema::create('domains', function($table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->string('url');
             $table->timestamps();
         });
@@ -42,9 +49,9 @@ class Install extends Migration {
 	 */
 	public function down()
 	{
-        Schema::drop('user_profiles');
-        Schema::drop('wpsites');
-        Schema::drop('user_wpsite');
+        Schema::drop('sites');
+        Schema::drop('site_user');
+        Schema::drop('domains');
 	}
 
 }

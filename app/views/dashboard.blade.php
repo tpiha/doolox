@@ -25,7 +25,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-@if($wpsites->count())
+@if($sites->count())
         <h2>Websites</h2>
         <div class="table-responsive">
             <table class="table table-hover table-striped tablesorter">
@@ -37,28 +37,28 @@
                     </tr>
                 </thead>
                 <tbody>
-@foreach($wpsites as $wpsite)
+@foreach($sites as $site)
                     <tr>
-                        <td><a href="{{ url('wpsite', array('id' => $wpsite->id)) }}">{{ $wpsite->name }}</a></td>
-                        <td>{{ str_replace('http://', '', str_replace('https://', '', $wpsite->url)) }}</td>
+                        <td><a href="{{ url('site', array('id' => $site->id)) }}">{{ $site->name }}</a></td>
+                        <td>{{ str_replace('http://', '', str_replace('https://', '', $site->url)) }}</td>
                         <td>
-                                <input type="hidden" value="{{ $wpsite->url }}wp-login.php" id="url-{{ $wpsite->id }}" />
-                                <input type="hidden" value="{{ $wpsite->username }}" id="username-{{ $wpsite->id }}" />
-                                <input type="hidden" value="{{ $wpsite->password }}" id="password-{{ $wpsite->id }}" />
-                                <a href="javascript: void null;" onclick="wplogin({{ $wpsite->id }});" class="btn btn-primary btn-xs">Login</a>
+                                <input type="hidden" value="{{ $site->url }}wp-login.php" id="url-{{ $site->id }}" />
+                                <input type="hidden" value="{{ $site->username }}" id="username-{{ $site->id }}" />
+                                <input type="hidden" value="{{ $site->password }}" id="password-{{ $site->id }}" />
+                                <a href="javascript: void null;" onclick="wplogin({{ $site->id }});" class="btn btn-primary btn-xs">Login</a>
                         </td>
                     </tr>
 @endforeach
                 </tbody>
             </table>
         </div>
-        <a href="{{ route('doolox.wpsite_new') }}" class="btn btn-primary">Add New Website</a>
+        <a href="{{ route('doolox.site_new') }}" class="btn btn-primary">Add New Website</a>
 @else
 <div class="bs-example">
               <div class="jumbotron">
                 <h1>Welcome!</h1>
                 <p>Welcome to your Doolox dashboard! Use the buttons bellow to install a new WordPress website or to add some existing ones to Doolox.</p>
-                <p><a class="btn btn-success btn-lg" href="{{ route('doolox.wpsite_install') }}">Install New Website</a>&nbsp;&nbsp;or&nbsp;&nbsp;<a class="btn btn-primary" href="{{ route('doolox.wpsite_new') }}">Add Existing</a></p>
+                <p><a class="btn btn-success btn-lg" href="{{ route('doolox.site_install') }}">Install New Website</a>&nbsp;&nbsp;or&nbsp;&nbsp;<a class="btn btn-primary" href="{{ route('doolox.site_new') }}">Add Existing</a></p>
               </div>
             </div>
 @endif

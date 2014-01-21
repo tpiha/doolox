@@ -4,7 +4,7 @@ Doolox Todo List
 ### v1.1 ###
 
 * Self hosted WordPress installation
-* Domain management (over name.com API)
+* Domain management (using name.com API)
 * WordPress move tool
 * Registration
 * Installation wizard

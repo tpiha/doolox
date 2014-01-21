@@ -84,7 +84,7 @@ $(document).ready(function() {
     }
 });
 
-__domain = 'doolox.com';
+
 function update_caret() {
     var ds = $('#url').val().split('.');
     if (ds.length == 3) {

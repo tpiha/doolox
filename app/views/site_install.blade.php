@@ -27,25 +27,29 @@
             <div id="myTabContent" class="tab-content">
 @if (Config::get('doolox.hosting'))
                 <div class="tab-pane fade active in" id="doolox">
-                    {{ Form::open(array('route' => 'doolox.wpsite_new', 'method' => 'post', 'role' => 'form')) }}
+                    {{ Form::open(array('route' => 'doolox.site_install', 'method' => 'post', 'role' => 'form')) }}
 
                     <div class="form-group @if ($errors->has('name')) has-error @endif">
                         {{ Form::label('domain', 'Domain') }}
-                        {{ Form::select('domain', array('1' => 'doolox.com'), '1', array('class' => 'form-control')); }}
+                        {{ Form::select('domain', array('1' => 'doolox.loc'), '1', array('class' => 'form-control')); }}
                     </div>
 
-                    <div class="form-group input-group">
+                    <div class="form-group @if ($errors->has('url')) has-error @endif">
                         {{ Form::label('url', 'URL') }}
-                        {{ Form::text('url', '.doolox.com', array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
-                        <span class="input-group-btn" style="vertical-align: bottom;">
-                            <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
-                        </span>
+                        <div class="input-group">
+                            {{ Form::text('url', '.doolox.loc', array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
+                            <span class="input-group-btn" style="vertical-align: bottom;">
+                                <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                        @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
                     </div>
                     <div class="bs-example" id="domain-free" style="display: none;"><div class="alert alert-dismissable alert-success"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is free and you can register it.</p></div></div>
                     <div class="bs-example" id="domain-taken" style="display: none;"><div class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is taken. You can use it if you are the owner.</p></div></div>
                     <div class="bs-example" id="domain-invalid" style="display: none;"><div class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is not valid.</p></div></div>
                     <div class="bs-example" id="domain-doolox" style="display: none;"><div class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is already used on Doolox. You can't use it.</p></div></div>
                     <div id="owner-parent" style="display: none;" class="checkbox"><label><input type="checkbox" value="" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
+                    <input type="submit" class="btn btn-primary" value="Continue">
                     {{ Form::close() }}
                 </div>
                 <div class="tab-pane fade" id="ftp">

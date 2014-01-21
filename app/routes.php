@@ -37,36 +37,36 @@ Route::get('logout', array(
     }
 ));
 
-Route::get('wpsite/{id}', array(
-    'as' => 'doolox.wpsite',
+Route::get('site/{id}', array(
+    'as' => 'doolox.site',
     'before' => 'owner',
-    'uses' => 'DooloxController@wpsite',
+    'uses' => 'DooloxController@site',
 ));
 
-Route::post('wpsite/{id}', array(
-    'as' => 'doolox.wpsite',
+Route::post('site/{id}', array(
+    'as' => 'doolox.site',
     'before' => 'owner',
-    'uses' => 'DooloxController@wpsite',
+    'uses' => 'DooloxController@site',
 ));
 
-Route::get('wpsite-new', array(
-    'as' => 'doolox.wpsite_new',
+Route::get('site-new', array(
+    'as' => 'doolox.site_new',
     'before' => 'auth.doolox:doolox.update',
     function () {
-        return View::make('wpsite_new');
+        return View::make('site_new');
     }
 ));
 
-Route::post('wpsite-new', array(
-    'as' => 'doolox.wpsite_new',
+Route::post('site-new', array(
+    'as' => 'doolox.site_new',
     'before' => 'auth.doolox:doolox.update',
-    'uses' => 'DooloxController@wpsite_new',
+    'uses' => 'DooloxController@site_new',
 ));
 
-Route::get('wpsite-delete/{id}', array(
-    'as' => 'doolox.wpsite_delete',
+Route::get('site-delete/{id}', array(
+    'as' => 'doolox.site_delete',
     'before' => 'auth.doolox:doolox.delete',
-    'uses' => 'DooloxController@wpsite_delete',
+    'uses' => 'DooloxController@site_delete',
 ));
 
 Route::get('account', array(
@@ -83,16 +83,16 @@ Route::post('account', array(
     'uses' => 'UserController@account',
 ));
 
-Route::get('wpsite-rmuser/{id}/{user_id}', array(
-    'as' => 'doolox.wpsite_rmuser',
+Route::get('site-rmuser/{id}/{user_id}', array(
+    'as' => 'doolox.site_rmuser',
     'before' => 'owner',
-    'uses' => 'DooloxController@wpsite_rmuser',
+    'uses' => 'DooloxController@site_rmuser',
 ));
 
-Route::post('wpsite-adduser/{id}', array(
-    'as' => 'doolox.wpsite_adduser',
+Route::post('site-adduser/{id}', array(
+    'as' => 'doolox.site_adduser',
     'before' => 'owner',
-    'uses' => 'DooloxController@wpsite_adduser',
+    'uses' => 'DooloxController@site_adduser',
 ));
 
 Route::get('users', array(
@@ -141,12 +141,32 @@ Route::get('getk', array(
     'uses' => 'DooloxController@get_key',
 ));
 
-Route::get('wpsite-install', array(
-    'as' => 'doolox.wpsite_install',
+Route::get('site-install', array(
+    'as' => 'doolox.site_install',
     'before' => 'auth.doolox:doolox.view',
     function() {
-        return View::make('wpsite_install');
+        return View::make('site_install');
     }
+));
+
+Route::post('site-install', array(
+    'as' => 'doolox.site_install',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@site_install',
+));
+
+Route::get('site-install-step2', array(
+    'as' => 'doolox.site_install_step2',
+    'before' => 'auth.doolox:doolox.view',
+    function() {
+        return View::make('site_install_step2')->with('domain', Session::get('domain'));
+    }
+));
+
+Route::post('site-install-step2', array(
+    'as' => 'doolox.site_install_step2',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@site_install_step2',
 ));
 
 Route::get('check-domain/{domain}', array(

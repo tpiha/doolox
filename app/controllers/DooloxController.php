@@ -5,19 +5,19 @@ class DooloxController extends BaseController {
 	public function dashboard()
     {
         $user = Sentry::getUser();
-        $wpsites = $user->getWPSites()->get();
-        // $wpsites = array();
-        foreach ($wpsites as $wpsite) {
-            $wpsite->password = self::rc4($user->key, $wpsite->password);
-            $wpsite->username = self::rc4($user->key, $wpsite->username);
+        $sites = $user->getSites()->get();
+        // $sites = array();
+        foreach ($sites as $site) {
+            $site->password = self::rc4($user->key, Crypt::decrypt($site->password));
+            $site->username = self::rc4($user->key, $site->username);
         }
-		return View::make('dashboard')->with('wpsites', $wpsites);
+		return View::make('dashboard')->with('sites', $sites);
 	}
 
-    public function wpsite($id)
+    public function site($id)
     {
         $validator = null;
-        $wpsite = WPSite::findOrFail((int) $id);
+        $site = Site::findOrFail((int) $id);
 
         if (Request::has('name')) {
             $rules = array(
@@ -26,17 +26,17 @@ class DooloxController extends BaseController {
             );
             $validator = Validator::make(Input::all(), $rules);
             if ($validator->passes()) {
-                $wpsite->fill(Input::except('_token'));
-                $wpsite->save();
+                $site->fill(Input::except('_token'));
+                $site->save();
                 Session::flash('success', 'Website successfully updated.');
                 return Redirect::route('doolox.dashboard');
             }
         }
 
-        return View::make('wpsite')->with('wpsite', $wpsite)->withErrors($validator);
+        return View::make('site')->with('site', $site)->withErrors($validator);
     }
 
-    public function wpsite_new()
+    public function site_new()
     {
         $rules = array(
             'name' => 'required',
@@ -48,62 +48,106 @@ class DooloxController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            $wpsite = WPSite::create(Input::except('_token'));
+            $input = Input::except('_token');
+            $input['password'] = Crypt::encrypt($input['password']);
+            $site = Site::create($input);
             $user = Sentry::getUser();
-            $user->getWPSites()->attach($wpsite);
+            $user->getSites()->attach($site);
             Session::flash('success', 'New website successfully added.');
             return Redirect::route('doolox.dashboard');
         }
 
-        return View::make('wpsite_new')->withErrors($validator);
+        return View::make('site_new')->withErrors($validator);
     }
 
-    public function wpsite_delete($id)
+    public function site_delete($id)
     {
-        $wpsite = WPSite::findOrFail((int) $id);
-        $wpusersites = WPUserSite::where('wpsite_id', (int) $id)->get();
+        $site = Site::findOrFail((int) $id);
+        $wpusersites = SiteUser::where('site_id', (int) $id)->get();
         foreach ($wpusersites as $wpusersite) {
             // die(var_dump($wpusersite->user_id));
             $wpusersite->delete();
         }
-        $wpsite->delete();
+        $site->delete();
         Session::flash('success', 'Website successfully deleted.');
         return Redirect::route('doolox.dashboard');
     }
 
-    public function wpsite_rmuser($id, $user_id)
+    public function site_rmuser($id, $user_id)
     {
-        $wpsite = WPSite::find($id);
-        $wpsite->getUsers()->detach($user_id);
-        $wpsite->save();
+        $site = Site::find($id);
+        $site->getUsers()->detach($user_id);
+        $site->save();
         Session::flash('success', 'User successfully removed from the website.');
         return Redirect::route('doolox.dashboard');
     }
 
-    public function wpsite_adduser($id)
+    public function site_adduser($id)
     {
         if (Input::get('email')) {
             $user = User::where('email', Input::get('email'))->first();
             if ($user) {
-                $user->getWPSites()->attach((int) $id);
+                $user->getSites()->attach((int) $id);
                 $user->save();
                 Session::flash('success', 'User successfully added to the website.');
                 return Redirect::route('doolox.dashboard');
             }
             else {
                 Session::flash('error', 'There is no user with this email.');
-                return Redirect::route('doolox.wpsite', array('id' => $id));
+                return Redirect::route('doolox.site', array('id' => $id));
             }
         }
         else {
             Session::flash('error', 'Email field is required.');
-            return Redirect::route('doolox.wpsite', array('id' => $id));
+            return Redirect::route('doolox.site', array('id' => $id));
         }
     }
 
-    public function wpsite_install()
+    public function site_install()
     {
-        
+        $rules = array(
+            'url' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->passes()) {
+            return Redirect::route('doolox.site_install_step2')->with('domain', Input::get('url'));;
+        }
+
+        return View::make('site_install')->withErrors($validator);
+    }
+
+    public function site_install_step2()
+    {
+        $domain = Input::get('domain');
+        $rules = array(
+            'domain' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
+            'title' => 'required',
+            'username' => 'required',
+            'email' => 'required|email',
+            'password1' => 'required|same:password2',
+            'password2' => 'required|same:password1',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->passes()) {
+            $title = Input::get('title');
+            $username = Input::get('username');
+            $password = Input::get('password1');
+            $email = Input::get('email');
+
+            $user = Sentry::getUser();
+            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $domain . '/', 'username' => $username, 'password' => Crypt::encrypt($password), 'local' => true, 'admin_url' => ''));
+            $user->getSites()->attach($site);
+
+            self::get_wordpress(Sentry::getUser(), $domain);
+            $dbname = 'user' . $user->id . '_db' . $site->id;
+            $dbpass = str_random(32);
+            self::create_database($dbname, $dbname, $dbpass);
+            self::create_wp_config($user, $domain, $dbname, $dbpass);
+            self::install_wordpress($domain, $title, $username, $password, $email);
+            Session::flash('success', 'New Doolox website successfully installed.');
+            return Redirect::route('doolox.dashboard');
+        }
+        return View::make('site_install_step2')->withErrors($validator)->with('domain', $domain);
     }
 
     /*
@@ -162,66 +206,138 @@ class DooloxController extends BaseController {
 
     public function check_domain($domain)
     {
-        return Response::json(array('free' => false, 'status' => 2));
+        return Response::json(array('free' => true, 'status' => 0));
     }
 
-    public static function is_domain_available($domain, $user)
-    {
-        $taken = array('blog', 'wiki', 'admin', '');
-        $domain = explode('.', $domain);
-        try {
-            $subdomain = $domain[2];
-            $tld = $subdomain;
-            $subdomain = $domain[0];
-        }
-        catch {
-            $subdomain = '';
-            try {
-                $tld = $domain[1];
-            }
-            catch {
-                return array(false, 1);
-            }
-        }
-        if (DooloxController::is_valid_host($domain) && $subdomain == Str::slug($subdomain)) {
-            // system domain
-            if ($domain == Config::get('doolox.system_domain')) {
+    // public static function is_domain_available($domain, $user)
+    // {
+    //     $taken = array('blog', 'wiki', 'admin', '');
+    //     $domain = explode('.', $domain);
+    //     try {
+    //         $subdomain = $domain[2];
+    //         $tld = $subdomain;
+    //         $subdomain = $domain[0];
+    //     }
+    //     catch {
+    //         $subdomain = '';
+    //         try {
+    //             $tld = $domain[1];
+    //         }
+    //         catch {
+    //             return array(false, 1);
+    //         }
+    //     }
+    //     if (DooloxController::is_valid_host($domain) && $subdomain == Str::slug($subdomain)) {
+    //         // system domain
+    //         if ($domain == Config::get('doolox.system_domain')) {
                 
-            }
-            // not system, but in database
-            else if () {
-            }
-            // not system, not in database, com, net, org
-            else if (in_array($tld, array('com', 'net', 'org'))) {
-                if (self::namecom_is_available($domain)) {
-                    return array(true, 0);
-                }
-                else {
-                    return array(false, 2);
-                }
-            }
-            // other top level domains
-            else {
-                $ip = gethostbyname($domain);
-                if ($ip == $domain) {
-                    return array(false, 2);
-                }
-                else {
-                    return array(true, 0);
-                }
-            }
-        }
-        else {
-            return array(false, 1);
-        }
-    }
+    //         }
+    //         // not system, but in database
+    //         else if () {
+    //         }
+    //         // not system, not in database, com, net, org
+    //         else if (in_array($tld, array('com', 'net', 'org'))) {
+    //             if (self::namecom_is_available($domain)) {
+    //                 return array(true, 0);
+    //             }
+    //             else {
+    //                 return array(false, 2);
+    //             }
+    //         }
+    //         // other top level domains
+    //         else {
+    //             $ip = gethostbyname($domain);
+    //             if ($ip == $domain) {
+    //                 return array(false, 2);
+    //             }
+    //             else {
+    //                 return array(true, 0);
+    //             }
+    //         }
+    //     }
+    //     else {
+    //         return array(false, 1);
+    //     }
+    // }
 
-    public static function namecom_is_available() {
+    public static function namecom_is_available()
+    {
         return true;
     }
 
-    public static function is_valid_host() {
+    public static function is_valid_host()
+    {
         return true;
+    }
+
+    public static function create_database($database, $username, $password)
+    {
+        DB::connection('managemysql')->statement("CREATE DATABASE $database");
+        DB::connection('managemysql')->statement("GRANT ALL ON $database.* TO '$username'@'localhost' IDENTIFIED BY '$password'");
+        DB::connection('managemysql')->statement("FLUSH PRIVILEGES");
+    }
+
+    public static function drop_database($dbname)
+    {
+        DB::connection('managemysql')->statement("DROP USER $dbname@localhost");
+        DB::connection('managemysql')->statement("DROP DATABASE $dbname");
+        DB::connection('managemysql')->statement("FLUSH PRIVILEGES");
+    }
+
+    public static function install_wordpress ($url, $title, $username, $password, $email)
+    {
+        $data = array(
+            'weblog_title' => $title,
+            'user_name' => $username,
+            'admin_password' => $password,
+            'admin_password2' => $password,
+            'admin_email' => $email,
+            'blog_public' => 1,
+        );
+        $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array(), $data);
+    }
+
+    public static function get_wordpress($user, $domain)
+    {
+        $dir = base_path() . '/users/' . $user->email . '/';
+        $url = 'http://wordpress.org/latest.zip';
+        file_put_contents($dir . basename($url), file_get_contents($url));
+
+        $zip = new ZipArchive;
+        $res = $zip->open($dir . basename($url));
+        if ($res === true) {
+            $zip->extractTo($dir);
+            $zip->close();
+            rename($dir . 'wordpress', $dir . $domain);
+            unlink($dir . 'latest.zip');
+            symlink($dir . $domain, base_path() . '/websites/' . $domain);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function create_wp_config($user, $domain, $dbname, $dbpass)
+    {
+        $source = base_path() . '/wp-config.php';
+        $dest = base_path() . '/users/' . $user->email . '/' . $domain . '/wp-config.php';
+        $wpconfig = file_get_contents($source);
+
+        $wpconfig = str_replace('###DB_NAME###', $dbname, $wpconfig);
+        $wpconfig = str_replace('###DB_USER###', $dbname, $wpconfig);
+        $wpconfig = str_replace('###DB_PASSWORD###', $dbpass, $wpconfig);
+        $wpconfig = str_replace('###DB_HOST###', 'localhost', $wpconfig);
+
+        $wpconfig = str_replace('###AUTH_KEY###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###SECURE_AUTH_KEY###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###LOGGED_IN_KEY###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###LOGGED_IN_KEY###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###AUTH_SALT###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###SECURE_AUTH_SALT###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###LOGGED_IN_SALT###', str_random(32), $wpconfig);
+        $wpconfig = str_replace('###NONCE_SALT###', str_random(32), $wpconfig);
+
+        file_put_contents($dest, $wpconfig);
     }
 
 }

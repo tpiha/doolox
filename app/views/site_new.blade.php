@@ -15,7 +15,7 @@
 <div class="row">
     
     <div class="col-lg-6">
-        {{ Form::open(array('route' => 'doolox.wpsite_new', 'method' => 'post', 'role' => 'form')) }}
+        {{ Form::open(array('route' => 'doolox.site_new', 'method' => 'post', 'role' => 'form')) }}
 
             <p class="help-block">required fields are marked with *</p>
 
@@ -47,6 +47,8 @@
                 {{ Form::label('admin_url', 'Admin URL') }}
                 {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
             </div>
+
+            <input type="hidden" name="user_id" value="{{ Sentry::getUser()->id }}" />
 
             <input type="submit" class="btn btn-primary" value="Add Website" />
 

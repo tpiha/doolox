@@ -104,7 +104,7 @@ class UserController extends BaseController {
         $auth_user = Sentry::getUser();
 
         if ($auth_user->isSuperUser() || $auth_user->id == $user->parent_id) {
-            $wpusersites = WPUserSite::where('user_id', (int) $id)->get();
+            $wpusersites = SiteUser::where('user_id', (int) $id)->get();
             foreach ($wpusersites as $wpusersite) {
                 $wpusersite->delete();
             }

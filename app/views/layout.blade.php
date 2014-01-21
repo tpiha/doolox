@@ -17,7 +17,7 @@
         <!-- Page Specific CSS -->
         <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
         <!-- JavaScript -->
-        <script type="text/javascript">var base_url = '{{ url() }}/';</script>
+        <script type="text/javascript">var base_url = '{{ url() }}/'; var __domain = '{{ Config::get("doolox.system_domain") }}';</script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="{{ url() }}/js/bootstrap.js"></script>
         <script src="{{ url() }}/js/jquery-cookie/jquery.cookie.js"></script>

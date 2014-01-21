@@ -7,13 +7,13 @@ use Cartalyst\Sentry\Users\Eloquent\User as SentryUserModel;
 class User extends SentryUserModel {
 
     /**
-     * Get all owned WPSites
+     * Get all owned Sites
      *
      * @return array
      */
-    public function getWPSites()
+    public function getSites()
     {
-        return $this->belongsToMany('WPSite', 'user_wpsite', 'user_id', 'wpsite_id');
+        return $this->belongsToMany('Site', 'site_user', 'user_id', 'site_id');
     }
 
 }

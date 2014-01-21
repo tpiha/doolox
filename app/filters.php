@@ -48,7 +48,7 @@ Route::filter('owner', function()
 {
     $user = Sentry::getUser();
     $id = Route::input('id');
-    if (!$user->getWPSites()->get()->contains((int) $id)) {
+    if (!$user->getSites()->get()->contains((int) $id)) {
         return Redirect::route('doolox.dashboard');
     }
 });
