@@ -174,3 +174,26 @@ Route::get('check-domain/{domain}', array(
     'before' => 'auth.doolox:doolox.view',
     'uses' => 'DooloxController@check_domain',
 ));
+
+Route::get('register', array(
+    'as' => 'user.register',
+    function() {
+        if (Config::get('doolox.registration')) {
+            return View::make('user_register');
+        }
+        else {
+            Session::flash('error', 'Registration is disabled, plase contact your Doolox admin.');
+            return Redirect::route('user.login');
+        }
+    }
+));
+
+Route::post('register', array(
+    'as' => 'user.register',
+    'uses' => 'UserController@register',
+));
+
+Route::get('activate/{user_id}/{code}', array(
+    'as' => 'user.activate',
+    'uses' => 'UserController@activate',
+));

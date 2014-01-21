@@ -152,4 +152,56 @@ class UserController extends BaseController {
         }
     }
 
+    public function register()
+    {
+        if (!Config::get('user.registration')) {
+            Session::flash('error', 'Registration is disabled, plase contact your Doolox admin.');
+            return Redirect::route('user.login');
+        }
+
+        $rules = array(
+            'email' => 'required|email|unique:users',
+            'password1' => 'same:password2',
+            'password2' => 'same:password1',
+        );
+
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->passes()) {
+            $user = Sentry::register(array(
+                'email'    => Input::get('email'),
+                'password' => Input::get('password1'),
+            ));
+
+            $code = $user->getActivationCode();
+
+            $data = array(
+                'user' => $user,
+                'code' => $code
+            );
+            Mail::send('emails.welcome', $data, function($message) use ($user)
+            {
+                $message->to($user->email, $user->first_name . ' ' . $user->last_name)->subject('Welcome to Doolox');
+            });
+            Session::flash('success', 'Activation link has been sent to your email.');
+        }
+
+        return View::make('user_register')->withErrors($validator);
+    }
+
+    public function activate($user_id, $code)
+    {
+        $user = Sentry::findUserById($user_id);
+        if ($user->attemptActivation($code)) {
+            Sentry::login($user, false);
+            Session::flash('success', 'You have successfully activated your Doolox account.');
+            return Redirect::route('doolox.dashboard');
+        }
+        else {
+            Session::flash('error', 'Activation failed, please try again.');
+        }
+
+        return View::make('user_register');
+    }
+
 }

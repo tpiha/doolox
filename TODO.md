@@ -6,7 +6,6 @@ Doolox Todo List
 * Missing domains funcions (+ namecom API)
 * Domain management (using name.com API)
 * WordPress move tool
-* Registration
 * Installation wizard
 * Switch features on and off depending on the doolox.hosting parameter
 

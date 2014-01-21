@@ -13,6 +13,12 @@
             {{ Session::get('error') }}
         </div>
 @endif
+@if(Session::has('success'))
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('success') }}
+        </div>
+@endif
     </div>
 </div>
 <div class="row">
@@ -37,7 +43,7 @@
                 </label>
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Login" />
+            <input type="submit" class="btn btn-primary" value="Login" />@if(Config::get('doolox.registration'))&nbsp;&nbsp;or&nbsp;&nbsp;<a class="btn btn-success" href="{{ route('user.register') }}">Register</a>@endif
 
         {{ Form::close() }}
     </div>
