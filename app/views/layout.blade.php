@@ -25,6 +25,7 @@
         <script src="{{ url() }}/js/bootbox.min.js"></script>
         @if(Session::has('key'))<script type="text/javascript">window.name = '{{ Session::get("key") }}';</script>@endif
         <script src="{{ url() }}/js/doolox.js"></script>
+        <link rel="shortcut icon" href="/images/favicon.ico">
     </head>
 
     <body>

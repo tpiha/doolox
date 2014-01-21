@@ -29,6 +29,8 @@ class UserController extends BaseController {
             }
         }
 
+        Input::flash();
+
         return View::make('login')->withErrors($validator);
 	}
 

@@ -21,13 +21,13 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 <label>Email</label>
-                <input class="form-control" name="email" tabindex="1" />
+                {{ Form::text('email', Input::old('email'), array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 <label>Password</label>
-                <input class="form-control" type="password" name="password" tabindex="2" />
+                {{ Form::password('password', array('class' => 'form-control', 'tabindex' => 2)) }}
                 @if ($errors->has('password'))<p class="help-block">{{ $errors->first('password') }}</p>@endif
             </div>
 

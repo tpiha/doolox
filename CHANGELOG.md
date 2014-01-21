@@ -12,6 +12,7 @@ Doolox Changelog
 * Remove all sensitive data from the Git
 * Put local / remote site status on dasboard and single site display
 * New site install form doesn't get re-populated if doesn't pass validation
+* Add favicon
 
 ### v1.0 (Jan 19 2014) ###
 
