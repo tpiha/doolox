@@ -117,7 +117,7 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     $parent.removeClass('in')
 
     function removeElement() {
-      $parent.trigger('closed.bs.alert').remove()
+      $parent.trigger('closed.bs.alert').hide();
     }
 
     $.support.transition && $parent.hasClass('fade') ?

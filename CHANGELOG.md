@@ -9,6 +9,7 @@ Doolox Changelog
 * Add "Install New" button on dashboard with existing sites
 * Fill in md5password for user when creating
 * Create user directory when creating user (and delete when deleting)
+* Remove all sensitive data from the Git
 
 ### v1.0 (Jan 19 2014) ###
 

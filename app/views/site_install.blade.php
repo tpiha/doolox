@@ -44,10 +44,12 @@
                         </div>
                         @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
                     </div>
-                    <div class="bs-example" id="domain-free" style="display: none;"><div class="alert alert-dismissable alert-success"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is free and you can register it.</p></div></div>
-                    <div class="bs-example" id="domain-taken" style="display: none;"><div class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is taken. You can use it if you are the owner.</p></div></div>
-                    <div class="bs-example" id="domain-invalid" style="display: none;"><div class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is not valid.</p></div></div>
-                    <div class="bs-example" id="domain-doolox" style="display: none;"><div class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is already used on Doolox. You can't use it.</p></div></div>
+                    <div class="bs-example">
+                        <div id="domain-free" style="display: none;" class="alert alert-dismissable alert-success"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is free and you can register it.</p></div>
+                        <div id="domain-taken" style="display: none;" class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is taken. You can use it if you are the owner.</p></div>
+                        <div id="domain-invalid" style="display: none;" class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is not valid.</p></div>
+                        <div id="domain-doolox" style="display: none;" class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is already used on Doolox. You can't use it.</p></div>
+                    </div>
                     <div id="owner-parent" style="display: none;" class="checkbox"><label><input type="checkbox" value="" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
                     <input type="submit" class="btn btn-primary" value="Continue">
                     {{ Form::close() }}
