@@ -31,13 +31,13 @@
 
                     <div class="form-group @if ($errors->has('name')) has-error @endif">
                         {{ Form::label('domain', 'Domain') }}
-                        {{ Form::select('domain', $domains, $selected_url, array('class' => 'form-control', 'onchange' => 'update_tld();')); }}
+                        {{ Form::select('domain', $domains, Input::old('domain') ? Input::old('domain') : $selected_url, array('class' => 'form-control', 'onchange' => 'update_tld();')); }}
                     </div>
 
                     <div class="form-group @if ($errors->has('url')) has-error @endif">
                         {{ Form::label('url', 'URL') }}
                         <div class="input-group">
-                            {{ Form::text('url', '.' . $selected_url, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
+                            {{ Form::text('url', Input::old('url') ? '.' . Input::old('url') : '.' . $selected_url, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
                             <span class="input-group-btn" style="vertical-align: bottom;">
                                 <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
                             </span>

@@ -121,15 +121,27 @@ class DooloxController extends BaseController {
 
     public function site_install_post()
     {
+        $domains = Sentry::getUser()->getDomains()->get();
+        $domains_string = '';
+        foreach ($domains as $domain) {
+            $domains_string .= '.' . $domain->url . ',';
+        }
         $rules = array(
-            'url' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
+            'url' => 'required|not_in:' . $domains_string,
         );
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
             return Redirect::route('doolox.site_install_step2')->with(array('domain' => Input::get('domain'), 'url' => Input::get('url')));
         }
+        $_domains = array();
+        foreach ($domains as $domain) {
+            $_domains["$domain->url"] = $domain->url;
+            $selected_url = $domain->url;
+        }
 
-        return View::make('site_install')->withErrors($validator);
+        Input::flash();
+
+        return View::make('site_install')->withErrors($validator)->with(array('domains' => $_domains, 'selected_url' => $selected_url));
     }
 
     public function site_install_step2()
@@ -138,7 +150,7 @@ class DooloxController extends BaseController {
         $url = Input::get('url');
 
         $rules = array(
-            'url' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
+            'url' => 'required|not_in:' . Config::get('doolox.system_domain') . ',',
             'title' => 'required',
             'username' => 'required',
             'email' => 'required|email',
@@ -173,7 +185,7 @@ class DooloxController extends BaseController {
 
         Input::flash();
 
-        return View::make('site_install_step2')->with(array('domain' => $domain, 'url' => 'fdsa'))->withErrors($validator);
+        return View::make('site_install_step2')->with(array('domain' => $domain, 'url' => $url))->withErrors($validator);
     }
 
     /*

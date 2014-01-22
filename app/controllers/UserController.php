@@ -9,7 +9,7 @@ class UserController extends BaseController {
         $rememberme = Input::get('rememberme');
 
         $rules = array(
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
             'password' => 'required',
         );
 
@@ -21,7 +21,6 @@ class UserController extends BaseController {
                 $user->key = DooloxController::generate_key();
                 $user->save();
                 return Redirect::route('doolox.dashboard')->with('key', $user->key);
-                // return Redirect::route('doolox.dashboard');
             }
             catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
             {

@@ -14,6 +14,7 @@ Doolox Changelog
 * New site install form doesn't get re-populated if doesn't pass validation
 * Add favicon
 * Registration
+* Bug - new site install passes validation without the subdomain (when not system domain)
 
 ### v1.0 (Jan 19 2014) ###
 
