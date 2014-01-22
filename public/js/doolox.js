@@ -144,3 +144,9 @@ function check_domain(callback, paypal) {
         }
     });
 }
+
+function update_tld() {
+    var tld = $('#domain :selected').val();
+    __domain = tld;
+    $('#url').val('.' + tld);
+}

@@ -144,22 +144,20 @@ Route::get('getk', array(
 Route::get('site-install', array(
     'as' => 'doolox.site_install',
     'before' => 'auth.doolox:doolox.view',
-    function() {
-        return View::make('site_install');
-    }
+    'uses' => 'DooloxController@site_install',
 ));
 
-Route::post('site-install', array(
-    'as' => 'doolox.site_install',
+Route::post('site-install-post', array(
+    'as' => 'doolox.site_install_post',
     'before' => 'auth.doolox:doolox.view',
-    'uses' => 'DooloxController@site_install',
+    'uses' => 'DooloxController@site_install_post',
 ));
 
 Route::get('site-install-step2', array(
     'as' => 'doolox.site_install_step2',
     'before' => 'auth.doolox:doolox.view',
     function() {
-        return View::make('site_install_step2')->with('domain', Session::get('domain'));
+        return View::make('site_install_step2')->with(array('domain' => Session::get('domain'), 'url' => Session::get('url')));
     }
 ));
 
@@ -196,4 +194,32 @@ Route::post('register', array(
 Route::get('activate/{user_id}/{code}', array(
     'as' => 'user.activate',
     'uses' => 'UserController@activate',
+));
+
+Route::get('domains', array(
+    'as' => 'domain.index',
+    'before' => 'auth.doolox:doolox.view',
+    function() {
+        return View::make('manage_domains')->with('domains', Sentry::getUser()->getDomains()->get());
+    }
+));
+
+Route::get('domain-new', array(
+    'as' => 'domain.domain_new',
+    'before' => 'auth.doolox:doolox.view',
+    function() {
+        return View::make('domain_new');
+    }
+));
+
+Route::post('domain-new', array(
+    'as' => 'domain.domain_new',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DomainController@domain_new',
+));
+
+Route::get('domain-delete/{id}', array(
+    'as' => 'domain.domain_delete',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DomainController@domain_delete',
 ));

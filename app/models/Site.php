@@ -48,14 +48,24 @@ class Site extends Eloquent {
     {
         parent::boot();
 
-        Site::deleting(function($site) {
+        Site::deleted(function($site) {
             if ($site->local) {
                 $dbname = 'user' . $site->getOwner()->first()->id . '_db' . $site->id;
-                DooloxController::drop_database($dbname);
+                try {
+                    DooloxController::drop_database($dbname);
+                }
+                catch (Exception $e){
+                    Log::error("Couldn't delete database: $dbname");
+                }
                 unlink(base_path() . '/websites/' . $site->getDomain());
                 $dirPath = base_path() . '/users/' . $site->getOwner()->first()->email . '/' . $site->getDomain();
-                foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
-                    $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+                try {
+                    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+                        $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+                    }
+                }
+                catch (Exception $e) {
+                    Log::error("Couldn't delete directory: $dirPath");
                 }
                 rmdir($dirPath);
             }

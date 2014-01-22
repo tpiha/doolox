@@ -53,15 +53,18 @@
                         </li>
 @if (Sentry::check())
                         <li class="dropdown">
-@if (Sentry::getUser()->isSuperUser() || Config::get('doolox.allow_user_management'))
                             <a href="javascript: void null;" onclick="toggle_dropdown('dropdown1');"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
                             <ul class="dropdown-menu" id="dropdown1">
+@if (Sentry::getUser()->isSuperUser() || Config::get('doolox.allow_user_management'))
                                 @if(Route::currentRouteName() == 'user.manage_users' || Route::currentRouteName() == 'user.user_new')<li class="active">@else<li>@endif
                                     <a href="{{ route('user.manage_users') }}">Users</a>
                                 </li>
+@endif
+                                @if(Route::currentRouteName() == 'domain.index')<li class="active">@else<li>@endif
+                                    <a href="{{ route('domain.index') }}">Domains</a>
+                                </li>
                             </ul>
                         </li>
-@endif
                         @if(Route::currentRouteName() == 'user.account')<li class="active">@else<li>@endif
                             <a href="{{ route('user.account') }}"><i class="fa fa-user"></i> Account</a>
                         </li>

@@ -27,17 +27,17 @@
             <div id="myTabContent" class="tab-content">
 @if (Config::get('doolox.hosting'))
                 <div class="tab-pane fade active in" id="doolox">
-                    {{ Form::open(array('route' => 'doolox.site_install', 'method' => 'post', 'role' => 'form')) }}
+                    {{ Form::open(array('route' => 'doolox.site_install_post', 'method' => 'post', 'role' => 'form')) }}
 
                     <div class="form-group @if ($errors->has('name')) has-error @endif">
                         {{ Form::label('domain', 'Domain') }}
-                        {{ Form::select('domain', array('1' => 'doolox.loc'), '1', array('class' => 'form-control')); }}
+                        {{ Form::select('domain', $domains, $selected_url, array('class' => 'form-control', 'onchange' => 'update_tld();')); }}
                     </div>
 
                     <div class="form-group @if ($errors->has('url')) has-error @endif">
                         {{ Form::label('url', 'URL') }}
                         <div class="input-group">
-                            {{ Form::text('url', '.doolox.loc', array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
+                            {{ Form::text('url', '.' . $selected_url, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
                             <span class="input-group-btn" style="vertical-align: bottom;">
                                 <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
                             </span>
@@ -67,5 +67,5 @@
     </div>
 
 </div>
-
+<script type="text/javascript">__domain = '{{ $selected_url }}';</script>
 @stop

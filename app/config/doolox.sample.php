@@ -50,8 +50,6 @@ return array(
 
     'hosting' => true,
 
-    'system_domain' => 'doolox.loc',
-
     'namecom_user' => '',
 
     'namecom_token' => '',

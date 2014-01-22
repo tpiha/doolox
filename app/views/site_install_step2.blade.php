@@ -50,6 +50,7 @@
             </div>
 
             <input type="hidden" name="domain" value="{{ $domain }}" />
+            <input type="hidden" name="url" value="{{ $url }}" />
 
             <input type="submit" class="btn btn-primary" value="Finish">
 

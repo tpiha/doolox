@@ -16,6 +16,16 @@ class User extends SentryUserModel {
         return $this->belongsToMany('Site', 'site_user', 'user_id', 'site_id');
     }
 
+    public function getDomains()
+    {
+        return DB::table('domains')->where('user_id', $this->id)->orWhere('system_domain', true);
+    }
+
+    public function getOwnedSites()
+    {
+        return DB::table('sites')->where('user_id', $this->id);
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -39,6 +49,14 @@ class User extends SentryUserModel {
             }
             catch (Exception $e) {
                 Log::error("Couldn't delete user dir for user: $user->email");
+            }
+            $sites = $user->getOwnedSites()->get();
+            foreach ($sites as $site) {
+                Site::destroy($site->id);
+            }
+            $domains = $user->getDomains()->get();
+            foreach ($domains as $domain) {
+                Domain::destroy($domain->id);
             }
         });
     }

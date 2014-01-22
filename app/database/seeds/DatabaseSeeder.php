@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder {
 		Eloquent::unguard();
 
 		$this->call('UserSeeder');
+        $this->call('DomainSeeder');
 	}
 
 }
@@ -22,7 +23,18 @@ class UserSeeder extends Seeder {
     {
         DB::table('users')->delete();
 
-        User::create(array('email' => 'tpiha@naklikaj.com', 'password' => Hash::make('admin'), 'superuser' => true));
+        Sentry::createUser(array('email' => 'admin@admin.com', 'password' => 'admin', 'md5password' => md5('admin'), 'activated' => 1));
+    }
+
+}
+
+class DomainSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('domains')->delete();
+
+        Domain::create(array('user_id' => 1, 'url' => Config::get('doolox.system_domain'), 'system_domain' => true));
     }
 
 }

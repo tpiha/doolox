@@ -107,12 +107,26 @@ class DooloxController extends BaseController {
 
     public function site_install()
     {
+        $domains = array();
+        $_domains = Sentry::getUser()->getDomains()->get();
+        $selected = 0;
+        $selected_url = '';
+        foreach ($_domains as $domain) {
+            $domains["$domain->url"] = $domain->url;
+            $selected_url = $domain->url;
+        }
+        // dd($domains);
+        return View::make('site_install')->with(array('domains' => $domains, 'selected_url' => $selected_url));
+    }
+
+    public function site_install_post()
+    {
         $rules = array(
             'url' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
         );
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
-            return Redirect::route('doolox.site_install_step2')->with('domain', Input::get('url'));;
+            return Redirect::route('doolox.site_install_step2')->with(array('domain' => Input::get('domain'), 'url' => Input::get('url')));
         }
 
         return View::make('site_install')->withErrors($validator);
@@ -121,38 +135,45 @@ class DooloxController extends BaseController {
     public function site_install_step2()
     {
         $domain = Input::get('domain');
+        $url = Input::get('url');
+
         $rules = array(
-            'domain' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
+            'url' => 'required|not_in:.' . Config::get('doolox.system_domain') . ',',
             'title' => 'required',
             'username' => 'required',
             'email' => 'required|email',
             'password1' => 'required|same:password2',
             'password2' => 'required|same:password1',
         );
+
         $validator = Validator::make(Input::all(), $rules);
+
         if ($validator->passes()) {
             $title = Input::get('title');
             $username = Input::get('username');
             $password = Input::get('password1');
             $email = Input::get('email');
 
+            $subdomain = str_replace($domain, '', $url);
+            $d = Domain::where('url', $domain)->first();
+
             $user = Sentry::getUser();
-            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $domain . '/', 'username' => $username, 'password' => Crypt::encrypt($password), 'local' => true, 'admin_url' => ''));
+            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'username' => $username, 'password' => Crypt::encrypt($password), 'local' => true, 'admin_url' => '', 'domain_id' => $d->id));
             $user->getSites()->attach($site);
 
-            self::get_wordpress(Sentry::getUser(), $domain);
+            self::get_wordpress(Sentry::getUser(), $url);
             $dbname = 'user' . $user->id . '_db' . $site->id;
             $dbpass = str_random(32);
             self::create_database($dbname, $dbname, $dbpass);
-            self::create_wp_config($user, $domain, $dbname, $dbpass);
-            self::install_wordpress($domain, $title, $username, $password, $email);
+            self::create_wp_config($user, $url, $dbname, $dbpass);
+            self::install_wordpress($url, $title, $username, $password, $email);
             Session::flash('success', 'New Doolox website successfully installed.');
             return Redirect::route('doolox.dashboard');
         }
 
         Input::flash();
 
-        return View::make('site_install_step2')->withErrors($validator)->with('domain', $domain);
+        return View::make('site_install_step2')->with(array('domain' => $domain, 'url' => 'fdsa'))->withErrors($validator);
     }
 
     /*
@@ -211,11 +232,12 @@ class DooloxController extends BaseController {
 
     public function check_domain($domain)
     {
-        return Response::json(array('free' => true, 'status' => 0));
+        return Response::json(array('free' => false, 'status' => 2));
     }
 
-    // public static function is_domain_available($domain, $user)
-    // {
+    public static function is_domain_available($domain, $user)
+    {
+        return true;
     //     $taken = array('blog', 'wiki', 'admin', '');
     //     $domain = explode('.', $domain);
     //     try {
@@ -275,7 +297,7 @@ class DooloxController extends BaseController {
     //     else {
     //         return array(false, 1);
     //     }
-    // }
+    }
 
     public static function namecom_is_available($domain)
     {
