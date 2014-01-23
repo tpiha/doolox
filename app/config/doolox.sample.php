@@ -56,4 +56,6 @@ return array(
 
     'namecom_url' => 'https://api.dev.name.com/api',
 
+    'registration' => false,
+
 );
