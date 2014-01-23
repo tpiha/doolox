@@ -313,7 +313,7 @@ class DooloxController extends BaseController {
 
     public static function namecom_is_available($domain)
     {
-        require_once(base_path() . "/namecom_api.php");
+        require_once(base_path() . "/tools/namecom_api.php");
         $api = new NameComApi();
         $api->login(Config::get('doolox.namecom_user'), Config::get('doolox.namecom_token'));
         $response = $api->check_domain($domain);
@@ -374,7 +374,7 @@ class DooloxController extends BaseController {
 
     public static function create_wp_config($user, $domain, $dbname, $dbpass)
     {
-        $source = base_path() . '/wp-config.php';
+        $source = base_path() . '/tools/wp-config.php';
         $dest = base_path() . '/users/' . $user->email . '/' . $domain . '/wp-config.php';
         $wpconfig = file_get_contents($source);
 
