@@ -8,8 +8,7 @@
         "stevemo/cpanel": "dev-develop",
         "rmccue/requests": ">=1.0",
         "rjkip/ftp-php": "dev-master",
-        "bitpay/php-client": "dev-master",
-        "logicalgrape/paypal-ipn-laravel": "dev-master"
+        "bitpay/php-client": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
