@@ -50,7 +50,7 @@ class Site extends Eloquent {
 
         Site::deleted(function($site) {
             if ($site->local) {
-                $dbname = 'user' . $site->getOwner()->first()->id . '_db' . $site->id;
+                $dbname = 'doolox' . $site->getOwner()->first()->id . '_db' . $site->id;
                 try {
                     DooloxController::drop_database($dbname);
                 }

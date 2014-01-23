@@ -174,7 +174,7 @@ class DooloxController extends BaseController {
             $user->getSites()->attach($site);
 
             self::get_wordpress(Sentry::getUser(), $url);
-            $dbname = 'user' . $user->id . '_db' . $site->id;
+            $dbname = 'doolox' . $user->id . '_db' . $site->id;
             $dbpass = str_random(32);
             self::create_database($dbname, $dbname, $dbpass);
             self::create_wp_config($user, $url, $dbname, $dbpass);
