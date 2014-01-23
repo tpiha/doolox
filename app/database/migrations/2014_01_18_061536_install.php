@@ -22,6 +22,8 @@ class Install extends Migration {
             $table->boolean('auto_billing');
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->engine = 'InnoDB';
+            $table->unique('url');
         });
 
         Schema::create('sites', function($table) {
@@ -38,6 +40,7 @@ class Install extends Migration {
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('domain_id')->references('id')->on('domains');
+            $table->engine = 'InnoDB';
         });
 
         Schema::create('site_user', function($table) {
@@ -48,6 +51,7 @@ class Install extends Migration {
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->engine = 'InnoDB';
         });
 
 	}

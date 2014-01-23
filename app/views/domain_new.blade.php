@@ -16,15 +16,15 @@
 
             <p class="help-block">required fields are marked with *</p>
 
-            <div class="form-group @if ($errors->has('domain')) has-error @endif">
-                {{ Form::label('domain', 'Domain *') }}
+            <div class="form-group @if ($errors->has('url')) has-error @endif">
+                {{ Form::label('url', 'Domain *') }}
                 <div class="input-group">
-                    {{ Form::text('domain', null, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
+                    {{ Form::text('url', Input::old('url'), array('class' => 'form-control')) }}
                     <span class="input-group-btn" style="vertical-align: bottom;">
                         <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
                     </span>
                 </div>
-                @if ($errors->has('domain'))<p class="help-block">{{ $errors->first('domain') }}</p>@endif
+                @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
             <div class="bs-example">
@@ -39,13 +39,13 @@
                 <label>Configuration Type <a href="#"><i class="fa fa-question"></i></a></label>
                 <div class="radio" style="margin-top: 0px;">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                        {{ Form::radio('type', 1, true) }}
                         Host your domain by yourself and set CNAME record (Free)
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                        {{ Form::radio('type', 2) }}
                         Let us buy and setup a domain and email for you ($15.- annually)
                     </label>
                 </div>
@@ -54,6 +54,7 @@
             <input type="submit" class="btn btn-primary" value="Add Domain" />
 
         {{ Form::close() }}
+
     </div>
 </div>
 @stop

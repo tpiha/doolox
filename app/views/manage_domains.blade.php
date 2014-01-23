@@ -38,7 +38,7 @@
                     <tr>
                         <td>{{ $domain->url }}</td>
                         <td>@if ($domain->activated)<span class="label label-success">Yes</span>@else<span class="label label-danger">No</span>@endif</td>
-                        <td align="center"><a href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this domain?', function(result) { if (result) { window.location.href = '{{ route('domain.domain_delete', array('id' => $domain->id)) }}'; }});"><i class="fa fa-minus-square"></i></a></td>
+                        <td align="center">@if($domain->url != Config::get('doolox.system_domain'))<a href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this domain?', function(result) { if (result) { window.location.href = '{{ route('domain.domain_delete', array('id' => $domain->id)) }}'; }});"><i class="fa fa-minus-square"></i></a>@endif</td>
                     </tr>
 @endforeach
                 </tbody>

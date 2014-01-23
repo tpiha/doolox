@@ -244,71 +244,96 @@ class DooloxController extends BaseController {
 
     public function check_domain($domain)
     {
-        return Response::json(array('free' => false, 'status' => 2));
+        $da = DooloxController::is_domain_available($domain, Sentry::getUser());
+        return Response::json(array('free' => $da[0], 'status' => $da[1]));
     }
 
     public static function is_domain_available($domain, $user)
     {
-        return true;
-    //     $taken = array('blog', 'wiki', 'admin', '');
-    //     $domain = explode('.', $domain);
-    //     try {
-    //         $subdomain = $domain[2];
-    //         $tld = $subdomain;
-    //         $subdomain = $domain[0];
-    //         $domain = $domain[1];
-    //     }
-    //     catch {
-    //         $subdomain = '';
-    //         try {
-    //             $tld = $domain[1];
-    //             $domain = $domain[0];
-    //         }
-    //         catch {
-    //             return array(false, 1);
-    //         }
-    //     }
-    //     $domain = join(array($domain, $tld));
+        $taken = array('blog', 'wiki', 'admin', '');
+        $domain = explode('.', $domain);
+        try {
+            $subdomain = $domain[2];
+            $tld = $subdomain;
+            $subdomain = $domain[0];
+            $domain = $domain[1];
+        }
+        catch (Exception $e) {
+            $subdomain = '';
+            try {
+                $tld = $domain[1];
+                $domain = $domain[0];
+            }
+            catch (Exception $e) {
+                return array(false, 1);
+            }
+        }
 
-    //     if (DooloxController::is_valid_host($domain) && $subdomain == Str::slug($subdomain)) {
-    //         // system domain
-    //         if ($domain == Config::get('doolox.system_domain')) {
-    //             if (in_array($subdomain, $taken) && !$user->isSuperUser()) {
-    //                 return array(false, 4);
-    //             }
-    //             if () {
+        if ($tld == Str::slug($tld) && $domain == Str::slug($domain) && $subdomain == Str::slug($subdomain)) {
+            $domain = join(array($domain, $tld), '.');
+            // system domain
+            if ($domain == Config::get('doolox.system_domain')) {
+                $do = Domain::where('url', $domain)->first();
 
-    //             }
-    //             else {
-    //                 return array(true, 0);
-    //             }
-    //         }
-    //         // not system, but in database
-    //         else if (Domain.:where('url', $domain)) {
-    //         }
-    //         // not system, not in database, com, net, org
-    //         else if (in_array($tld, array('com', 'net', 'org'))) {
-    //             if (self::namecom_is_available($domain)) {
-    //                 return array(true, 0);
-    //             }
-    //             else {
-    //                 return array(false, 2);
-    //             }
-    //         }
-    //         // other top level domains
-    //         else {
-    //             $ip = gethostbyname($domain);
-    //             if ($ip == $domain) {
-    //                 return array(false, 2);
-    //             }
-    //             else {
-    //                 return array(true, 0);
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         return array(false, 1);
-    //     }
+                // in taken array, but user not superuser
+                if (in_array($subdomain, $taken) && !$user->isSuperUser()) {
+                    return array(false, 4);
+                }
+                // taken
+                if (Site::where('domain_id', $do->id)->where('subdomain', $subdomain)->count()) {
+                    return array(false, 4);
+                }
+                // domain not taken
+                else {
+                    return array(true, 0);
+                }
+            }
+            // not system, but in database
+            else if (Domain::where('url', $domain)->count()) {
+                $do = Domain::where('url', $domain)->first();
+
+                // website already in database
+                if (Site::where('domain_id', $do->id)->where('subdomain', $subdomain)->count()) {
+                    return array(false, 4);
+                }
+                // not in database and user is owner
+                else if ($do->user_id == $user->id) {
+                    if (strlen($subdomain)) {
+                        return array(true, 0);
+                    }
+                    else {
+                        return array(true, 1);
+                    }
+                }
+                // not in database but not owner
+                else {
+                    return array(false, 4);
+                }
+            }
+            // not system, not in database, com, net, org
+            else if (in_array($tld, array('com', 'net', 'org'))) {
+                if (self::namecom_is_available($domain)) {
+                    Log::debug("Name.com - domain available: $domain");
+                    return array(true, 0);
+                }
+                else {
+                    return array(false, 2);
+                }
+            }
+            // other top level domains
+            else {
+                $ip = gethostbyname($domain);
+                if ($ip == $domain) {
+                    return array(false, 2);
+                }
+                else {
+                    return array(true, 0);
+                }
+            }
+        }
+        else {
+            return array(false, 1);
+        }
     }
 
     public static function namecom_is_available($domain)
@@ -318,11 +343,6 @@ class DooloxController extends BaseController {
         $api->login(Config::get('doolox.namecom_user'), Config::get('doolox.namecom_token'));
         $response = $api->check_domain($domain);
         return $response;
-    }
-
-    public static function is_valid_host()
-    {
-        return true;
     }
 
     public static function create_database($database, $username, $password)

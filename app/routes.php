@@ -223,3 +223,16 @@ Route::get('domain-delete/{id}', array(
     'before' => 'auth.doolox:doolox.view',
     'uses' => 'DomainController@domain_delete',
 ));
+
+Route::get('domain-payment/{id}', array(
+    'as' => 'domain.domain_payment',
+    'before' => 'auth.doolox:doolox.view',
+    function($id) {
+        return View::make('domain_payment');
+    }
+));
+
+Route::post('ipn', array(
+    'uses' => 'IpnController@store',
+    'as' => 'ipn'
+));

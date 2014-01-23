@@ -28,7 +28,8 @@ class DomainController extends BaseController {
 
         Validator::extend('domainav', function($attribute, $value, $parameters)
         {
-            return DooloxController::is_domain_available($value, Sentry::getUser());
+            $av = DooloxController::is_domain_available($value, Sentry::getUser());
+            return $av[0];
         });
 
         $messages = array(
@@ -38,15 +39,21 @@ class DomainController extends BaseController {
         );
 
         $rules = array(
-            'domain' => 'required|domaindots|domainan|domainav',
+            'url' => 'required|domaindots|domainan|domainav',
         );
 
         $validator = Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->passes()) {
-            Domain::create(array('user_id' => Sentry::getUser()->id, 'url' => Input::get('domain')));
-            Session::flash('success', 'New Doolox domain successfully added.');
-            return Redirect::route('domain.index');
+            $type = Input::get('type');
+            $domain = Domain::create(array('user_id' => Sentry::getUser()->id, 'url' => Input::get('url')));
+            if ($type == 1) {
+                Session::flash('success', 'New Doolox domain successfully added.');
+                return Redirect::route('domain.index');
+            }
+            else {
+                return Redirect::route('domain.domain_payment', array('id' => $domain->id));
+            }
         }
 
         Input::flash();
@@ -56,9 +63,15 @@ class DomainController extends BaseController {
 
     public function domain_delete($id)
     {
-        $domain = Domain::find($id)->first();
-        $domain->delete();
-        Session::flash('success', 'Doolox domain successfully deleted.');
+        $user = Sentry::getUser();
+        $domain = Domain::find(intval($id));
+        if ($domain->user_id == $user->id && $domain->url != Config::get('doolox.system_domain')) {
+            $domain->delete();
+            Session::flash('success', 'Doolox domain successfully deleted.');
+        }
+        else {
+            Session::flash('error', 'You are not the owner of this domain.');
+        }
         return Redirect::route('domain.index');
     }
 

@@ -15,6 +15,7 @@ Doolox Changelog
 * Add favicon
 * Registration
 * Bug - new site install passes validation without the subdomain (when not system domain)
+* Missing domain functions (+ name.com API)
 
 ### v1.0 (Jan 19 2014) ###
 
