@@ -8,5 +8,6 @@ Thumbs.db
 /app/config/database.php
 /app/config/mail.php
 /app/config/doolox.php
+/app/config/app.php
 /users/*
 /websites/*
