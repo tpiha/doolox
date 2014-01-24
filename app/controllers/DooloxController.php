@@ -8,13 +8,20 @@ class DooloxController extends BaseController {
         $rsa->loadKey(Config::get('doolox.private_key'));
         $user = Sentry::getUser();
         $sites = $user->getSites()->get();
-        // foreach($sites as $site) {
-        //     $data = array(
-        //         'ciphertext' => base64_encode($ciphertext),
-        //         'rand' => str_random(32)
-        //     );
-        //     $site->data = 'fsda';
-        // }
+        foreach ($sites as $site) {
+            $d = Domain::find($site->domain_id);
+            if ($site->local) {
+                $site->full_domain = $site->subdomain . '.' . $d->url;
+            }
+            else {
+                $url = str_replace('http://', '', $site->url);
+                $url = str_replace('https://', '', $url);
+                if (substr($url, -1) == '/') {
+                    $url = substr($url, 0, -1);
+                }
+                $site->full_domain = $url;
+            }
+        }
 		return View::make('dashboard')->with('sites', $sites);
 	}
 
@@ -45,15 +52,12 @@ class DooloxController extends BaseController {
         $rules = array(
             'name' => 'required',
             'url' => 'required',
-            'username' => 'required',
-            'password' => 'required',
         );
 
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
             $input = Input::except('_token');
-            $input['password'] = Crypt::encrypt($input['password']);
             $site = Site::create($input);
             $user = Sentry::getUser();
             $user->getSites()->attach($site);
@@ -174,7 +178,7 @@ class DooloxController extends BaseController {
             $d = Domain::where('url', $domain)->first();
 
             $user = Sentry::getUser();
-            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $d->id));
+            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $d->id, 'subdomain' => $subdomain));
             $user->getSites()->attach($site);
 
             self::get_wordpress(Sentry::getUser(), $url);

@@ -41,7 +41,7 @@
 @foreach($sites as $site)
                     <tr>
                         <td><a href="{{ url('site', array('id' => $site->id)) }}">{{ $site->name }}</a></td>
-                        <td>{{ str_replace('http://', '', str_replace('https://', '', $site->url)) }}</td>
+                        <td><a href="http://{{ $site->url }}" target="_blank">{{ $site->full_domain }}</a></td>
                         <td>@if ($site->local)<span class="label label-success">Local</span>@else<span class="label label-danger">Remote</span>@endif</td>
                         <td align="center">
 @if($site->connected)

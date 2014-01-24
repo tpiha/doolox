@@ -31,18 +31,6 @@
                 @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
-            <div class="form-group @if ($errors->has('username')) has-error @endif">
-                {{ Form::label('username', 'Username *') }}
-                {{ Form::text('username', Input::old('username'), array('class' => 'form-control')) }}
-                @if ($errors->has('username'))<p class="help-block">{{ $errors->first('username') }}</p>@endif
-            </div>
-
-            <div class="form-group @if ($errors->has('password')) has-error @endif">
-                {{ Form::label('password', 'Password *') }}
-                {{ Form::password('password', array('class' => 'form-control')) }}
-                @if ($errors->has('password'))<p class="help-block">{{ $errors->first('password') }}</p>@endif
-            </div>
-
             <div class="form-group @if ($errors->has('admin_url')) has-error @endif">
                 {{ Form::label('admin_url', 'Admin URL') }}
                 {{ Form::text('admin_url', Input::old('admin_url'), array('class' => 'form-control')) }}

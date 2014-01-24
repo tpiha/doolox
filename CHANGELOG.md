@@ -16,6 +16,7 @@ Doolox Changelog
 * Registration
 * Bug - new site install passes validation without the subdomain (when not system domain)
 * Missing domain functions (+ name.com API)
+* Install new version on the server as a SAAS
 
 ### v1.0 (Jan 19 2014) ###
 

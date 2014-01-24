@@ -9,9 +9,8 @@ Doolox Todo List
 * Changing email should change user folder and all his website links
 * Owner of the domain - passes when not checked and doesn't work with submiting the form
 
-* Prepare for installation on the server - existing users and websites migration
-* Prepare for installation on the server - hosted models and packaging
-* Install new version on the server as a SAAS
+* SaaS - existing users and websites migration
+* SaaS - hosted models and packaging
 
 ### v1.2 ###
 
