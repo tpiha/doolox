@@ -4,13 +4,17 @@ class DooloxController extends BaseController {
 
 	public function dashboard()
     {
+        $rsa = new Crypt_RSA();
+        $rsa->loadKey(Config::get('doolox.private_key'));
         $user = Sentry::getUser();
         $sites = $user->getSites()->get();
-        // $sites = array();
-        foreach ($sites as $site) {
-            $site->password = self::rc4($user->key, Crypt::decrypt($site->password));
-            $site->username = self::rc4($user->key, $site->username);
-        }
+        // foreach($sites as $site) {
+        //     $data = array(
+        //         'ciphertext' => base64_encode($ciphertext),
+        //         'rand' => str_random(32)
+        //     );
+        //     $site->data = 'fsda';
+        // }
 		return View::make('dashboard')->with('sites', $sites);
 	}
 
@@ -170,7 +174,7 @@ class DooloxController extends BaseController {
             $d = Domain::where('url', $domain)->first();
 
             $user = Sentry::getUser();
-            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'username' => $username, 'password' => Crypt::encrypt($password), 'local' => true, 'admin_url' => '', 'domain_id' => $d->id));
+            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $d->id));
             $user->getSites()->attach($site);
 
             self::get_wordpress(Sentry::getUser(), $url);
@@ -186,60 +190,6 @@ class DooloxController extends BaseController {
         Input::flash();
 
         return View::make('site_install_step2')->with(array('domain' => $domain, 'url' => $url))->withErrors($validator);
-    }
-
-    /*
-     * RC4 symmetric cipher encryption/decryption
-     *
-     * @param string key - secret key for encryption/decryption
-     * @param string str - string to be encrypted/decrypted
-     * @return string
-     */
-    public static function rc4($key, $pt)
-    {
-        $s = array();
-        for ($i=0; $i<256; $i++) {
-            $s[$i] = $i;
-        }
-        $j = 0;
-        $x;
-        for ($i=0; $i<256; $i++) {
-            $j = ($j + $s[$i] + ord($key[$i % strlen($key)])) % 256;
-            $x = $s[$i];
-            $s[$i] = $s[$j];
-            $s[$j] = $x;
-        }
-        $i = 0;
-        $j = 0;
-        $ct = '';
-        $y;
-        for ($y=0; $y<strlen($pt); $y++) {
-            $i = ($i + 1) % 256;
-            $j = ($j + $s[$i]) % 256;
-            $x = $s[$i];
-            $s[$i] = $s[$j];
-            $s[$j] = $x;
-            $ct .= $pt[$y] ^ chr($s[($s[$i] + $s[$j]) % 256]);
-        }
-        return bin2hex($ct);
-    }
-
-    public static function generate_key($length = 32)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $string = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
-        }
-
-        return $string;
-    }
-
-    public function get_key()
-    {
-        $user = Sentry::getUser();
-        return Response::json(array('key' => $user->key));
     }
 
     public function check_domain($domain)
@@ -413,6 +363,68 @@ class DooloxController extends BaseController {
         $wpconfig = str_replace('###NONCE_SALT###', str_random(32), $wpconfig);
 
         file_put_contents($dest, $wpconfig);
+    }
+
+    public function wpcipher_connect($id, $username) {
+        $site = Site::find($id);
+        $rsa = new Crypt_RSA();
+
+        if ($site->private_key) {
+            $privatekey = $site->private_key;
+            $publickey = $site->public_key;
+        }
+        else {
+            extract($rsa->createKey());
+            $site->private_key = $privatekey;
+            $site->public_key = $publickey;
+            $site->save();
+        }
+
+        $rsa->loadKey(Config::get('doolox.private_key'));
+
+        $data = array(
+            'id' => $site->id,
+            'action' => 'connect',
+            'username' => $username,
+            'public_key' => $publickey,
+            'rand' => str_random(32)
+        );
+
+        $data = json_encode($data);
+        $data = base64_encode($data);
+        $data = $rsa->encrypt($data);
+        $data = base64_encode($data);
+        $data = urlencode($data);
+
+        return Response::json(array('cipher' => $data));
+    }
+
+    public function wpcipher_login($id) {
+        $site = Site::find($id);
+
+        $rsa = new Crypt_RSA();
+        $rsa->loadKey($site->private_key);
+
+        $data = array(
+            'id' => (string) $site->id,
+            'action' => 'login',
+            'rand' => str_random(32),
+        );
+
+        $data = json_encode($data);
+        $data = base64_encode($data);
+        $data = $rsa->encrypt($data);
+        $data = base64_encode($data);
+        $data = urlencode($data);
+
+        return Response::json(array('cipher' => $data));
+    }
+
+    public function connected() {
+        $site_id = Input::get('id');
+        $site = Site::find($site_id);
+        $site->connected = true;
+        $site->save();
     }
 
 }

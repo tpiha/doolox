@@ -31,12 +31,13 @@ class Install extends Migration {
             $table->integer('user_id')->unsigned();
             $table->string('name');
             $table->string('url');
-            $table->string('username');
-            $table->string('password');
             $table->string('admin_url')->nullable();
             $table->boolean('local');
             $table->string('subdomain')->nullable();
             $table->integer('domain_id')->unsigned()->nullable();
+            $table->boolean('connected');
+            $table->binary('private_key')->nullable();
+            $table->binary('public_key')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('domain_id')->references('id')->on('domains');

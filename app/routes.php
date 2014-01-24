@@ -135,12 +135,6 @@ Route::post('user-update/{id}', array(
     'uses' => 'UserController@user_update',
 ));
 
-Route::get('getk', array(
-    'as' => 'doolox.get_key',
-    'before' => 'auth.doolox:doolox.view',
-    'uses' => 'DooloxController@get_key',
-));
-
 Route::get('site-install', array(
     'as' => 'doolox.site_install',
     'before' => 'auth.doolox:doolox.view',
@@ -235,4 +229,21 @@ Route::get('domain-payment/{id}', array(
 Route::post('ipn', array(
     'uses' => 'IpnController@store',
     'as' => 'ipn'
+));
+
+Route::get('wpcipher-connect/{id}/{username}', array(
+    'as' => 'doolox.wpcipher_connect',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@wpcipher_connect',
+));
+
+Route::get('wpcipher-login/{id}', array(
+    'as' => 'doolox.wpcipher_login',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@wpcipher_login',
+));
+
+Route::post('connected', array(
+    'as' => 'doolox.connected',
+    'uses' => 'DooloxController@connected',
 ));

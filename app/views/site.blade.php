@@ -42,6 +42,11 @@
     </div>
 
     <div class="col-lg-6">
+        <h4>WordPress Connection</h4>
+        <div class="well">
+            <a onclick="wpconnect({{ $site->id }}, '{{ $site->url }}');" href="javascript: void null;" class="btn btn-success btn-lg" style="width: 100%;">Connect</a>
+        </div>
+
         <h4>Users</h4>
         <div class="well">
             {{ Form::open(array('route' => array('doolox.site_adduser', $site->id), 'method' => 'post', 'role' => 'form')) }}
@@ -73,4 +78,7 @@
     </div>
 
 </div>
+<form method="POST" action="" id="wploginform" target="blank">
+    <input type="hidden" name="data" id="ciphertext" >
+</form>
 @stop

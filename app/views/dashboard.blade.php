@@ -44,10 +44,11 @@
                         <td>{{ str_replace('http://', '', str_replace('https://', '', $site->url)) }}</td>
                         <td>@if ($site->local)<span class="label label-success">Local</span>@else<span class="label label-danger">Remote</span>@endif</td>
                         <td align="center">
-                                <input type="hidden" value="{{ $site->url }}wp-login.php" id="url-{{ $site->id }}" />
-                                <input type="hidden" value="{{ $site->username }}" id="username-{{ $site->id }}" />
-                                <input type="hidden" value="{{ $site->password }}" id="password-{{ $site->id }}" />
-                                <a href="javascript: void null;" onclick="wplogin({{ $site->id }});" class="btn btn-primary btn-xs">Login</a>
+@if($site->connected)
+                                <a class="btn btn-primary btn-xs" href="javascript: void null;" onclick="wplogin({{ $site->id }}, '{{ $site->url }}');">Login</a>
+@else
+                                <span class="label label-danger">Not Connected</span>
+@endif
                         </td>
                     </tr>
 @endforeach
@@ -67,7 +68,6 @@
     </div>
 </div>
 <form method="POST" action="" id="wploginform" target="blank">
-    <input type="hidden" name="log" value="" id="log" />
-    <input type="hidden" name="pwd" value="" id="pwd" />
+    <input type="hidden" name="data" id="ciphertext" >
 </form>
 @stop

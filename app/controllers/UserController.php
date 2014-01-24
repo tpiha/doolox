@@ -17,9 +17,6 @@ class UserController extends BaseController {
         if ($validator->passes()) {
             try {
                 $user = Sentry::authenticate(array('email' => $email, 'password' => $password), $rememberme);
-                $user = Sentry::getUser();
-                $user->key = DooloxController::generate_key();
-                $user->save();
                 return Redirect::route('doolox.dashboard')->with('key', $user->key);
             }
             catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
