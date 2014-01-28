@@ -23,7 +23,7 @@ function wpconnect(site_id, site_url) {
                 type: 'get',
                 async: false,
                 success: function(data) {
-                    $('#wploginform').attr('action', 'http://' + site_url + '/wp-login.php');
+                    $('#wploginform').attr('action', site_url + 'wp-login.php');
                     $('#ciphertext').val(data.cipher);
                     $('#wploginform').submit();
                 }
@@ -38,7 +38,7 @@ function wplogin(site_id, site_url) {
         type: 'get',
         async: false,
         success: function(data) {
-            $('#wploginform').attr('action', 'http://' + site_url + '/wp-login.php');
+            $('#wploginform').attr('action', site_url + '/wp-login.php');
             $('#ciphertext').val(data.cipher);
             $('#wploginform').submit();
         }
@@ -65,11 +65,58 @@ function update_caret() {
 
 
 function check_domain(callback, paypal) {
-    $('#ajax-loader').fadeIn();
     var domain = $('#url').val();
-    // if (!domain) domain = $('#id_domain_full').val();
+    if (domain.length) {
+        $('#ajax-loader').fadeIn();
+        $.ajax({
+            url: base_url + 'check-domain/' + domain,
+            type: 'get',
+            success: function(data) {
+                if (!paypal || (!data.free && !$('#id_owner').is(":checked")) || data.status == 3) $('#ajax-loader').fadeOut();
+                $('#domain-required').fadeOut();
+                $('#domain-invalid').fadeOut();
+                $('.errorlist').fadeOut();
+                if (data.free) {
+                    $('#domain-taken').fadeOut(function() { $('#domain-free').fadeIn(); });
+                    $('#domain-doolox').fadeOut();
+                    if (callback) callback();
+                    $('#owner-parent').fadeOut();
+                }
+                else {
+                    if (data.status == 1) {
+                        $('#domain-free').fadeOut(function() { $('#domain-invalid').fadeIn(); });
+                        $('#domain-taken').fadeOut();
+                        $('#domain-doolox').fadeOut();
+                        $('#owner-parent').fadeOut();
+                    }
+                    else if (data.status == 2) {
+                        $('#domain-free').fadeOut(function() { $('#domain-taken').fadeIn(); $('#owner-parent').fadeIn(); });
+                        $('#domain-doolox').fadeOut();
+                        if ($('#id_owner').is(":checked")) callback();
+                    }
+                    else {
+                        $('#domain-free').fadeOut(function() { $('#domain-doolox').fadeIn(); });
+                        $('#domain-taken').fadeOut();
+                        $('#owner-parent').fadeOut();
+                        $('#id_owner').attr('checked', false);
+                    }
+                }
+            }
+        });
+    }
+    else {
+        $('#domain-free').fadeOut(function() { $('#domain-invalid').fadeIn(); });
+        $('#domain-taken').fadeOut();
+        $('#domain-doolox').fadeOut();
+        $('#owner-parent').fadeOut();
+    }
+}
+
+function check_subdomain(callback, paypal) {
+    var domain = $('#url').val();
+    $('#ajax-loader').fadeIn();
     $.ajax({
-        url: base_url + 'check-domain/' + domain,
+        url: base_url + 'check-subdomain/' + domain,
         type: 'get',
         success: function(data) {
             if (!paypal || (!data.free && !$('#id_owner').is(":checked")) || data.status == 3) $('#ajax-loader').fadeOut();

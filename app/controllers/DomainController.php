@@ -28,8 +28,10 @@ class DomainController extends BaseController {
 
         Validator::extend('domainav', function($attribute, $value, $parameters)
         {
+            $owner = (bool) Input::get('owner', 0);
             $av = DooloxController::is_domain_available($value, Sentry::getUser());
-            return $av[0];
+            dd($av);
+            return ($owner || $av[0]);
         });
 
         $messages = array(

@@ -39,7 +39,7 @@
                         <div class="input-group">
                             {{ Form::text('url', Input::old('url') ? '.' . Input::old('url') : '.' . $selected_url, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
                             <span class="input-group-btn" style="vertical-align: bottom;">
-                                <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
+                                <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_subdomain();"><i class="fa fa-search"></i></button>
                             </span>
                         </div>
                         @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif

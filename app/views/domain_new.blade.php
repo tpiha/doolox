@@ -33,7 +33,7 @@
                 <div id="domain-invalid" style="display: none;" class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is not valid.</p></div>
                 <div id="domain-doolox" style="display: none;" class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is already used on Doolox. You can't use it.</p></div>
             </div>
-            <div id="owner-parent" style="display: none; margin-bottom: 20px;" class="checkbox"><label><input type="checkbox" value="" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
+            <div id="owner-parent" style="display: none; margin-bottom: 20px;" class="checkbox"><label><input type="checkbox" value="1" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
 
             <div class="form-group">
                 <label>Configuration Type <a href="#"><i class="fa fa-question"></i></a></label>

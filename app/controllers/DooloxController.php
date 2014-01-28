@@ -9,18 +9,13 @@ class DooloxController extends BaseController {
         $user = Sentry::getUser();
         $sites = $user->getSites()->get();
         foreach ($sites as $site) {
-            $d = Domain::find($site->domain_id);
-            if ($site->local) {
-                $site->full_domain = $site->subdomain . '.' . $d->url;
+            $link = $site->url;
+            $link = str_replace('http://', '', $link);
+            $link = str_replace('https://', '', $link);
+            if (substr($link, -1) == '/') {
+                $link = substr($link, 0, -1);
             }
-            else {
-                $url = str_replace('http://', '', $site->url);
-                $url = str_replace('https://', '', $url);
-                if (substr($url, -1) == '/') {
-                    $url = substr($url, 0, -1);
-                }
-                $site->full_domain = $url;
-            }
+            $site->link = $link;
         }
 		return View::make('dashboard')->with('sites', $sites);
 	}
@@ -58,6 +53,12 @@ class DooloxController extends BaseController {
 
         if ($validator->passes()) {
             $input = Input::except('_token');
+            if (strpos($input['url'], 'http://') !== 0 && strpos($input['url'], 'https://') !== 0) {
+                $input['url'] = 'http://' . $input['url'];
+            }
+            if (substr($input['url'], -1) != '/') {
+                $input['url'] .= '/';
+            }
             $site = Site::create($input);
             $user = Sentry::getUser();
             $user->getSites()->attach($site);
@@ -130,14 +131,29 @@ class DooloxController extends BaseController {
     public function site_install_post()
     {
         $domains = Sentry::getUser()->getDomains()->get();
-        $domains_string = '';
-        foreach ($domains as $domain) {
-            $domains_string .= '.' . $domain->url . ',';
-        }
-        $rules = array(
-            'url' => 'required|not_in:' . $domains_string,
+
+        Validator::extend('domainav', function($attribute, $value, $parameters)
+        {
+            $domain = explode('.', $value);
+            $subdomain = $domain[0];
+            $domain = $domain[1] . '.' . $domain[2];
+            $d = Domain::where('url', $domain)->first();
+            if (Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
+        $messages = array(
+            'domainav' => 'This domain is not available.',
         );
-        $validator = Validator::make(Input::all(), $rules);
+
+        $rules = array(
+            'url' => 'required|domainav',
+        );
+        $validator = Validator::make(Input::all(), $rules, $messages);
         if ($validator->passes()) {
             return Redirect::route('doolox.site_install_step2')->with(array('domain' => Input::get('domain'), 'url' => Input::get('url')));
         }
@@ -174,7 +190,7 @@ class DooloxController extends BaseController {
             $password = Input::get('password1');
             $email = Input::get('email');
 
-            $subdomain = str_replace($domain, '', $url);
+            $subdomain = str_replace($domain . '.', '', $url);
             $d = Domain::where('url', $domain)->first();
 
             $user = Sentry::getUser();
@@ -202,9 +218,28 @@ class DooloxController extends BaseController {
         return Response::json(array('free' => $da[0], 'status' => $da[1]));
     }
 
+    public function check_subdomain($domain)
+    {
+        if ($domain != '.' . Config::get('doolox.system_domain')) {
+            $domain = explode('.', $domain);
+            $subdomain = $domain[0];
+            $domain = $domain[1] . '.' . $domain[2];
+            $d = Domain::where('url', $domain)->first();
+            if (Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
+                return Response::json(array('free' => false, 'status' => 3));
+            }
+            else {
+                return Response::json(array('free' => true, 'status' => 0));
+            }
+        }
+        else {
+            return Response::json(array('free' => false, 'status' => 1));
+        }
+    }
+
     public static function is_domain_available($domain, $user)
     {
-        $taken = array('blog', 'wiki', 'admin', '');
+        // $taken = array('blog', 'wiki', 'admin', '');
         $domain = explode('.', $domain);
         try {
             $subdomain = $domain[2];
@@ -225,64 +260,31 @@ class DooloxController extends BaseController {
 
         if ($tld == Str::slug($tld) && $domain == Str::slug($domain) && $subdomain == Str::slug($subdomain)) {
             $domain = join(array($domain, $tld), '.');
-            // system domain
-            if ($domain == Config::get('doolox.system_domain')) {
-                $do = Domain::where('url', $domain)->first();
-
-                // in taken array, but user not superuser
-                if (in_array($subdomain, $taken) && !$user->isSuperUser()) {
-                    return array(false, 4);
+            if ($domain != Config::get('doolox.system_domain')) {
+                if (Domain::where('url', $domain)->count()) {
+                    return array(false, 3);
                 }
-                // taken
-                if (Site::where('domain_id', $do->id)->where('subdomain', $subdomain)->count()) {
-                    return array(false, 4);
-                }
-                // domain not taken
-                else {
-                    return array(true, 0);
-                }
-            }
-            // not system, but in database
-            else if (Domain::where('url', $domain)->count()) {
-                $do = Domain::where('url', $domain)->first();
-
-                // website already in database
-                if (Site::where('domain_id', $do->id)->where('subdomain', $subdomain)->count()) {
-                    return array(false, 4);
-                }
-                // not in database and user is owner
-                else if ($do->user_id == $user->id) {
-                    if (strlen($subdomain)) {
+                else if (in_array($tld, array('com', 'net', 'org'))) {
+                    if (self::namecom_is_available($domain)) {
+                        Log::debug("Name.com - domain available: $domain");
                         return array(true, 0);
                     }
                     else {
-                        return array(true, 1);
+                        return array(false, 2);
                     }
                 }
-                // not in database but not owner
                 else {
-                    return array(false, 4);
-                }
+                    $ip = gethostbyname($domain);
+                    if ($ip == $domain) {
+                        return array(false, 2);
+                    }
+                    else {
+                        return array(true, 0);
+                    }
+                }                    
             }
-            // not system, not in database, com, net, org
-            else if (in_array($tld, array('com', 'net', 'org'))) {
-                if (self::namecom_is_available($domain)) {
-                    Log::debug("Name.com - domain available: $domain");
-                    return array(true, 0);
-                }
-                else {
-                    return array(false, 2);
-                }
-            }
-            // other top level domains
             else {
-                $ip = gethostbyname($domain);
-                if ($ip == $domain) {
-                    return array(false, 2);
-                }
-                else {
-                    return array(true, 0);
-                }
+                return array(false, 3);
             }
         }
         else {
@@ -292,6 +294,7 @@ class DooloxController extends BaseController {
 
     public static function namecom_is_available($domain)
     {
+        return false;
         require_once(base_path() . "/tools/namecom_api.php");
         $api = new NameComApi();
         $api->login(Config::get('doolox.namecom_user'), Config::get('doolox.namecom_token'));

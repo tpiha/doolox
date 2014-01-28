@@ -167,6 +167,12 @@ Route::get('check-domain/{domain}', array(
     'uses' => 'DooloxController@check_domain',
 ));
 
+Route::get('check-subdomain/{domain}', array(
+    'as' => 'doolox.check_subdomain',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@check_subdomain',
+));
+
 Route::get('register', array(
     'as' => 'user.register',
     function() {

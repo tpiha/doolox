@@ -3,6 +3,7 @@ Doolox Todo List
 
 ### v1.1 ###
 
+* Connected callback needs Doolox app URL in connect API call
 * Domain management (using name.com API)
 * WordPress move tool
 * Switch features on and off depending on the doolox settings parameters
