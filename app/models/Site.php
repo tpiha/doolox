@@ -72,4 +72,68 @@ class Site extends Eloquent {
         });
     }
 
+    public function move($domain)
+    {
+        $old_url = $this->url;
+        $old_url = str_replace('http://', '', $old_url);
+        $old_url = str_replace('https://', '', $old_url);
+        if (substr($old_url, -1) == '/') {
+            $old_url = substr($old_url, 0, -1);
+        }
+        $new_url = $domain;
+        $old_path = base_path() . '/users/' . $this->getOwner()->first()->email . '/' . $old_url . '/';
+        $new_path = base_path() . '/users/' . $this->getOwner()->first()->email . '/' . $new_url . '/';
+        $old_link = base_path() . '/websites/' . $old_url;
+        $new_link = base_path() . '/websites/' . $new_url;
+
+        $user = $this->getOwner()->first();
+        $dbname = 'doolox' . $user->id . '_db' . $this->id;
+        $file = base_path() . '/app/storage/' . $dbname . '.sql';
+        exec('mysqldump ' . $dbname . ' -u' . Config::get('database.connections.managemysql.username') . ' -p' . Config::get('database.connections.managemysql.password') . ' > ' . $file);
+
+        $domain = explode('.', $domain);
+        $subdomain = $domain[0];
+        $domain = $domain[1] . '.' . $domain[2];
+
+        $d = Domain::where('url', $domain)->first();
+
+        $str = file_get_contents($file);
+        $str = str_replace("$old_url", "$new_url", $str);
+        $str = Site::fix_serialized($str);
+        file_put_contents($file, $str);
+
+        exec('mysql ' . $dbname . ' -u' . Config::get('database.connections.managemysql.username') . ' -p' . Config::get('database.connections.managemysql.password') . ' < ' . $file);
+        unlink($file);
+
+        rename($old_path, $new_path);
+
+        unlink($old_link);
+
+        symlink($new_path, $new_link);
+
+        $this->url = 'http://' . $new_url . '/';
+        $this->domain_id = $d->id;
+        $this->subdomain = $subdomain;
+        $this->save();
+    }
+
+    /**
+     * Fix a serialized string
+     */
+    public static function fix_serialized($string) {
+        if ( !preg_match('/^[aOs]:/', $string) ) return $string;
+        if ( @unserialize($string) !== false ) return $string;
+        $string = preg_replace_callback('/\bs:(\d+):"(.*?)"/', Site::fix_str_length, $string);
+        return $string;
+    }
+
+    /**
+     * Callback function for replacing the string
+     */
+    public static function fix_str_length($matches) {
+        $string = $matches[2];
+        $right_length = strlen($string);
+        return 's:' . $right_length . ':"' . $string . '"';
+    }
+
 }

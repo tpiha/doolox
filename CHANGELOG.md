@@ -17,6 +17,8 @@ Doolox Changelog
 * Bug - new site install passes validation without the subdomain (when not system domain)
 * Missing domain functions (+ name.com API)
 * Install new version on the server as a SAAS
+* Owner of the domain - passes when not checked and doesn't work with submiting the form
+* Connected callback needs Doolox app URL in connect API call
 
 ### v1.0 (Jan 19 2014) ###
 

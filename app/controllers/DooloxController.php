@@ -394,7 +394,8 @@ class DooloxController extends BaseController {
             'action' => 'connect',
             'username' => $username,
             'public_key' => $publickey,
-            'rand' => str_random(32)
+            'rand' => str_random(32),
+            'url' => Config::get('app.url')
         );
 
         $data = json_encode($data);
@@ -432,6 +433,69 @@ class DooloxController extends BaseController {
         $site = Site::find($site_id);
         $site->connected = true;
         $site->save();
+    }
+
+    public function site_move($id)
+    {
+        $site = Site::find($id);
+        $domains = array();
+        $_domains = Sentry::getUser()->getDomains()->get();
+        $selected = 0;
+        $selected_url = '';
+        foreach ($_domains as $domain) {
+            $domains["$domain->url"] = $domain->url;
+            $selected_url = $domain->url;
+        }
+        return View::make('site_move')->with(array('domains' => $domains, 'selected_url' => $selected_url, 'site' => $site));
+    }
+
+    public function site_move_post($id)
+    {
+        $domains = Sentry::getUser()->getDomains()->get();
+        $site = Site::find($id);
+        Validator::extend('domainav', function($attribute, $value, $parameters)
+        {
+            $domain = explode('.', $value);
+            $subdomain = $domain[0];
+            $domain = $domain[1] . '.' . $domain[2];
+
+            $d = Domain::where('url', $domain)->first();
+            if (Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
+                return false;
+            }
+            else if (!strlen($subdomain)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
+        $messages = array(
+            'domainav' => 'This domain is not available.',
+        );
+
+        $rules = array(
+            'url' => 'required|domainav',
+        );
+
+        $validator = Validator::make(Input::all(), $rules, $messages);
+
+        if ($validator->passes()) {
+            $site->move(Input::get('url'));
+            Session::flash('success', 'Website successfully moved.');
+            return Redirect::route('doolox.dashboard');
+        }
+
+        $_domains = array();
+        foreach ($domains as $domain) {
+            $_domains["$domain->url"] = $domain->url;
+            $selected_url = $domain->url;
+        }
+
+        Input::flash();
+
+        return View::make('site_move')->withErrors($validator)->with(array('domains' => $_domains, 'selected_url' => $selected_url, 'site' => $site));
     }
 
 }

@@ -9,7 +9,8 @@
         "rmccue/requests": ">=1.0",
         "rjkip/ftp-php": "dev-master",
         "bitpay/php-client": "dev-master",
-        "phpseclib/phpseclib": "0.3.*"
+        "phpseclib/phpseclib": "0.3.*",
+        "dg/mysql-dump": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

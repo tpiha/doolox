@@ -69,6 +69,18 @@ Route::get('site-delete/{id}', array(
     'uses' => 'DooloxController@site_delete',
 ));
 
+Route::get('site-move/{id}', array(
+    'as' => 'doolox.site_move',
+    'before' => 'auth.doolox:doolox.update',
+    'uses' => 'DooloxController@site_move',
+));
+
+Route::post('site-move-post/{id}', array(
+    'as' => 'doolox.site_move_post',
+    'before' => 'auth.doolox:doolox.update',
+    'uses' => 'DooloxController@site_move_post',
+));
+
 Route::get('account', array(
     'as' => 'user.account',
     'before' => 'auth.doolox:doolox.view',

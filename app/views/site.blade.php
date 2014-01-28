@@ -36,15 +36,17 @@
                 {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Update Website" />&nbsp;&nbsp;or&nbsp;&nbsp;<a class="text-danger" href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this website?', function(result) { if (result) { window.location.href = '{{ route('doolox.site_delete', $site->id) }}'; }});">Delete</a>
+            <input type="submit" class="btn btn-primary" value="Update Website" />
 
         {{ Form::close() }}
     </div>
 
     <div class="col-lg-6">
-        <h4>WordPress Connection</h4>
+        <h4>Actions</h4>
         <div class="well">
-            <a onclick="wpconnect({{ $site->id }}, '{{ $site->url }}');" href="javascript: void null;" class="btn btn-success btn-lg" style="width: 100%;">Connect</a>
+            <a onclick="wpconnect({{ $site->id }}, '{{ $site->url }}');" href="javascript: void null;" class="btn btn-success">Connect</a>
+            <a href="{{ route('doolox.site_move', $site->id) }}" class="btn btn-success">Move</a>
+            <a class="btn btn-danger" href="javascript: void null;" onclick="bootbox.confirm('Are you sure you want to delete this website?', function(result) { if (result) { window.location.href = '{{ route('doolox.site_delete', $site->id) }}'; }});">Delete</a>
         </div>
 
         <h4>Users</h4>
