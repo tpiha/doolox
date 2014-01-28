@@ -30,18 +30,38 @@ class DomainController extends BaseController {
         {
             $owner = (bool) Input::get('owner', 0);
             $av = DooloxController::is_domain_available($value, Sentry::getUser());
-            dd($av);
-            return ($owner || $av[0]);
+            if ($owner) {
+                return true;
+            }
+            
+            if ((int) $av[1] == 2) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
+        Validator::extend('domainused', function($attribute, $value, $parameters)
+        {
+            $av = DooloxController::is_domain_available($value, Sentry::getUser());            
+            if ((int) $av[1] == 3) {
+                return false;
+            }
+            else {
+                return true;
+            }
         });
 
         $messages = array(
-            'domaindots' => 'Please search without the subdomain part (www).',
-            'domainan' => 'Domains can only contain lowercase alphanumeric characters and dash.',
-            'domainav' => 'This domain is not available.',
+            'domaindots' => '<script type="text/javascript">$(document).ready(function() { $("#domain-invalid").fadeIn();  });</script>',
+            'domainan' => '<script type="text/javascript">$(document).ready(function() { $("#domain-invalid").fadeIn();  });</script>',
+            'domainav' => '<script type="text/javascript">$(document).ready(function() { $("#domain-taken").fadeIn(); $("#owner-parent").fadeIn();  });</script>',
+            'domainused' => '<script type="text/javascript">$(document).ready(function() { $("#domain-doolox").fadeIn();  });</script>',
         );
 
         $rules = array(
-            'url' => 'required|domaindots|domainan|domainav',
+            'url' => 'required|domaindots|domainan|domainused|domainav',
         );
 
         $validator = Validator::make(Input::all(), $rules, $messages);
