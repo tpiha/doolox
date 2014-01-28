@@ -19,6 +19,9 @@ Doolox Changelog
 * Install new version on the server as a SAAS
 * Owner of the domain - passes when not checked and doesn't work with submiting the form
 * Connected callback needs Doolox app URL in connect API call
+* WordPress move tool
+* Move - disable for remote sites
+* Changing email should change user folder and all his website links
 
 ### v1.0 (Jan 19 2014) ###
 

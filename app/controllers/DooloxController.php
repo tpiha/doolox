@@ -438,15 +438,21 @@ class DooloxController extends BaseController {
     public function site_move($id)
     {
         $site = Site::find($id);
-        $domains = array();
-        $_domains = Sentry::getUser()->getDomains()->get();
-        $selected = 0;
-        $selected_url = '';
-        foreach ($_domains as $domain) {
-            $domains["$domain->url"] = $domain->url;
-            $selected_url = $domain->url;
+        if ($site->local) {
+            $domains = array();
+            $_domains = Sentry::getUser()->getDomains()->get();
+            $selected = 0;
+            $selected_url = '';
+            foreach ($_domains as $domain) {
+                $domains["$domain->url"] = $domain->url;
+                $selected_url = $domain->url;
+            }
+            return View::make('site_move')->with(array('domains' => $domains, 'selected_url' => $selected_url, 'site' => $site));
         }
-        return View::make('site_move')->with(array('domains' => $domains, 'selected_url' => $selected_url, 'site' => $site));
+        else {
+            Session::flash('error', 'Remote websites can\'t be migrated.');
+            return Redirect::route('doolox.dashboard');
+        }
     }
 
     public function site_move_post($id)
@@ -482,7 +488,7 @@ class DooloxController extends BaseController {
         $validator = Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->passes()) {
-            $site->move(Input::get('url'));
+            $site->change_domain(Input::get('url'));
             Session::flash('success', 'Website successfully moved.');
             return Redirect::route('doolox.dashboard');
         }

@@ -46,6 +46,12 @@ class UserController extends BaseController {
             }
             else {
                 if ($user->email != Input::get('email')) {
+                    $sites = Site::where('user_id', $user->id)->get();
+                    foreach ($sites as $site) {
+                        if ($site->local) {
+                            $site->change_email(Input::get('email'));
+                        }
+                    }
                     $user->email = Input::get('email');
                     $user->save();
                 }

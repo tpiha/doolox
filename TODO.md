@@ -3,8 +3,6 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* WordPress move tool
-* Changing email should change user folder and all his website links
 * Domain management (using name.com API)
 * Switch features on and off depending on the doolox settings parameters
 * Finish plugin - clean all on deactivate, readme.txt, ...
