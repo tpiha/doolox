@@ -74,7 +74,8 @@ class DomainController extends BaseController {
                 return Redirect::route('domain.index');
             }
             else {
-                return Redirect::route('domain.domain_payment', array('id' => $domain->id));
+                // return Redirect::route('domain.domain_payment', array('id' => $domain->id));
+                return Redirect::to('https://sites.fastspring.com/doolox/instant/dooloxdomain');
             }
         }
 
