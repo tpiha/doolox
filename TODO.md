@@ -4,14 +4,11 @@ Doolox Todo List
 ### v1.1 ###
 
 * Domain management (using name.com API)
-* Switch features on and off depending on the doolox settings parameters
-* Finish plugin - clean all on deactivate, readme.txt, ...
-
 * SaaS - hosted models, packaging, payment
 
 ### v1.2 ###
 
-* Download version - private/public key scheme
+* Download version - private/public key scheme, remove payment processing
 * WordPress download cacheing
 * Fix tab indexes on all forms
 * Installation wizard

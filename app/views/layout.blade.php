@@ -52,6 +52,7 @@
                             <a href="{{ url() }}"><i class="fa fa-dashboard"></i> Dashboard</a>
                         </li>
 @if (Sentry::check())
+@if (Sentry::getUser()->isSuperUser() || Config::get('doolox.allow_user_management') || Config::get('doolox.hosting'))
                         <li class="dropdown">
                             <a href="javascript: void null;" onclick="toggle_dropdown('dropdown1');"><i class="fa fa-cog"></i> Settings <b class="caret"></b></a>
                             <ul class="dropdown-menu" id="dropdown1">
@@ -60,11 +61,14 @@
                                     <a href="{{ route('user.manage_users') }}">Users</a>
                                 </li>
 @endif
+@if (Sentry::getUser()->isSuperUser() || Config::get('doolox.hosting'))
                                 @if(Route::currentRouteName() == 'domain.index')<li class="active">@else<li>@endif
                                     <a href="{{ route('domain.index') }}">Domains</a>
                                 </li>
+@endif
                             </ul>
                         </li>
+@endif
                         @if(Route::currentRouteName() == 'user.account')<li class="active">@else<li>@endif
                             <a href="{{ route('user.account') }}"><i class="fa fa-user"></i> Account</a>
                         </li>

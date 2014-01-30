@@ -38,7 +38,7 @@ function wplogin(site_id, site_url) {
         type: 'get',
         async: false,
         success: function(data) {
-            $('#wploginform').attr('action', site_url + '/wp-login.php');
+            $('#wploginform').attr('action', site_url + 'wp-login.php');
             $('#ciphertext').val(data.cipher);
             $('#wploginform').submit();
         }

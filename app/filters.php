@@ -68,7 +68,7 @@ Route::filter('user-management', function()
 
     if ($redirect) {
             Session::flash('error', 'You don\'t have permissions to access this link.');
-            if (Auth::guest()) {
+            if (!Sentry::check()) {
                 return Redirect::route('user.login');
             }
             else {

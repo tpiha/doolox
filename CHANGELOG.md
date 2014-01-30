@@ -22,6 +22,8 @@ Doolox Changelog
 * WordPress move tool
 * Move - disable for remote sites
 * Changing email should change user folder and all his website links
+* Finish plugin - function names
+* Switch features on and off depending on the doolox settings parameters
 
 ### v1.0 (Jan 19 2014) ###
 
