@@ -24,6 +24,7 @@ Doolox Changelog
 * Changing email should change user folder and all his website links
 * Finish plugin - function names
 * Switch features on and off depending on the doolox settings parameters
+* SaaS - hosted models, packaging, payment
 
 ### v1.0 (Jan 19 2014) ###
 

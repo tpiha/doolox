@@ -205,7 +205,6 @@ Route::filter('limit-remote', function()
     $group2 = Sentry::findGroupByName('Doolox Business');
     $group3 = Sentry::findGroupByName('Doolox Unlimited');
     $sites = Site::where('user_id', $user->id)->where('local', false)->get();
-    dd(count($sites));
     if ($user->inGroup($group1)) {
         $limit = 30;
     }

@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder {
 		Eloquent::unguard();
 
 		$this->call('UserSeeder');
+        $this->call('GroupSeeder');
         $this->call('DomainSeeder');
 	}
 
@@ -23,7 +24,20 @@ class UserSeeder extends Seeder {
     {
         DB::table('users')->delete();
 
-        Sentry::createUser(array('email' => 'admin@admin.com', 'password' => 'admin', 'md5password' => md5('admin'), 'activated' => 1));
+        Sentry::createUser(array('email' => 'admin@admin.com', 'password' => 'admin', 'md5password' => md5('admin'), 'activated' => 1, 'permissions' => array('superuser' => 1) ));
+    }
+
+}
+
+class GroupSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('groups')->delete();
+
+        Sentry::createGroup(array('name' => 'Doolox Pro'));
+        Sentry::createGroup(array('name' => 'Doolox Business'));
+        Sentry::createGroup(array('name' => 'Doolox Unlimited'));
     }
 
 }

@@ -3,7 +3,7 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* SaaS - hosted models, packaging, payment
+* SaaS - upgrade and payment + upgrade notification
 
 ### v1.2 ###
 
