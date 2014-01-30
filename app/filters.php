@@ -171,3 +171,81 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+
+Route::filter('limit-local', function()
+{
+    $user = Sentry::getUser();
+    $group1 = Sentry::findGroupByName('Doolox Pro');
+    $group2 = Sentry::findGroupByName('Doolox Business');
+    $group3 = Sentry::findGroupByName('Doolox Unlimited');
+    $sites = Site::where('user_id', $user->id)->where('local', 1)->get();
+    if ($user->inGroup($group1)) {
+        $limit = 1;
+    }
+    else if ($user->inGroup($group2)) {
+        $limit = 50;
+    }
+    else if ($user->inGroup($group3)) {
+        $limit = 1000;
+    }
+    else {
+        $limit = 0;
+    }
+    if ($sites->count() >= $limit) {
+        Session::flash('error', 'No extra local installations available in your Doolox plan. Please upgrade to continue!');
+        return Redirect::route('doolox.dashboard');
+    }
+});
+
+Route::filter('limit-remote', function()
+{
+    $user = Sentry::getUser();
+    $group1 = Sentry::findGroupByName('Doolox Pro');
+    $group2 = Sentry::findGroupByName('Doolox Business');
+    $group3 = Sentry::findGroupByName('Doolox Unlimited');
+    $sites = Site::where('user_id', $user->id)->where('local', false)->get();
+    dd(count($sites));
+    if ($user->inGroup($group1)) {
+        $limit = 30;
+    }
+    else if ($user->inGroup($group2)) {
+        $limit = 200;
+    }
+    else if ($user->inGroup($group3)) {
+        $limit = 10000;
+    }
+    else {
+        $limit = 5;
+    }
+    if ($sites->count() >= $limit) {
+        Session::flash('error', 'No extra remote installations available in your Doolox plan. Please upgrade to continue!');
+        return Redirect::route('doolox.dashboard');
+    }
+});
+
+Route::filter('limit-size', function()
+{
+    $user = Sentry::getUser();
+    $group1 = Sentry::findGroupByName('Doolox Pro');
+    $group2 = Sentry::findGroupByName('Doolox Business');
+    $group3 = Sentry::findGroupByName('Doolox Unlimited');
+    $user_home = base_path() . '/users/' . $user->email . '/';
+    $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
+    if ($user->inGroup($group1)) {
+        $limit = 1024;
+    }
+    else if ($user->inGroup($group2)) {
+        $limit = 51200;
+    }
+    else if ($user->inGroup($group3)) {
+        $limit = 204800;
+    }
+    else {
+        $limit = 1;
+    }
+    if ($size >= $limit) {
+        Session::flash('error', 'You don\'t have enough disk space for this action. Please upgrade to continue!');
+        return Redirect::route('doolox.dashboard');
+    }
+});

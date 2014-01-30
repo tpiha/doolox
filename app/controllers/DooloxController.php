@@ -504,4 +504,23 @@ class DooloxController extends BaseController {
         return View::make('site_move')->withErrors($validator)->with(array('domains' => $_domains, 'selected_url' => $selected_url, 'site' => $site));
     }
 
+    public static function folder_size($dir){
+        $count_size = 0;
+        $count = 0;
+        $dir_array = scandir($dir);
+        foreach($dir_array as $key=>$filename) {
+            if($filename!=".." && $filename!=".") {
+                if(is_dir($dir."/".$filename)) {
+                    $new_foldersize = self::folder_size($dir."/".$filename);
+                    $count_size = $count_size + $new_foldersize;
+                } else if(is_file($dir."/".$filename)) {
+                    $count_size = $count_size + filesize($dir."/".$filename);
+                    $count++;
+                }
+            }
+
+        }
+        return $count_size;
+    }
+
 }

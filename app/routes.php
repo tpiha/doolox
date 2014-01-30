@@ -51,7 +51,7 @@ Route::post('site/{id}', array(
 
 Route::get('site-new', array(
     'as' => 'doolox.site_new',
-    'before' => 'auth.doolox:doolox.update',
+    'before' => 'auth.doolox:doolox.update|limit-remote',
     function () {
         return View::make('site_new');
     }
@@ -149,19 +149,19 @@ Route::post('user-update/{id}', array(
 
 Route::get('site-install', array(
     'as' => 'doolox.site_install',
-    'before' => 'auth.doolox:doolox.view',
+    'before' => 'auth.doolox:doolox.view|limit-local|limit-size',
     'uses' => 'DooloxController@site_install',
 ));
 
 Route::post('site-install-post', array(
     'as' => 'doolox.site_install_post',
-    'before' => 'auth.doolox:doolox.view',
+    'before' => 'auth.doolox:doolox.view|limit-local|limit-size',
     'uses' => 'DooloxController@site_install_post',
 ));
 
 Route::get('site-install-step2', array(
     'as' => 'doolox.site_install_step2',
-    'before' => 'auth.doolox:doolox.view',
+    'before' => 'auth.doolox:doolox.view|limit-local|limit-size',
     function() {
         return View::make('site_install_step2')->with(array('domain' => Session::get('domain'), 'url' => Session::get('url')));
     }
@@ -169,7 +169,7 @@ Route::get('site-install-step2', array(
 
 Route::post('site-install-step2', array(
     'as' => 'doolox.site_install_step2',
-    'before' => 'auth.doolox:doolox.view',
+    'before' => 'auth.doolox:doolox.view|limit-local|limit-size',
     'uses' => 'DooloxController@site_install_step2',
 ));
 
