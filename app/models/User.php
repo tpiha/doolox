@@ -18,12 +18,12 @@ class User extends SentryUserModel {
 
     public function getDomains()
     {
-        return DB::table('domains')->where('user_id', $this->id)->orWhere('system_domain', true);
+        return Domain::where('user_id', $this->id)->orWhere('system_domain', true);
     }
 
     public function getOwnedSites()
     {
-        return DB::table('sites')->where('user_id', $this->id);
+        return Site::where('user_id', $this->id);
     }
 
     public static function boot()
