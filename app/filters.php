@@ -248,3 +248,47 @@ Route::filter('limit-size', function()
         return Redirect::route('doolox.dashboard');
     }
 });
+
+Route::filter('check-plan', function()
+{
+    $user = Sentry::getUser();
+    if ($user) {
+        $group1 = Sentry::findGroupByName('Doolox Pro');
+        $group2 = Sentry::findGroupByName('Doolox Business');
+        $group3 = Sentry::findGroupByName('Doolox Unlimited');
+
+        $sites_local = Site::where('user_id', $user->id)->where('local', true)->get();
+        $sites_remote = Site::where('user_id', $user->id)->where('local', false)->get();
+        $user_home = base_path() . '/users/' . $user->email . '/';
+        $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
+
+        Session::flash('limit-installations-current', $sites_local->count());
+        Session::flash('limit-management-current', $sites_remote->count());
+        Session::flash('limit-size-current', $size);
+
+        if ($user->inGroup($group1)) {
+            Session::flash('limit-installations', 1);
+            Session::flash('limit-management', 30);
+            Session::flash('limit-size', 1024);
+        }
+        else if ($user->inGroup($group2)) {
+            Session::flash('limit-installations', 50);
+            Session::flash('limit-management', 200);
+            Session::flash('limit-size', 51200);
+        }
+        else if ($user->inGroup($group3)) {
+            Session::flash('limit-installations', 10000);
+            Session::flash('limit-management',10000);
+            Session::flash('limit-size', 204800);
+        }
+        else {
+            Session::flash('limit-installations', 0);
+            Session::flash('limit-management',5);
+            Session::flash('limit-size', 0);
+        }
+
+        if (!$user->inGroup($group1) && !$user->inGroup($group2) && !$user->inGroup($group3)) {
+            Session::flash('plan-notice', 'You are using Doolox Free plan. Please <a href="' . URL::route('doolox.upgrade') . '">upgrade</a> to use all Doolox features!');
+        }
+    }
+});

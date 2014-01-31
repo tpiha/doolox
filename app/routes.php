@@ -265,3 +265,9 @@ Route::post('connected', array(
     'as' => 'doolox.connected',
     'uses' => 'DooloxController@connected',
 ));
+
+Route::get('upgrade', array(
+    'as' => 'doolox.upgrade',
+    'before' => 'auth.doolox:doolox.view',
+    'uses' => 'DooloxController@upgrade',
+));

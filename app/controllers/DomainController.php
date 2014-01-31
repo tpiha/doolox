@@ -2,6 +2,11 @@
 
 class DomainController extends BaseController {
 
+    public function __construct()
+    {
+        $this->beforeFilter('check-plan');
+    }
+
 	public function domain_new()
     {
         Validator::extend('domaindots', function($attribute, $value, $parameters)

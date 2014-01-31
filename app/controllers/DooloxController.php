@@ -2,6 +2,11 @@
 
 class DooloxController extends BaseController {
 
+    public function __construct()
+    {
+        $this->beforeFilter('check-plan');
+    }
+
 	public function dashboard()
     {
         $rsa = new Crypt_RSA();
@@ -521,6 +526,11 @@ class DooloxController extends BaseController {
 
         }
         return $count_size;
+    }
+
+    public function upgrade()
+    {
+        return View::make('upgrade');
     }
 
 }

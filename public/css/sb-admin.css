@@ -130,6 +130,11 @@ table.tablesorter thead tr th:hover {
 	padding: 15px 15px 15px 25px;
   }
 
+  .side-nav>li.dropdown>ul.dropdown-menu>li>span {
+    color: #DDD;
+    padding: 15px 15px 15px 25px;
+  }
+
   .side-nav>li.dropdown>ul.dropdown-menu>li.active>a {
     color: #ffffff;
     background-color: #080808;

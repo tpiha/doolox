@@ -7,6 +7,12 @@
         <ol class="breadcrumb">
             <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
         </ol>
+@if(Session::has('plan-notice'))
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{ Session::get('plan-notice') }}
+                        </div>
+@endif
 @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
