@@ -20,6 +20,12 @@ Route::group(array('before' => 'check-plan'), function()
         'uses' => 'DooloxController@dashboard',
     ));
 
+    Route::get('registered', array(
+        'as' => 'doolox.dashboard_registered',
+        'before' => 'auth.doolox:doolox.view',
+        'uses' => 'DooloxController@dashboard',
+    ));
+
     Route::post('login', array(
         'as' => 'user.login',
         'uses' => 'UserController@login',

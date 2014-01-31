@@ -196,7 +196,7 @@ class UserController extends BaseController {
 
             Sentry::login($user, false);
             Session::flash('success', 'You have successfully registered on Doolox.');
-            return Redirect::route('doolox.dashboard');
+            return Redirect::route('doolox.dashboard_registered');
         }
 
         return View::make('user_register')->withErrors($validator);
