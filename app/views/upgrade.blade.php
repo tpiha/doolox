@@ -33,7 +33,7 @@
                 </li>
             </ul>
             <div class="list-group">
-                <a href="https://sites.fastspring.com/doolox/instant/pro1month" class="list-group-item active">
+                <a href="https://sites.fastspring.com/doolox/instant/pro1month?referrer={{ Sentry::getUser()->id }}" class="list-group-item active">
                     <strong>Upgrade to Doolox Pro</strong>
                 </a>
             </div>
@@ -61,7 +61,7 @@
                 </li>
             </ul>
             <div class="list-group">
-                <a href="https://sites.fastspring.com/doolox/instant/business1month" class="list-group-item active">
+                <a href="https://sites.fastspring.com/doolox/instant/business1month?referrer={{ Sentry::getUser()->id }}" class="list-group-item active">
                     <strong>Upgrade to Doolox Business</strong>
                 </a>
             </div>
@@ -89,7 +89,7 @@
                 </li>
             </ul>
             <div class="list-group">
-                <a href="https://sites.fastspring.com/doolox/instant/unlimited1month" class="list-group-item active">
+                <a href="https://sites.fastspring.com/doolox/instant/unlimited1month?referrer={{ Sentry::getUser()->id }}" class="list-group-item active">
                     <strong>Upgrade to Doolox Unlimited</strong>
                 </a>
             </div>

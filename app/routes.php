@@ -276,3 +276,8 @@ Route::group(array('before' => 'check-plan'), function()
     ));
 
 });
+
+Route::get('paid-plan', array(
+    'as' => 'doolox.paid_plan',
+    'uses' => 'DooloxController@paid_plan',
+));

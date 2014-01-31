@@ -528,4 +528,15 @@ class DooloxController extends BaseController {
         return View::make('upgrade');
     }
 
+    public function paid_plan() {
+        $privatekey = Config::get('doolox.fskey');
+        $secdata = Request::server('security_data');
+        $sechash = Request::server('security_hash');
+        Log::info('FastSpring ' . $secdata . ' ' . $sechash);
+        // if (md5($secdata . $privatekey) == $sechash){
+        //     die('received');
+        // }
+        // die('not received');
+    }
+
 }

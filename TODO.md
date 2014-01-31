@@ -7,6 +7,7 @@ Doolox Todo List
 * Donation page
 * Google Analytics + Goals
 * Subscribe new users to newsletter
+* Downloads page
 
 ### v1.2 ###
 
