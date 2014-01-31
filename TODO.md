@@ -3,8 +3,8 @@ Doolox Todo List
 
 ### v1.1 ###
 
+* Bug - deleting user deletes websites that it shouldn't
 * Donation page
-* Google Analytics + Goals
 * Subscribe new users to newsletter
 * Downloads page
 

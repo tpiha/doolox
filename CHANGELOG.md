@@ -3,7 +3,7 @@ Doolox Changelog
 
 ### v1.1 ###
 
-* Option to remember logged in user
+* Option to remember a logged in user
 * Integrated Laravel Cpanel
 * Self hosted WordPress installation
 * Add "Install New" button on dashboard with existing sites
@@ -28,6 +28,7 @@ Doolox Changelog
 * Fix FS emails
 * SaaS - upgrade and payment + upgrade notification
 * Remove email activation (there's no need for it with our free plan)
+* Google Analytics + Goals
 
 ### v1.0 (Jan 19 2014) ###
 
