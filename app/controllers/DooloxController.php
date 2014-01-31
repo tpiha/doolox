@@ -326,7 +326,7 @@ class DooloxController extends BaseController {
             'admin_email' => $email,
             'blog_public' => 1,
         );
-        $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array(), $data);
+        $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array('timeout' => 15,), $data);
     }
 
     public static function get_wordpress($user, $domain)
