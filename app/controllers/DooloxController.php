@@ -529,6 +529,7 @@ class DooloxController extends BaseController {
     }
 
     public function paid_plan() {
+        Log::info('FastSpring start');
         $privatekey = Config::get('doolox.fskey');
         $secdata = Request::server('security_data');
         $sechash = Request::server('security_hash');
