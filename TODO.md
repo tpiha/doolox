@@ -3,7 +3,7 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* Upgrade page - missing monthly
+* Fix FS emails
 * SaaS - upgrade and payment + upgrade notification
 * Donation page
 * Google Analytics + Goals
