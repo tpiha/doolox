@@ -42,7 +42,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ url() }}"><img src="{{ url('images/doolox-logo.png') }}" alt="" /> <div>Doolox</div></a>
+                    <a class="navbar-brand" href="/"><img src="{{ url('images/doolox-logo.png') }}" alt="" /> <div>Doolox</div></a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
