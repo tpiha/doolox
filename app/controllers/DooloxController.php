@@ -530,13 +530,26 @@ class DooloxController extends BaseController {
 
     public function paid_plan() {
         $privatekey = Config::get('doolox.fskey');
-        $secdata = Request::header('security_data');
-        $sechash = Request::header('security_hash');
-        Log::info('FastSpring ' . $_REQUEST['security_data'] . " " . $_REQUEST['security_hash'] . " " . Input::get('SubscriptionPath'));
-        // if (md5($secdata . $privatekey) == $sechash){
-        //     die('received');
-        // }
-        // die('not received');
+        $secdata = $_REQUEST['security_data'];
+        $sechash = $_REQUEST['security_hash'];
+
+        if (md5($secdata . $privatekey) == $sechash){
+            $product = Input::get('SubscriptionPath');
+            $user_id = (int) Input::get('SubscriptionReferrer');
+            Log::info('FastSpring ' .  . " " .  . " " . );
+
+            if ($product == '/pro1month') {
+                $group = Sentry::findGroupByName('Doolox Pro');
+            }
+            else if ($product == '/business1month') {
+                $group = Sentry::findGroupByName('Doolox Business');
+            }
+            else {
+                $group = Sentry::findGroupByName('Doolox Unlimited');
+            }
+            $user = Sentry::findUserById($user_id);
+            $user->addGroup($group);
+        }
     }
 
 }
