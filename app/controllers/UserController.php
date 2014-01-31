@@ -1,11 +1,6 @@
-<?php
+ <?php
 
 class UserController extends BaseController {
-
-    public function __construct()
-    {
-        $this->beforeFilter('check-plan');
-    }
 
 	public function login()
     {
