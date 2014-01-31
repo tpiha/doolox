@@ -29,7 +29,7 @@
                 </li>
                 <li class="list-group-item">
                   <span class="badge">$14.-</span>
-                  Price (monthly)
+                  Price / <strong>month</strong>
                 </li>
             </ul>
             <div class="list-group">
@@ -57,7 +57,7 @@
                 </li>
                 <li class="list-group-item">
                   <span class="badge">$29.-</span>
-                  Price (monthly)
+                  Price / <strong>month</strong>
                 </li>
             </ul>
             <div class="list-group">
@@ -85,7 +85,7 @@
                 </li>
                 <li class="list-group-item">
                   <span class="badge">$59.-</span>
-                  Price (monthly)
+                  Price / <strong>month</strong>
                 </li>
             </ul>
             <div class="list-group">
