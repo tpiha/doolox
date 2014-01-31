@@ -532,7 +532,7 @@ class DooloxController extends BaseController {
         $privatekey = Config::get('doolox.fskey');
         $secdata = Request::header('security_data');
         $sechash = Request::header('security_hash');
-        Log::info('FastSpring ' . $_REQUEST['security_data']);
+        Log::info('FastSpring ' . var_dump($_REQUEST));
         // if (md5($secdata . $privatekey) == $sechash){
         //     die('received');
         // }
