@@ -533,10 +533,9 @@ class DooloxController extends BaseController {
         $secdata = $_REQUEST['security_data'];
         $sechash = $_REQUEST['security_hash'];
 
-        if (md5($secdata . $privatekey) == $sechash){
+        if (md5($secdata . $privatekey) == $sechash) {
             $product = Input::get('SubscriptionPath');
             $user_id = (int) Input::get('SubscriptionReferrer');
-            Log::info('FastSpring ' .  . " " .  . " " . );
 
             if ($product == '/pro1month') {
                 $group = Sentry::findGroupByName('Doolox Pro');
@@ -549,6 +548,8 @@ class DooloxController extends BaseController {
             }
             $user = Sentry::findUserById($user_id);
             $user->addGroup($group);
+
+            Log::info('FastSpring - user activated: ' . $user->email);
         }
     }
 
