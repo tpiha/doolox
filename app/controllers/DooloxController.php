@@ -202,7 +202,10 @@ class DooloxController extends BaseController {
             $dbpass = str_random(32);
             self::create_database($dbname, $dbname, $dbpass);
             self::create_wp_config($user, $url, $dbname, $dbpass);
-            self::install_wordpress($url, $title, $username, $password, $email);
+            try {
+                self::install_wordpress($url, $title, $username, $password, $email);
+            }
+            catch (Exception $e) {}
             Session::flash('success', 'New Doolox website successfully installed.');
             return Redirect::route('doolox.dashboard');
         }
