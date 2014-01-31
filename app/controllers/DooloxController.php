@@ -332,11 +332,10 @@ class DooloxController extends BaseController {
     public static function get_wordpress($user, $domain)
     {
         $dir = base_path() . '/users/' . $user->email . '/';
-        $url = 'http://wordpress.org/latest.zip';
-        file_put_contents($dir . basename($url), file_get_contents($url));
+        copy(base_path() . '/latest.zip', $dir . 'latest.zip');
 
         $zip = new ZipArchive;
-        $res = $zip->open($dir . basename($url));
+        $res = $zip->open($dir . 'latest.zip');
         if ($res === true) {
             $zip->extractTo($dir);
             $zip->close();
