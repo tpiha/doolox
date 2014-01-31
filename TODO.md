@@ -3,8 +3,6 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* Bug - deleting user deletes websites that it shouldn't
-* Donation page
 * Subscribe new users to newsletter
 * Downloads page
 
@@ -14,7 +12,7 @@ Doolox Todo List
 * Download version - private/public key scheme, remove payment processing
 * WordPress download cacheing
 * Fix tab indexes on all forms
-* Installation wizard
+* Self-hosted installation wizard
 * Tools (Install New WordPress website on FTP server)
 * Ftp servers management
 * Recovering forgotten password

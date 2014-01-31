@@ -21,6 +21,11 @@ class User extends SentryUserModel {
         return Domain::where('user_id', $this->id)->orWhere('system_domain', true);
     }
 
+    public function getOwnedDomains()
+    {
+        return Domain::where('user_id', $this->id);
+    }
+
     public function getOwnedSites()
     {
         return Site::where('user_id', $this->id);
@@ -54,7 +59,7 @@ class User extends SentryUserModel {
             foreach ($sites as $site) {
                 Site::destroy($site->id);
             }
-            $domains = $user->getDomains()->get();
+            $domains = $user->getOwnedDomains()->get();
             foreach ($domains as $domain) {
                 Domain::destroy($domain->id);
             }

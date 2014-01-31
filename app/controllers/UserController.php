@@ -111,10 +111,10 @@ class UserController extends BaseController {
         $auth_user = Sentry::getUser();
 
         if ($auth_user->isSuperUser() || $auth_user->id == $user->parent_id) {
-            $wpusersites = SiteUser::where('user_id', (int) $id)->get();
-            foreach ($wpusersites as $wpusersite) {
-                $wpusersite->delete();
-            }
+            // $wpusersites = SiteUser::where('user_id', (int) $id)->get();
+            // foreach ($wpusersites as $wpusersite) {
+            //     $wpusersite->delete();
+            // }
             $user->delete();
             Session::flash('success', 'User successfully deleted.');
             return Redirect::route('user.manage_users');

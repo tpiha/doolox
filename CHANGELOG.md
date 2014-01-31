@@ -29,6 +29,8 @@ Doolox Changelog
 * SaaS - upgrade and payment + upgrade notification
 * Remove email activation (there's no need for it with our free plan)
 * Google Analytics + Goals
+* Donation page
+* Bug - deleting user deletes websites that it shouldn't
 
 ### v1.0 (Jan 19 2014) ###
 
