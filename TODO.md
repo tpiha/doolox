@@ -3,8 +3,6 @@ Doolox Todo List
 
 ### v1.1 ###
 
-* Fix FS emails
-* SaaS - upgrade and payment + upgrade notification
 * Donation page
 * Google Analytics + Goals
 * Subscribe new users to newsletter

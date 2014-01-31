@@ -154,7 +154,7 @@ class UserController extends BaseController {
         }
     }
 
-    public function register()
+    public function register_post()
     {
         if (!Config::get('doolox.registration')) {
             Session::flash('error', 'Registration is disabled, plase contact your Doolox admin.');
@@ -170,22 +170,33 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            $user = Sentry::register(array(
-                'email'    => Input::get('email'),
-                'password' => Input::get('password1'),
+
+            // $user = Sentry::register(array(
+            //     'email'    => Input::get('email'),
+            //     'password' => Input::get('password1'),
+            // ));
+
+            $user = Sentry::createUser(array(
+                'email'     => Input::get('email'),
+                'password'  => Input::get('password1'),
+                'activated' => true,
             ));
 
-            $code = $user->getActivationCode();
+            // $code = $user->getActivationCode();
 
-            $data = array(
-                'user' => $user,
-                'code' => $code
-            );
-            Mail::send('emails.welcome', $data, function($message) use ($user)
-            {
-                $message->to($user->email, $user->first_name . ' ' . $user->last_name)->subject('Welcome to Doolox');
-            });
-            Session::flash('success', 'Activation link has been sent to your email.');
+            // $data = array(
+            //     'user' => $user,
+            //     'code' => $code
+            // );
+            // Mail::send('emails.welcome', $data, function($message) use ($user)
+            // {
+            //     $message->to($user->email, $user->first_name . ' ' . $user->last_name)->subject('Welcome to Doolox');
+            // });
+            // Session::flash('success', 'Activation link has been sent to your email.');
+
+            Sentry::login($user, false);
+            Session::flash('success', 'You have successfully registered on Doolox.');
+            return Redirect::route('doolox.dashboard');
         }
 
         return View::make('user_register')->withErrors($validator);

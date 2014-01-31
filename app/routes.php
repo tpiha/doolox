@@ -201,9 +201,9 @@ Route::group(array('before' => 'check-plan'), function()
         }
     ));
 
-    Route::post('register', array(
-        'as' => 'user.register',
-        'uses' => 'UserController@register',
+    Route::post('register-post', array(
+        'as' => 'user.register_post',
+        'uses' => 'UserController@register_post',
     ));
 
     Route::get('activate/{user_id}/{code}', array(

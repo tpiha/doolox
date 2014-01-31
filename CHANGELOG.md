@@ -25,6 +25,9 @@ Doolox Changelog
 * Finish plugin - function names
 * Switch features on and off depending on the doolox settings parameters
 * SaaS - hosted models, packaging, payment
+* Fix FS emails
+* SaaS - upgrade and payment + upgrade notification
+* Remove email activation (there's no need for it with our free plan)
 
 ### v1.0 (Jan 19 2014) ###
 

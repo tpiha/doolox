@@ -23,7 +23,7 @@
 </div>
 <div class="row">
     <div class="col-lg-6">
-        {{ Form::open(array('url' => 'register', 'method' => 'post', 'role' => 'form')) }}
+        {{ Form::open(array('url' => 'register-post', 'method' => 'post', 'role' => 'form')) }}
 
             <p class="help-block">required fields are marked with *</p>
 
