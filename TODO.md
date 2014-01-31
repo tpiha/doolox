@@ -6,6 +6,7 @@ Doolox Todo List
 * SaaS - upgrade and payment + upgrade notification
 * Donation page
 * Google Analytics + Goals
+* Subscribe new users to newsletter
 
 ### v1.2 ###
 

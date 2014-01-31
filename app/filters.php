@@ -193,7 +193,7 @@ Route::filter('limit-local', function()
         $limit = 0;
     }
     if ($sites->count() >= $limit) {
-        Session::flash('error', 'No extra local installations available in your Doolox plan. Please upgrade to continue!');
+        Session::flash('error', 'No extra local installations available in your Doolox plan. Please <a href="' . URL::route('doolox.upgrade') . '">upgrade</a> to continue!');
         return Redirect::route('doolox.dashboard');
     }
 });
