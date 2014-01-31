@@ -156,7 +156,7 @@ class UserController extends BaseController {
 
     public function register()
     {
-        if (!Config::get('user.registration')) {
+        if (!Config::get('doolox.registration')) {
             Session::flash('error', 'Registration is disabled, plase contact your Doolox admin.');
             return Redirect::route('user.login');
         }

@@ -4,6 +4,8 @@ Doolox Todo List
 ### v1.1 ###
 
 * SaaS - upgrade and payment + upgrade notification
+* Donation page
+* Google Analytics + Goals
 
 ### v1.2 ###
 
