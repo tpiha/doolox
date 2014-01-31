@@ -77,13 +77,13 @@
                             <a href="javascript: void null;" onclick="toggle_dropdown('dropdown2');"><i class="fa fa-cog"></i> Doolox Stats <b class="caret"></b></a>
                             <ul class="dropdown-menu" id="dropdown2">
                                 <li>
-                                    <span>Installations: {{ Session::get('limit-installations-current') }}/{{ Session::get('limit-installations') }}</span>
+                                    <span>Installations: {{ Session::get('limit-installations-current') }} / {{ Session::get('limit-installations') }}</span>
                                 </li>
                                 <li>
-                                    <span>Management:  {{ Session::get('limit-management-current') }}/{{ Session::get('limit-management') }}</span>
+                                    <span>Management:  {{ Session::get('limit-management-current') }} / {{ Session::get('limit-management') }}</span>
                                 </li>
                                 <li>
-                                    <span>Disc: {{ Session::get('limit-size-current') }}/{{ Session::get('limit-size') }} (MB)</span>
+                                    <span>Disc: {{ Session::get('limit-size-current') }} / {{ Session::get('limit-size') }} (MB)</span>
                                 </li>
                             </ul>
                         </li>
