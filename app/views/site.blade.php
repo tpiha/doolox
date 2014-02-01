@@ -44,7 +44,7 @@
     <div class="col-lg-6">
         <h4>Actions</h4>
         <div class="well">
-            <a onclick="wpconnect({{ $site->id }}, '{{ $site->url }}');" href="javascript: void null;" class="btn btn-success">Connect</a>
+            <a onclick="wpconnect({{ $site->id }}, '{{ $site->url }}', '{{ $site->admin_url }}');" href="javascript: void null;" class="btn btn-success">Connect</a>
 @if($site->local)
             <a href="{{ route('doolox.site_move', $site->id) }}" class="btn btn-success">Move</a>
 @endif

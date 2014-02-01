@@ -22,7 +22,13 @@ else {
     document.write('<style type="text/css">#dropdown2 { display: none; }</style>');
 }
 
-function wpconnect(site_id, site_url) {
+function wpconnect(site_id, site_url, admin_url) {
+    if (admin_url.length) {
+        var url = site_url + admin_url;
+    }
+    else {
+        var url = site_url + 'wp-login.php';
+    }
     bootbox.prompt("WordPress website username:<br /><span style=\"font-size: 12px; color: #888;\">(only first time and it's not stored in our database)</span>", function(result) {                
         if (result !== null) {
             $.ajax({
@@ -30,7 +36,7 @@ function wpconnect(site_id, site_url) {
                 type: 'get',
                 async: false,
                 success: function(data) {
-                    $('#wploginform').attr('action', site_url + 'wp-login.php');
+                    $('#wploginform').attr('action', url);
                     $('#ciphertext').val(data.cipher);
                     $('#wploginform').submit();
                 }
@@ -39,13 +45,19 @@ function wpconnect(site_id, site_url) {
     });    
 }
 
-function wplogin(site_id, site_url) {
+function wplogin(site_id, site_url, admin_url) {
+    if (admin_url.length) {
+        var url = site_url + admin_url;
+    }
+    else {
+        var url = site_url + 'wp-login.php';
+    }
     $.ajax({
         url: base_url + 'wpcipher-login/' + site_id,
         type: 'get',
         async: false,
         success: function(data) {
-            $('#wploginform').attr('action', site_url + 'wp-login.php');
+            $('#wploginform').attr('action', url);
             $('#ciphertext').val(data.cipher);
             $('#wploginform').submit();
         }
