@@ -435,6 +435,7 @@ class DooloxController extends BaseController {
         $site = Site::find($site_id);
         $site->connected = true;
         $site->save();
+        Log::info('Connected site ID: ' . $site_id . " " . $site->url);
     }
 
     public function site_move($id)
