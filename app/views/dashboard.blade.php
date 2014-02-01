@@ -51,7 +51,7 @@
                         <td>@if ($site->local)<span class="label label-success">Local</span>@else<span class="label label-danger">Remote</span>@endif</td>
                         <td align="center">
 @if($site->connected)
-                                <a class="btn btn-primary btn-xs" href="javascript: void null;" onclick="wplogin({{ $site->id }}, '{{ $site->url }}');">Login</a>
+                                <a class="btn btn-primary btn-xs" href="javascript: void null;" onclick="wplogin({{ $site->id }}, '{{ $site->url }}', '{{ $site->admin_url }}');">Login</a>
 @else
                                 <span class="label label-danger">Not Connected</span>
 @endif
