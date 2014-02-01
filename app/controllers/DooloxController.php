@@ -432,7 +432,7 @@ class DooloxController extends BaseController {
 
     public function connected() {
         $site_id = Input::get('id');
-        $site = Site::find($site_id);
+        $site = Site::findOrFail($site_id);
         $site->connected = true;
         $site->save();
         Log::info('Connected site ID: ' . $site_id . " " . $site->url);
