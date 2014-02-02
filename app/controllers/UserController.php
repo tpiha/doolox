@@ -102,6 +102,8 @@ class UserController extends BaseController {
 
         Input::flash();
 
+        $user->subscribe_to_newsletter();
+
         return View::make('user_new')->withErrors($validator);
     }
 
@@ -193,6 +195,8 @@ class UserController extends BaseController {
             //     $message->to($user->email, $user->first_name . ' ' . $user->last_name)->subject('Welcome to Doolox');
             // });
             // Session::flash('success', 'Activation link has been sent to your email.');
+
+            $user->subscribe_to_newsletter();
 
             Sentry::login($user, false);
             Session::flash('success', 'You have successfully registered on Doolox.');
