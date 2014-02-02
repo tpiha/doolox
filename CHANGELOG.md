@@ -31,6 +31,8 @@ Doolox Changelog
 * Google Analytics + Goals
 * Donation page
 * Bug - deleting user deletes websites that it shouldn't
+* Forms validation checkup (leading/trailing slashes, http://, ...)
+* Downloads page
 
 ### v1.0 (Jan 19 2014) ###
 
