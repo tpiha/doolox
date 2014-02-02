@@ -95,14 +95,13 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
+            $user->subscribe_to_newsletter();
             Sentry::createUser(array('email' => Input::get('email'), 'password' => Input::get('password1'), 'md5password' => md5(Input::get('password1')), 'activated' => 1, 'parent_id' => $user->id));
             Session::flash('success', 'New user successfully added.');
             return Redirect::route('user.manage_users');
         }
 
         Input::flash();
-
-        $user->subscribe_to_newsletter();
 
         return View::make('user_new')->withErrors($validator);
     }
