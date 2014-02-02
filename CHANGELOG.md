@@ -3,7 +3,7 @@ Doolox Changelog
 
 ### v1.2 ###
 
-
+* Create connecting tutorial
 
 ### v1.1 (Feb 2 2014) ###
 

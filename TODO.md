@@ -3,13 +3,13 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Create connecting tutorial
 * Subscribe new users to newsletter
 * Name.com API configuration
 * Automatic domain activation
-* Download version - private/public key scheme, remove payment processing
 * WordPress download caching
 * Self-hosted installation wizard
+* Self-hosted - private/public key scheme
+* Self-hosted - remove SaaS stuff
 
 ### v1.3 ###
 
