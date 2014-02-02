@@ -17,7 +17,7 @@ Now setup app/config/database.php file and run this in the shell:
 composer update
 php artisan migrate:install
 php artisan migrate
-php artisan cpanel:user
+php artisan db:seed
 ```
 
 You can now login on [http://localhost/doolox/](http://localhost/doolox/)
