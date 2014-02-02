@@ -3,6 +3,7 @@ Doolox Todo List
 
 ### v1.2 ###
 
+* Upgrade - make more visible
 * Setup real Name.com API credentials
 * Name.com API configuration
 * Automatic domain activation

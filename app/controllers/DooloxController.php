@@ -44,27 +44,38 @@ class DooloxController extends BaseController {
 
     public function site_new()
     {
-        $rules = array(
-            'name' => 'required',
-            'url' => 'required',
+        Validator::extend('wpurl', function($attribute, $value, $parameters)
+        {
+            if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/", $value)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
+        $messages = array(
+            'wpurl' => 'URL is not valid. Allowed characters are lowercase alphanumeric, dash, dot and slash. URL can start with http:// or https://.',
         );
 
-        $validator = Validator::make(Input::all(), $rules);
+        $rules = array(
+            'name' => 'required',
+            'url' => 'required|wpurl',
+        );
+
+        $validator = Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->passes()) {
             $input = Input::except('_token');
-            $input['url'] = Str::slug($input['url']);
             if (strpos($input['url'], 'http://') !== 0 && strpos($input['url'], 'https://') !== 0) {
                 $input['url'] = 'http://' . $input['url'];
             }
             if (substr($input['url'], -1) != '/') {
                 $input['url'] .= '/';
             }
-
             if (strlen($input['admin_url']) && $input['admin_url'][0] == '/') {
                  $input['admin_url'] = substr($input['admin_url'], 1);
             }
-
             $site = Site::create($input);
             $user = Sentry::getUser();
             $user->getSites()->attach($site);
@@ -152,12 +163,23 @@ class DooloxController extends BaseController {
             }
         });
 
+        Validator::extend('wpurl', function($attribute, $value, $parameters)
+        {
+            if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/", $value)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
         $messages = array(
             'domainav' => 'This domain is not available.',
+            'wpurl' => 'URL is not valid. Allowed characters are lowercase alphanumeric, dash, and dot.',
         );
 
         $rules = array(
-            'url' => 'required|domainav',
+            'url' => 'required|domainav|wpurl',
         );
         $validator = Validator::make(Input::all(), $rules, $messages);
         if ($validator->passes()) {
@@ -178,6 +200,8 @@ class DooloxController extends BaseController {
     {
         $domain = Input::get('domain');
         $url = Input::get('url');
+        $url = str_replace('http://', '', $url);
+        $url = str_replace('https://', '', $url);
 
         $rules = array(
             'url' => 'required|not_in:' . Config::get('doolox.system_domain') . ',',
