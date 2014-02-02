@@ -3,6 +3,8 @@ Doolox Todo List
 
 ### v1.1 ###
 
+* Forms validation checkup (leading/trailing slashes, http://, ...)
+* Name.com API configuration
 * Subscribe new users to newsletter
 * Downloads page
 

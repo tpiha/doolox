@@ -59,6 +59,9 @@ class DooloxController extends BaseController {
             if (substr($input['url'], -1) != '/') {
                 $input['url'] .= '/';
             }
+            if ($input['admin_url'][0] == '/') {
+                 $input['admin_url'] = substr($input['admin_url'], 1);
+            }
             $site = Site::create($input);
             $user = Sentry::getUser();
             $user->getSites()->attach($site);
@@ -435,7 +438,6 @@ class DooloxController extends BaseController {
         $site = Site::find($site_id);
         $site->connected = true;
         $site->save();
-        Log::info('Connected site ID: ' . $site_id . " " . $site->url);
     }
 
     public function site_move($id)

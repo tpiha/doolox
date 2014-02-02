@@ -13,17 +13,17 @@ return array(
 
     'system_domain' => 'doolox.loc',
 
-	/*
-	|--------------------------------------------------------------------------
-	| Allow User Management To Regular Users
-	|--------------------------------------------------------------------------
-	|
-	| When you set this to true, all users can manage their sub-users. When set
+    /*
+    |--------------------------------------------------------------------------
+    | Allow User Management To Regular Users
+    |--------------------------------------------------------------------------
+    |
+    | When you set this to true, all users can manage their sub-users. When set
     | to false, only superusers can manage Doolox users.
-	|
-	*/
+    |
+    */
 
-	'allow_user_management' => true,
+    'allow_user_management' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -56,6 +56,10 @@ return array(
 
     'namecom_url' => 'https://api.dev.name.com/api',
 
-    'registration' => false,
+    'private_key' => '',
+
+    'fskey' => '',
+
+    'google_analytics_code' => '',
 
 );
