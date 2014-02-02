@@ -1,7 +1,11 @@
 Doolox Changelog
 ================
 
-### v1.1 ###
+### v1.2 ###
+
+
+
+### v1.1 (Feb 2 2014) ###
 
 * Option to remember a logged in user
 * Integrated Laravel Cpanel

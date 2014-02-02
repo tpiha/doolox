@@ -32,7 +32,7 @@
             </div>
 
             <div class="form-group @if ($errors->has('admin_url')) has-error @endif">
-                {{ Form::label('admin_url', 'Admin URL') }}
+                {{ Form::label('admin_url', 'Alternative for wp-login.php') }}
                 {{ Form::text('admin_url', Input::old('admin_url'), array('class' => 'form-control')) }}
             </div>
 

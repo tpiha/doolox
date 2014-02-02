@@ -3,6 +3,7 @@ Doolox Todo List
 
 ### v1.2 ###
 
+* Create connecting tutorial
 * Subscribe new users to newsletter
 * Name.com API configuration
 * Automatic domain activation
