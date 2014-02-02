@@ -3,8 +3,7 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Setup newsletter
-* Subscribe new users to newsletter
+* Setup real Name.com API credentials
 * Name.com API configuration
 * Automatic domain activation
 * Self-hosted installation wizard

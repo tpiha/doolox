@@ -33,9 +33,11 @@
                 </li>
             </ul>
             <div class="list-group">
-                <a href="https://sites.fastspring.com/doolox/instant/pro1month?referrer={{ Sentry::getUser()->id }}" class="list-group-item active">
-                    <strong>Upgrade to Doolox Pro</strong>
-                </a>
+                <form method="POST" action="http://sites.fastspring.com/doolox/product/pro1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_pro">
+                    <a href="javascript: void null;" onclick="$('#id_pro').submit();" class="list-group-item active">
+                        <strong>Upgrade to Doolox Pro</strong>
+                    </a>
+                </form>
             </div>
         </div>
     </div>
@@ -61,9 +63,11 @@
                 </li>
             </ul>
             <div class="list-group">
-                <a href="https://sites.fastspring.com/doolox/instant/business1month?referrer={{ Sentry::getUser()->id }}" class="list-group-item active">
-                    <strong>Upgrade to Doolox Business</strong>
-                </a>
+                <form method="POST" action="http://sites.fastspring.com/doolox/product/business1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_business">
+                    <a href="javascript: void null;" onclick="$('#id_business').submit();" class="list-group-item active">
+                        <strong>Upgrade to Doolox Business</strong>
+                    </a>
+                </form>
             </div>
         </div>
     </div>
@@ -89,9 +93,11 @@
                 </li>
             </ul>
             <div class="list-group">
-                <a href="https://sites.fastspring.com/doolox/instant/unlimited1month?referrer={{ Sentry::getUser()->id }}" class="list-group-item active">
-                    <strong>Upgrade to Doolox Unlimited</strong>
-                </a>
+                <form method="POST" action="http://sites.fastspring.com/doolox/product/unlimited1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_unlimited">
+                    <a href="javascript: void null;" onclick="$('#id_unlimited').submit();" class="list-group-item active">
+                        <strong>Upgrade to Doolox Unlimited</strong>
+                    </a>
+                </form>
             </div>
         </div>
     </div>

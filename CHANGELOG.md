@@ -5,6 +5,8 @@ Doolox Changelog
 
 * Create connecting tutorial
 * WordPress download caching
+* Setup newsletter
+* Subscribe new users to newsletter
 
 ### v1.1 (Feb 2 2014) ###
 

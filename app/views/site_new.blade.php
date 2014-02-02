@@ -31,10 +31,12 @@
                 @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
-            <div class="form-group @if ($errors->has('admin_url')) has-error @endif">
+<!--             <div class="form-group @if ($errors->has('admin_url')) has-error @endif">
                 {{ Form::label('admin_url', 'Alternative for wp-login.php') }}
                 {{ Form::text('admin_url', Input::old('admin_url'), array('class' => 'form-control')) }}
-            </div>
+            </div> -->
+
+            <input type="hidden" name="admin_url" value="" />            
 
             <input type="hidden" name="user_id" value="{{ Sentry::getUser()->id }}" />
 

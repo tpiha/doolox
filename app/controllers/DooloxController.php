@@ -53,15 +53,18 @@ class DooloxController extends BaseController {
 
         if ($validator->passes()) {
             $input = Input::except('_token');
+            $input['url'] = Str::slug($input['url']);
             if (strpos($input['url'], 'http://') !== 0 && strpos($input['url'], 'https://') !== 0) {
                 $input['url'] = 'http://' . $input['url'];
             }
             if (substr($input['url'], -1) != '/') {
                 $input['url'] .= '/';
             }
-            if ($input['admin_url'][0] == '/') {
+
+            if (strlen($input['admin_url']) && $input['admin_url'][0] == '/') {
                  $input['admin_url'] = substr($input['admin_url'], 1);
             }
+
             $site = Site::create($input);
             $user = Sentry::getUser();
             $user->getSites()->attach($site);
