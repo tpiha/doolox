@@ -165,11 +165,11 @@ class DooloxController extends BaseController {
 
         Validator::extend('wpurl', function($attribute, $value, $parameters)
         {
-            if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/", $value)) {
-                return false;
+            if ($value == strtolower($value)) {
+                return true;
             }
             else {
-                return true;
+                return false;
             }
         });
 
