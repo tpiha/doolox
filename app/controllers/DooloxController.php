@@ -220,7 +220,7 @@ class DooloxController extends BaseController {
             $password = Input::get('password1');
             $email = Input::get('email');
 
-            $subdomain = str_replace($domain . '.', '', $url);
+            $subdomain = str_replace('.' . $domain, '', $url);
             $d = Domain::where('url', $domain)->first();
 
             $user = Sentry::getUser();
