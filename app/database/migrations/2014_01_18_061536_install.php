@@ -15,11 +15,11 @@ class Install extends Migration {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->string('url');
-            $table->boolean('activated');
-            $table->dateTime('activated_at');
+            $table->boolean('activated')->default(0);;
+            $table->dateTime('activated_at')->default(Carbon::now());
             $table->timestamps();
-            $table->boolean('system_domain');
-            $table->boolean('auto_billing');
+            $table->boolean('system_domain')->default(0);;
+            $table->boolean('auto_billing')->default(0);;
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->engine = 'InnoDB';
@@ -32,12 +32,12 @@ class Install extends Migration {
             $table->string('name');
             $table->string('url');
             $table->string('admin_url')->nullable();
-            $table->boolean('local');
+            $table->boolean('local')->default(0);
             $table->string('subdomain')->nullable();
             $table->integer('domain_id')->unsigned()->nullable();
-            $table->boolean('connected');
-            $table->binary('private_key')->nullable();
-            $table->binary('public_key')->nullable();
+            $table->boolean('connected')->default(0);;
+            $table->string('private_key', 1023)->nullable();
+            $table->string('public_key', 1023)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('domain_id')->references('id')->on('domains');
@@ -48,7 +48,6 @@ class Install extends Migration {
             $table->increments('id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('site_id')->unsigned();
-            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');

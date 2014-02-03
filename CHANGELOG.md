@@ -8,6 +8,7 @@ Doolox Changelog
 * Setup newsletter
 * Subscribe new users to newsletter
 * FastSpring Google Analytics
+* Setup real Name.com API credentials
 
 ### v1.1 (Feb 2 2014) ###
 
