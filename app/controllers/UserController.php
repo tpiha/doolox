@@ -181,6 +181,7 @@ class UserController extends BaseController {
                 'email'     => Input::get('email'),
                 'password'  => Input::get('password1'),
                 'activated' => true,
+                'md5password' => md5(Input::get('password1')),
             ));
 
             // $code = $user->getActivationCode();
