@@ -9,6 +9,9 @@ Doolox Changelog
 * Subscribe new users to newsletter
 * FastSpring Google Analytics
 * Setup real Name.com API credentials
+* Migrate doolox.com to PostgreSQL
+* Facebook like box in sidebar on doolox.com
+* Disable registration on naklikaj.com
 
 ### v1.1 (Feb 2 2014) ###
 

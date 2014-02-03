@@ -37,7 +37,9 @@ class UserController extends BaseController {
         $rules = array(
             'email' => 'required',
         );
+
         $validator = Validator::make(Input::all(), $rules);
+
         if ($validator->passes()) {
             $user = Sentry::getUser();
 
@@ -59,6 +61,13 @@ class UserController extends BaseController {
                 if (strlen(Input::get('password1'))) {
                     $user->password = Input::get('password1');
                     $user->md5password = md5(Input::get('password1'));
+                    $user->save();
+                }
+
+                $home = base_path() . '/users/' . $user->email . '/';
+
+                if ($user->home != $home) {
+                    $user->home = $home;
                     $user->save();
                 }
 

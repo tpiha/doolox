@@ -3,8 +3,6 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Migrate doolox.com to PostgreSQL
-* Disable registration on naklikaj.com
 * Setup FTP server for Doolox users
 * Upgrade - make more visible
 * Name.com API configuration
