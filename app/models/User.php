@@ -45,6 +45,14 @@ class User extends SentryUserModel {
         });
 
         User::deleting(function($user) {
+            $sites = $user->getOwnedSites()->get();
+            foreach ($sites as $site) {
+                Site::destroy($site->id);
+            }
+            $domains = $user->getOwnedDomains()->get();
+            foreach ($domains as $domain) {
+                Domain::destroy($domain->id);
+            }
             try {
                 $dirPath = base_path() . '/users/' . $user->email;
                 foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
@@ -54,14 +62,6 @@ class User extends SentryUserModel {
             }
             catch (Exception $e) {
                 Log::error("Couldn't delete user dir for user: $user->email");
-            }
-            $sites = $user->getOwnedSites()->get();
-            foreach ($sites as $site) {
-                Site::destroy($site->id);
-            }
-            $domains = $user->getOwnedDomains()->get();
-            foreach ($domains as $domain) {
-                Domain::destroy($domain->id);
             }
         });
     }
