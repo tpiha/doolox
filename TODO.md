@@ -3,7 +3,6 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* FastSpring Google Analytics
 * Upgrade - make more visible
 * Setup real Name.com API credentials
 * Name.com API configuration

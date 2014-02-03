@@ -7,6 +7,7 @@ Doolox Changelog
 * WordPress download caching
 * Setup newsletter
 * Subscribe new users to newsletter
+* FastSpring Google Analytics
 
 ### v1.1 (Feb 2 2014) ###
 

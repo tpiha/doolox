@@ -36,7 +36,7 @@
             <div id="owner-parent" style="display: none; margin-bottom: 20px;" class="checkbox"><label><input type="checkbox" value="1" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
 
             <div class="form-group">
-                <label>Configuration Type <a href="#"><i class="fa fa-question"></i></a></label>
+                <label>Configuration Type <a href="https://www.doolox.com/how-to-add-your-existing-domain-to-doolox/" target="_blank"><i class="fa fa-question"></i></a></label>
                 <div class="radio" style="margin-top: 0px;">
                     <label>
                         {{ Form::radio('type', 1, true) }}
