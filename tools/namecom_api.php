@@ -167,7 +167,12 @@ class NameComApi
   public function apiToken($api_token = NULL)
   {
     NameComRequest::apiToken($api_token);
-  }  
+  }
+
+  public function baseUrl($base_url = NULL)
+  {
+    NameComRequest::baseUrl($base_url);
+  }
 }
 
 abstract class NameComRequest
@@ -278,6 +283,14 @@ abstract class NameComRequest
       self::$API_TOKEN = $api_token;
     else
       return self::$API_TOKEN;
+  }
+
+  static function baseUrl($base_url = NULL)
+  {
+    if($base_url !== NULL)
+      self::$BASE_URL = $base_url;
+    else
+      return self::$BASE_URL;
   }
 }
 
@@ -427,7 +440,7 @@ class NameCom_remove_dns_record extends NameCom_delete_dns_record { }
 class NameCom_check_domain extends NameComRequest
 {
   public $method = 'POST';
-  public $path = '/domain/power_check';
+  public $path = '/domain/check';
 
   function __construct($keyword, $tlds = NULL, $services = NULL)
   {

@@ -330,12 +330,13 @@ class DooloxController extends BaseController {
 
     public static function namecom_is_available($domain)
     {
-        return false;
         require_once(base_path() . "/tools/namecom_api.php");
         $api = new NameComApi();
-        $api->login(Config::get('doolox.namecom_user'), Config::get('doolox.namecom_token'));
+        $api->baseUrl(Config::get('doolox.namecom_url'));
+        $api->username(Config::get('doolox.namecom_user'));
+        $api->apiToken(Config::get('doolox.namecom_token'));
         $response = $api->check_domain($domain);
-        return $response;
+        return $response->domains->{$domain}->avail;
     }
 
     public static function create_database($database, $username, $password)
