@@ -13,6 +13,8 @@ Doolox Changelog
 * Facebook like box in sidebar on doolox.com
 * Disable registration on naklikaj.com
 * Setup FTP server for Doolox users
+* Name.com API configuration
+* Automatic domain activation
 
 ### v1.1 (Feb 2 2014) ###
 

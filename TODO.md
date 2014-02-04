@@ -3,8 +3,6 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Name.com API configuration
-* Automatic domain activation
 * Self-hosted - installation wizard
 * Self-hosted - private/public key scheme
 * Self-hosted - remove SaaS stuff

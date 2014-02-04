@@ -602,6 +602,7 @@ class DooloxController extends BaseController {
 
         if (md5($secdata . $privatekey) == $sechash) {
             $domain = Input::get('SubscriptionReferrer');
+            $do = Domain::where('url', $domain)->first();
 
             $api = new NameComApi();
             $api->baseUrl(Config::get('doolox.namecom_url'));
@@ -630,6 +631,9 @@ class DooloxController extends BaseController {
             if ($code == 100) {
                 $response1 = $api->create_dns_record($domain, '*', 'A', '176.9.133.107', 300);
                 $response2 = $api->create_dns_record($domain, 'mail', 'MX', 'mail.doolox.com', 300, 10);
+
+                $do->activated = true;
+                $do->save();
 
                 Log::info('FastSpring - domain activated: ' . $domain . ' ' . $response->result->code . ' ' . $response1->result->code . ' ' . $response2->result->code);
             }
