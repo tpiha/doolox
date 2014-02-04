@@ -594,6 +594,8 @@ class DooloxController extends BaseController {
     }
 
     public function paid_domain() {
+        require_once(base_path() . "/tools/namecom_api.php");
+
         $privatekey = Config::get('doolox.fskey_domain');
         $secdata = $_REQUEST['security_data'];
         $sechash = $_REQUEST['security_hash'];
