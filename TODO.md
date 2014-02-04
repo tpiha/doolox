@@ -5,12 +5,11 @@ Doolox Todo List
 
 * Self-hosted - installation wizard
 * Self-hosted - private/public key scheme
-* Self-hosted - remove SaaS stuff
-* WordPress Template Viewer
-* Upgrade - make more visible
+* Self-hosted - remove SaaS stuff + refactoring
 
 ### v1.3 ###
 
+* WordPress Template Viewer
 * Unit tests
 * Fix tab indexes on all forms
 * Tools (Install New WordPress website on FTP server)

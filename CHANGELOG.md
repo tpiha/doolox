@@ -15,6 +15,7 @@ Doolox Changelog
 * Setup FTP server for Doolox users
 * Name.com API configuration
 * Automatic domain activation
+* Upgrade - make more visible
 
 ### v1.1 (Feb 2 2014) ###
 
