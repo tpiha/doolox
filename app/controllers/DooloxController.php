@@ -601,6 +601,11 @@ class DooloxController extends BaseController {
         if (md5($secdata . $privatekey) == $sechash) {
             $domain = Input::get('SubscriptionReferrer');
 
+            $api = new NameComApi();
+            $api->baseUrl(Config::get('doolox.namecom_url'));
+            $api->username(Config::get('doolox.namecom_user'));
+            $api->apiToken(Config::get('doolox.namecom_token'));
+
             $nameservers = array('ns1.name.com', 'ns2.name.com', 'ns3.name.com', 'ns4.name.com');
             $contacts = array(array('type' => array('registrant', 'administrative', 'technical', 'billing'),
                 'first_name' => 'Tihomir',
