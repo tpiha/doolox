@@ -594,7 +594,7 @@ class DooloxController extends BaseController {
     }
 
     public function paid_domain() {
-        $privatekey = Config::get('doolox.fskey');
+        $privatekey = Config::get('doolox.fskey_domain');
         $secdata = $_REQUEST['security_data'];
         $sechash = $_REQUEST['security_hash'];
 
