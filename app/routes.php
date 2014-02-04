@@ -94,7 +94,23 @@ Route::group(array('before' => 'check-plan'), function()
         'as' => 'user.account',
         'before' => 'auth.doolox:doolox.view',
         function() {
-            return View::make('account')->with('user', Sentry::getUser());
+            $user = Sentry::getUser();
+            $group1 = Sentry::findGroupByName('Doolox Pro');
+            $group2 = Sentry::findGroupByName('Doolox Business');
+            $group3 = Sentry::findGroupByName('Doolox Unlimited');
+            if ($user->inGroup($group1)) {
+                $user->plan = 'Doolox Pro';
+            }
+            else if ($user->inGroup($group2)) {
+                $user->plan = 'Doolox Business';
+            }
+            else if ($user->inGroup($group3)) {
+                $user->plan = 'Doolox Unlimited';
+            }
+            else {
+                $user->plan = 'Doolox Free';
+            }
+            return View::make('account')->with('user', $user);
         }
     ));
 

@@ -37,5 +37,14 @@
 
         {{ Form::close() }}
     </div>
+    <div class="col-lg-6">
+        <h4>Doolox Plan</h4>
+        <div class="well">
+            <p>
+                <label>Your Doolox Plan:</label> {{ $user->plan }}
+            </p>
+            <a class="btn btn-primary btn-lg" href="{{ route('doolox.upgrade') }}">Upgrade Doolox Plan</a>
+        </div>
+    </div>
 </div>
 @stop

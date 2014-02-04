@@ -288,7 +288,7 @@ Route::filter('check-plan', function()
         }
 
         if (!$user->inGroup($group1) && !$user->inGroup($group2) && !$user->inGroup($group3)) {
-            Session::flash('plan-notice', 'You are using Doolox Free plan. Please <a href="' . URL::route('doolox.upgrade') . '">upgrade</a> to use all Doolox features!');
+            Session::flash('plan-notice', 'You are using Doolox Free plan. Please <a class="btn btn-primary btn-xs" href="' . URL::route('doolox.upgrade') . '">upgrade</a> to use all Doolox features!');
         }
     }
 });

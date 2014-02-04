@@ -33,6 +33,9 @@ class UserController extends BaseController {
     public function account()
     {
         $user = Sentry::getUser();
+        $group1 = Sentry::findGroupByName('Doolox Pro');
+        $group2 = Sentry::findGroupByName('Doolox Business');
+        $group3 = Sentry::findGroupByName('Doolox Unlimited');
 
         $rules = array(
             'email' => 'required',
@@ -41,8 +44,6 @@ class UserController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            $user = Sentry::getUser();
-
             if (Input::get('password1') != Input::get('password2')) {
                 Session::flash('error', 'Passwords don\'t match.');
             }
@@ -74,6 +75,19 @@ class UserController extends BaseController {
                 Session::flash('success', 'Account successfully updated.');
                 return Redirect::route('doolox.dashboard');
             }
+        }
+
+        if ($user->inGroup($group1)) {
+            $user->plan = 'Doolox Pro';
+        }
+        else if ($user->inGroup($group2)) {
+            $user->plan = 'Doolox Business';
+        }
+        else if ($user->inGroup($group3)) {
+            $user->plan = 'Doolox Unlimited';
+        }
+        else {
+            $user->plan = 'Doolox Free';
         }
 
         return View::make('account')->with('user', $user)->withErrors($validator);
