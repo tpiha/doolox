@@ -3,6 +3,7 @@ Doolox Todo List
 
 ### v1.2 ###
 
+* Automatic plugin installation
 * Self-hosted - installation wizard
 * Self-hosted - private/public key scheme
 * Self-hosted - remove SaaS stuff + refactoring

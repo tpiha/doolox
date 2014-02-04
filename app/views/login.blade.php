@@ -43,7 +43,7 @@
                 </label>
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Login" />@if(Config::get('doolox.registration'))&nbsp;&nbsp;or&nbsp;&nbsp;<a class="btn btn-success" href="{{ route('user.register') }}">Register</a>@endif
+            <input type="submit" class="btn btn-success" value="Login" />@if(Config::get('doolox.registration'))&nbsp;&nbsp;or&nbsp;&nbsp;<a href="{{ route('user.register') }}">Register</a>@endif
 
         {{ Form::close() }}
     </div>

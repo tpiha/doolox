@@ -45,7 +45,7 @@
                 @if ($errors->has('password2'))<p class="help-block">{{ $errors->first('password2') }}</p>@endif
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Register" />&nbsp;&nbsp;or&nbsp;&nbsp;<a class="btn btn-success" href="{{ route('user.login') }}">Login</a>
+            <input type="submit" class="btn btn-success" value="Register" />&nbsp;&nbsp;or&nbsp;&nbsp;<a href="{{ route('user.login') }}">Login</a>
 
         {{ Form::close() }}
     </div>
