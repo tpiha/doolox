@@ -625,8 +625,17 @@ class DooloxController extends BaseController {
             ));
 
             $response = $api->create_domain($domain, 1, $nameservers, $contacts);
+            $code = intval($response->result->code);
 
-            Log::info('FastSpring - user activated: ' . $domain . ' ' . $response->result->code);
+            if ($code == 100) {
+                $response1 = $api->create_dns_record($domain, '*', 'A', '176.9.133.107', 300);
+                $response2 = $api->create_dns_record($domain, 'mail', 'MX', 'mail.doolox.com', 300, 10);
+
+                Log::info('FastSpring - domain activated: ' . $domain . ' ' . $response->result->code . ' ' . $response1->result->code . ' ' . $response2->result->code);
+            }
+            else {
+                Log::info('FastSpring - domain activation failed: ' . $domain . ' ' . $response->result->code);
+            }
         }
     }
 
