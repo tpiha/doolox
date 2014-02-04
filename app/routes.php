@@ -287,3 +287,8 @@ Route::post('paid-plan', array(
     'as' => 'doolox.paid_plan',
     'uses' => 'DooloxController@paid_plan',
 ));
+
+Route::post('paid-domain', array(
+    'as' => 'doolox.paid_domain',
+    'uses' => 'DooloxController@paid_domain',
+));

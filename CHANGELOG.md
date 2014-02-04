@@ -12,6 +12,7 @@ Doolox Changelog
 * Migrate doolox.com to PostgreSQL
 * Facebook like box in sidebar on doolox.com
 * Disable registration on naklikaj.com
+* Setup FTP server for Doolox users
 
 ### v1.1 (Feb 2 2014) ###
 

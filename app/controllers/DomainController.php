@@ -4,29 +4,35 @@ class DomainController extends BaseController {
 
 	public function domain_new()
     {
-        Validator::extend('domaindots', function($attribute, $value, $parameters)
+        Validator::extend('domainvalid', function($attribute, $value, $parameters)
         {
             $domain = explode('.', $value);
-            if (count($domain) > 2 || count($domain) < 2) {
-                return false;
+            try {
+                $subdomain = $domain[2];
+                $tld = $subdomain;
+                $subdomain = $domain[0];
+                $domain = $domain[1];
+            }
+            catch (Exception $e) {
+                $subdomain = '';
+                try {
+                    $tld = $domain[1];
+                    $domain = $domain[0];
+                }
+                catch (Exception $e) {
+                    // no dots
+                    return false;
+                }
+            }
+            if ($tld == Str::slug($tld) && $domain == Str::slug($domain) && $subdomain == Str::slug($subdomain)) {
+                return true;
             }
             else {
-                return true;
+                return false;
             }
         });
 
-        Validator::extend('domainan', function($attribute, $value, $parameters)
-        {
-            $domain = explode('.', $value);
-            if(count($domain) == 1 || !preg_match('/^[a-z\-\d]+$/', $domain[0]) || !preg_match('/^[a-z\d]+$/', $domain[1])) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        });
-
-        Validator::extend('domainav', function($attribute, $value, $parameters)
+        Validator::extend('domainavailable', function($attribute, $value, $parameters)
         {
             $owner = (bool) Input::get('owner', 0);
             $av = DooloxController::is_domain_available($value, Sentry::getUser());
@@ -54,28 +60,42 @@ class DomainController extends BaseController {
         });
 
         $messages = array(
-            'domaindots' => '<script type="text/javascript">$(document).ready(function() { $("#domain-invalid").fadeIn();  });</script>',
-            'domainan' => '<script type="text/javascript">$(document).ready(function() { $("#domain-invalid").fadeIn();  });</script>',
-            'domainav' => '<script type="text/javascript">$(document).ready(function() { $("#domain-taken").fadeIn(); $("#owner-parent").fadeIn();  });</script>',
+            'domainvalid' => '<script type="text/javascript">$(document).ready(function() { $("#domain-invalid").fadeIn();  });</script>',
+            'domainavailable' => '<script type="text/javascript">$(document).ready(function() { $("#domain-taken").fadeIn(); $("#owner-parent").fadeIn();  });</script>',
             'domainused' => '<script type="text/javascript">$(document).ready(function() { $("#domain-doolox").fadeIn();  });</script>',
         );
 
         $rules = array(
-            'url' => 'required|domaindots|domainan|domainused|domainav',
+            'url' => 'required|domainvalid|domainavailable|domainused',
         );
 
         $validator = Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->passes()) {
             $type = Input::get('type');
-            $domain = Domain::create(array('user_id' => Sentry::getUser()->id, 'url' => Input::get('url')));
+
+            $domain = explode('.', Input::get('url'));
+            try {
+                $subdomain = $domain[2];
+                $tld = $subdomain;
+                $subdomain = $domain[0];
+                $domain = $domain[1];
+            }
+            catch (Exception $e) {
+                $subdomain = '';
+                $tld = $domain[1];
+                $domain = $domain[0];
+            }
+            $domain = join(array($domain, $tld), '.');
+
+            $domain = Domain::create(array('user_id' => Sentry::getUser()->id, 'url' => $domain));
             if ($type == 1) {
                 Session::flash('success', 'New Doolox domain successfully added.');
                 return Redirect::route('domain.index');
             }
             else {
                 // return Redirect::route('domain.domain_payment', array('id' => $domain->id));
-                return Redirect::to('https://sites.fastspring.com/doolox/instant/dooloxdomain');
+                return Redirect::to('https://sites.fastspring.com/doolox/instant/dooloxdomain?referrer=' . $domain->url);
             }
         }
 

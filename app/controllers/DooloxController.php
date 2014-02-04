@@ -248,14 +248,9 @@ class DooloxController extends BaseController {
         return View::make('site_install_step2')->with(array('domain' => $domain, 'url' => $url))->withErrors($validator);
     }
 
-    public function check_domain($domain)
-    {
-        $da = DooloxController::is_domain_available($domain, Sentry::getUser());
-        return Response::json(array('free' => $da[0], 'status' => $da[1]));
-    }
-
     public function check_subdomain($domain)
     {
+        // $taken = array('blog', 'wiki', 'admin', '');
         if ($domain != '.' . Config::get('doolox.system_domain')) {
             $domain = explode('.', $domain);
             $subdomain = $domain[0];
@@ -273,9 +268,14 @@ class DooloxController extends BaseController {
         }
     }
 
+    public function check_domain($domain)
+    {
+        $da = DooloxController::is_domain_available($domain, Sentry::getUser());
+        return Response::json(array('free' => $da[0], 'status' => $da[1]));
+    }
+
     public static function is_domain_available($domain, $user)
     {
-        // $taken = array('blog', 'wiki', 'admin', '');
         $domain = explode('.', $domain);
         try {
             $subdomain = $domain[2];
@@ -290,12 +290,16 @@ class DooloxController extends BaseController {
                 $domain = $domain[0];
             }
             catch (Exception $e) {
+                // no dots
                 return array(false, 1);
             }
         }
 
+        // check allowed characters
         if ($tld == Str::slug($tld) && $domain == Str::slug($domain) && $subdomain == Str::slug($subdomain)) {
+
             $domain = join(array($domain, $tld), '.');
+
             if ($domain != Config::get('doolox.system_domain')) {
                 if (Domain::where('url', $domain)->count()) {
                     return array(false, 3);
@@ -586,6 +590,18 @@ class DooloxController extends BaseController {
             $user->addGroup($group);
 
             Log::info('FastSpring - user activated: ' . $user->email);
+        }
+    }
+
+    public function paid_domain() {
+        $privatekey = Config::get('doolox.fskey');
+        $secdata = $_REQUEST['security_data'];
+        $sechash = $_REQUEST['security_hash'];
+
+        if (md5($secdata . $privatekey) == $sechash) {
+            $domain = Input::get('SubscriptionReferrer');
+
+            Log::info('FastSpring - user activated: ' . $domain);
         }
     }
 

@@ -3,14 +3,13 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Setup FTP server for Doolox users
-* Upgrade - make more visible
 * Name.com API configuration
 * Automatic domain activation
 * Self-hosted - installation wizard
 * Self-hosted - private/public key scheme
 * Self-hosted - remove SaaS stuff
 * WordPress Template Viewer
+* Upgrade - make more visible
 
 ### v1.3 ###
 
