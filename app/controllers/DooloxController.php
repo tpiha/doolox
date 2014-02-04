@@ -601,7 +601,25 @@ class DooloxController extends BaseController {
         if (md5($secdata . $privatekey) == $sechash) {
             $domain = Input::get('SubscriptionReferrer');
 
-            Log::info('FastSpring - user activated: ' . $domain);
+            $nameservers = array('ns1.name.com', 'ns2.name.com', 'ns3.name.com', 'ns4.name.com');
+            $contacts = array(array('type' => array('registrant', 'administrative', 'technical', 'billing'),
+                'first_name' => 'Tihomir',
+                'last_name' => 'Piha',
+                'organization' => 'Click the page Ltd.',
+                'address_1' => 'Marice Baric 3',
+                'address_2' => '',
+                'city' => 'Zagreb',
+                'state' => 'Grad Zagreb',
+                'zip' => '10000',
+                'country' => 'HR',
+                'phone' => '+385955388411',
+                'fax' => '+385955388411',
+                'email' => 'tpiha@naklikaj.com',
+            ));
+
+            $response = $api->create_domain($domain, 1, $nameservers, $contacts);
+
+            Log::info('FastSpring - user activated: ' . $domain . ' ' . (string) var_dump($response));
         }
     }
 
