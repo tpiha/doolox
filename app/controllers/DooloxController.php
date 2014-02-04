@@ -626,7 +626,7 @@ class DooloxController extends BaseController {
 
             $response = $api->create_domain($domain, 1, $nameservers, $contacts);
 
-            Log::info('FastSpring - user activated: ' . $domain . ' ' . (string) var_dump($response));
+            Log::info('FastSpring - user activated: ' . $domain . ' ' . (string) $response);
         }
     }
 
