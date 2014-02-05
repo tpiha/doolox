@@ -33,7 +33,7 @@
                 </li>
             </ul>
             <div class="list-group">
-                <form method="POST" action="http://sites.fastspring.com/doolox/product/pro1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_pro" onsubmit="_gaq.push(['_linkByPost', this]);">
+                <form method="POST" action="https://sites.fastspring.com/doolox/product/pro1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_pro" onsubmit="_gaq.push(['_linkByPost', this]);">
                     <a href="javascript: void null;" onclick="$('#id_pro').submit();" class="list-group-item active">
                         <strong>Upgrade to Doolox Pro</strong>
                     </a>
@@ -63,7 +63,7 @@
                 </li>
             </ul>
             <div class="list-group">
-                <form method="POST" action="http://sites.fastspring.com/doolox/product/business1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_business" onsubmit="_gaq.push(['_linkByPost', this]);">
+                <form method="POST" action="https://sites.fastspring.com/doolox/product/business1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_business" onsubmit="_gaq.push(['_linkByPost', this]);">
                     <a href="javascript: void null;" onclick="$('#id_business').submit();" class="list-group-item active">
                         <strong>Upgrade to Doolox Business</strong>
                     </a>
@@ -93,7 +93,7 @@
                 </li>
             </ul>
             <div class="list-group">
-                <form method="POST" action="http://sites.fastspring.com/doolox/product/unlimited1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_unlimited" onsubmit="_gaq.push(['_linkByPost', this]);">
+                <form method="POST" action="https://sites.fastspring.com/doolox/product/unlimited1month?action=order&amp;referrer={{ Sentry::getUser()->id }}" target="_top" id="id_unlimited" onsubmit="_gaq.push(['_linkByPost', this]);">
                     <a href="javascript: void null;" onclick="$('#id_unlimited').submit();" class="list-group-item active">
                         <strong>Upgrade to Doolox Unlimited</strong>
                     </a>
