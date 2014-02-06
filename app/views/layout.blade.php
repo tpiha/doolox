@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
+        <meta name="description" content="Doolox Dashboard / Doolox is a free and Open Source WordPress management tool and website builder available both as a SaaS and for download.">
         <meta name="author" content="">
 
         <title>Doolox Dashboard</title>
