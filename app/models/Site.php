@@ -107,7 +107,7 @@ class Site extends Eloquent {
         file_put_contents($file, $str);
 
         exec('mysql ' . $dbname . ' -u' . Config::get('database.connections.managemysql.username') . ' -p' . Config::get('database.connections.managemysql.password') . ' < ' . $file);
-        // unlink($file);
+        unlink($file);
     }
 
     /**
