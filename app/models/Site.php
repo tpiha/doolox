@@ -107,26 +107,42 @@ class Site extends Eloquent {
         file_put_contents($file, $str);
 
         exec('mysql ' . $dbname . ' -u' . Config::get('database.connections.managemysql.username') . ' -p' . Config::get('database.connections.managemysql.password') . ' < ' . $file);
-        unlink($file);
+        // unlink($file);
     }
 
     /**
      * Fix a serialized string
      */
     public static function fix_serialized($string) {
-        if ( !preg_match('/^[aOs]:/', $string) ) return $string;
-        if ( @unserialize($string) !== false ) return $string;
-        $string = preg_replace_callback('/\bs:(\d+):"(.*?)"/', Site::fix_str_length, $string);
+        $string = self::unescape_quotes($string);
+        $string = preg_replace_callback('!s:(\d+):"(.*?)";!', function ($matches) {
+            $new = 's:' . strlen($matches[2]) . ':\"' . $matches[2] . '\";';
+            Log::info($new);
+            return $new;
+        }, $string);
         return $string;
     }
 
-    /**
-     * Callback function for replacing the string
-     */
-    public static function fix_str_length($matches) {
-        $string = $matches[2];
-        $right_length = strlen($string);
-        return 's:' . $right_length . ':"' . $string . '"';
+    // Unescape to avoid dump-text issues
+    public static function unescape_mysql($value) {
+        return str_replace(array("\\\\", "\\0", "\\n", "\\r", "\Z",  "\'", '\"'),
+                           array("\\",   "\0",  "\n",  "\r",  "\x1a", "'", '"'), 
+                           $value);
+    }
+
+    public static function escape_mysql($value) {
+        return str_replace(array("\\",   "\0",  "\n",  "\r",  "\x1a", "'", '"'),
+                            array("\\\\", "\\0", "\\n", "\\r", "\Z",  "\'", '\"'),                            
+                           $value);
+    }
+
+    // Fix strange behaviour if you have escaped quotes in your replacement
+    public static function unescape_quotes($value) {
+        return str_replace('\"', '"', $value);
+    }
+
+    public static function escape_quotes($value) {
+        return str_replace('"', '\"', $value);
     }
 
     public static function boot()

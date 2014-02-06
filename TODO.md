@@ -3,7 +3,6 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Google Analytics - double user
 * Automatic plugin installation
 * Self-hosted - installation wizard
 * Self-hosted - private/public key scheme

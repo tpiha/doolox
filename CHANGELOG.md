@@ -16,6 +16,7 @@ Doolox Changelog
 * Name.com API configuration
 * Automatic domain activation
 * Upgrade - make more visible
+* Fix WordPress serialized database data
 
 ### v1.1 (Feb 2 2014) ###
 
