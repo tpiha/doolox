@@ -20,6 +20,7 @@ Doolox Changelog
 * Fix pricing tooltips
 * Automatic plugin installation
 * Fix tab indexes on all forms
+* Self-hosted - private/public key scheme
 
 ### v1.1 (Feb 2 2014) ###
 
