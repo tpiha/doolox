@@ -17,6 +17,8 @@ Doolox Changelog
 * Automatic domain activation
 * Upgrade - make more visible
 * Fix WordPress serialized database data
+* Fix pricing tooltips
+* Automatic plugin installation
 
 ### v1.1 (Feb 2 2014) ###
 

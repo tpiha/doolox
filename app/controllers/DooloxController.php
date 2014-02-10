@@ -64,12 +64,14 @@ class DooloxController extends BaseController {
         $rules = array(
             'name' => 'required',
             'url' => 'required|wpurl',
+            'username' => 'required_if:doolox_node,true',
+            'password' => 'required_if:doolox_node,true',
         );
 
         $validator = Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->passes()) {
-            $input = Input::except('_token');
+            $input = Input::except(array('_token', 'username', 'password', 'doolox_node'));
             if (strpos($input['url'], 'http://') !== 0 && strpos($input['url'], 'https://') !== 0) {
                 $input['url'] = 'http://' . $input['url'];
             }
@@ -82,6 +84,11 @@ class DooloxController extends BaseController {
             $site = Site::create($input);
             $user = Sentry::getUser();
             $user->getSites()->attach($site);
+
+            if (Input::get('doolox_node')) {
+                self::install_doolox_node($input['url'], Input::get('username'), Input::get('password'));
+            }
+
             Session::flash('success', 'New website successfully added.');
             return Redirect::route('doolox.dashboard');
         }
@@ -239,6 +246,7 @@ class DooloxController extends BaseController {
                 self::install_wordpress($url, $title, $username, $password, $email);
             }
             catch (Exception $e) {}
+            self::install_doolox_node('http://' . $url . '/', $username, $password);
             Session::flash('success', 'New Doolox website successfully installed.');
             return Redirect::route('doolox.dashboard');
         }
@@ -410,6 +418,52 @@ class DooloxController extends BaseController {
         $wpconfig = str_replace('###NONCE_SALT###', str_random(32), $wpconfig);
 
         file_put_contents($dest, $wpconfig);
+    }
+
+    public static function install_doolox_node($url, $username, $password)
+    {
+        Log::debug($url . ' ' . $username . ' ' . $password);
+        $headers = array();
+        $options = array();
+
+        $session = new Requests_Session($url);
+
+        $data = array('log' => $username, 'pwd' => $password);
+        $request = $session->post('wp-login.php', array(), $data);
+
+        $request = $session->get('wp-admin/plugin-install.php?tab=search&s=doolox+node&plugin-search-input=Search+Plugins', $headers, $options);
+
+        $start = strpos($request->body, 'update.php?action=install-plugin&amp;plugin=doolox-node');
+        $end = strpos($request->body, '"', $start);
+        $length = $end - $start;
+
+        $link = substr($request->body, $start, $length);
+        $link = str_replace($url, '', $link);
+        $link = str_replace('&amp;', '&', $link);
+
+        Log::debug($link);
+
+        try {
+            $request = $session->get('wp-admin/' . $link, $headers, $options);
+        }
+        catch (Exception $e) {
+            // Plugin already installed
+            return false;
+        }
+
+        $start = strpos($request->body, 'plugins.php?action=activate&amp;plugin=doolox-node%2Fdoolox.php');
+        $end = strpos($request->body, '"', $start);
+        $length = $end - $start;
+
+        $link = substr($request->body, $start, $length);
+        $link = str_replace($url, '', $link);
+        $link = str_replace('&amp;', '&', $link);
+
+        Log::debug($link);
+
+        $request = $session->get('wp-admin/' . $link, $headers, $options);
+
+        return true;
     }
 
     public function wpcipher_connect($id, $username) {
