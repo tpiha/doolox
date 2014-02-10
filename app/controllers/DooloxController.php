@@ -380,21 +380,24 @@ class DooloxController extends BaseController {
 
     public static function get_wordpress($user, $domain)
     {
-        $dir = base_path() . '/users/' . $user->email . '/';
-        copy(base_path() . '/latest.zip', $dir . 'latest.zip');
+        $source = base_path() . '/wordpress';
+        $dest = base_path() . '/users/' . $user->email . '/' . $domain;
 
-        $zip = new ZipArchive;
-        $res = $zip->open($dir . 'latest.zip');
-        if ($res === true) {
-            $zip->extractTo($dir);
-            $zip->close();
-            rename($dir . 'wordpress', $dir . $domain);
-            unlink($dir . 'latest.zip');
-            symlink($dir . $domain, base_path() . '/websites/' . $domain);
-            return true;
-        } else {
-            return false;
+        mkdir($dest);
+
+        foreach (
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST) as $item
+            ) {
+            if ($item->isDir()) {
+                mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            } else {
+                copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            }
         }
+
+        symlink($dest, base_path() . '/websites/' . $domain);
     }
 
     public static function create_wp_config($user, $domain, $dbname, $dbpass)

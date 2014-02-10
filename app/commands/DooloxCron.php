@@ -37,10 +37,26 @@ class DooloxCron extends Command {
 	 */
 	public function fire()
 	{
+        $dir = base_path() . '/';
         $local = base_path() . '/latest.zip';
         $remote = 'http://wordpress.org/latest.zip';
-        unlink($local);
+
+        $dirPath = $dir . 'wordpress/';
+
+        foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+            $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+        }
+
+        rmdir($dirPath);
+
         file_put_contents($local, fopen($remote, 'r'));
+
+        $zip = new ZipArchive;
+        $res = $zip->open($local);
+        $zip->extractTo($dir);
+        $zip->close();
+
+        unlink($local);
 	}
 
 	/**

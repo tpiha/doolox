@@ -35,7 +35,7 @@
                 <div class="checkbox">
                     <label>
                         {{ Form::checkbox('doolox_node', 'true', Input::old('doolox_node', true)) }}
-                        Install Doolox Node automatically
+                        Install <a href="https://wordpress.org/plugins/doolox-node/" target="_blank">Doolox Node</a> automatically (credentials will not be stored)
                     </label>
                 </div>
             </div>

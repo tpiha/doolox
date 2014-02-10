@@ -15,7 +15,7 @@
 <div class="row">
     
     <div class="col-lg-6">
-        {{ Form::open(array('route' => 'doolox.site_install_step2', 'method' => 'post', 'role' => 'form')) }}
+        {{ Form::open(array('route' => 'doolox.site_install_step2', 'method' => 'post', 'role' => 'form', 'onsubmit' => '$(this).hide();$("#please-wait").fadeIn();')) }}
 
             <p class="help-block">required fields are marked with *</p>
 
@@ -52,9 +52,14 @@
             <input type="hidden" name="domain" value="{{ $domain }}" />
             <input type="hidden" name="url" value="{{ $url }}" />
 
-            <input type="submit" class="btn btn-primary" value="Finish">
+            <input type="submit" class="btn btn-primary" value="Finish" id="submit-button" />
 
         {{ Form::close() }}
+
+        <div class="alert alert-success alert-dismissable" id="please-wait" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            This action might take up to minute or two, please wait!
+        </div>
     </div>
 
 </div>
