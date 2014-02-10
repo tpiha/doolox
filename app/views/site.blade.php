@@ -27,7 +27,7 @@
 
             <div class="form-group @if ($errors->has('url')) has-error @endif">
                 {{ Form::label('url', 'URL *') }}
-                {{ Form::text('url', null, array('class' => 'form-control')) }}
+                {{ Form::text('url', null, array('class' => 'form-control', 'disabled' => 'disabled')) }}
                 @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
