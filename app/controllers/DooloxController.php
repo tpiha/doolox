@@ -375,7 +375,7 @@ class DooloxController extends BaseController {
             'admin_email' => $email,
             'blog_public' => 1,
         );
-        $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array('timeout' => 30,), $data);
+        $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array('timeout' => 90), $data);
     }
 
     public static function get_wordpress($user, $domain)
@@ -437,7 +437,9 @@ class DooloxController extends BaseController {
         $request = $session->get('wp-admin/plugin-install.php?tab=search&s=doolox+node&plugin-search-input=Search+Plugins', $headers, $options);
 
         $start = strpos($request->body, 'update.php?action=install-plugin&amp;plugin=doolox-node');
+        Log::debug($start);
         $end = strpos($request->body, '"', $start);
+        Log::debug($end);
         $length = $end - $start;
 
         $link = substr($request->body, $start, $length);
