@@ -19,19 +19,7 @@
 @else
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong>app/storage/</strong> directory doesn't exist or it is not writable.
-        </div>
-@endif
-
-@if ($conds['install'])
-        <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong>install/</strong> directory exists and it is writable.
-        </div>
-@else
-        <div class="alert alert-danger alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong>install/</strong> directory doesn't exist or it is not writable.
+            <strong>app/storage/</strong> directory doesn't exist or it is not writable recursively.
         </div>
 @endif
 

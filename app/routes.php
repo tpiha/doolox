@@ -317,6 +317,14 @@ Route::get('install', array(
 Route::get('install2', array(
     'as' => 'doolox.install2',
     function() {
+        if (!file_exists(base_path() . '/app/storage/install')) {
+            return Redirect::route('doolox.dashboard');
+        }
         return View::make('install2');
     }
+));
+
+Route::post('install2', array(
+    'as' => 'doolox.install2',
+    'uses' => 'DooloxController@install2',
 ));

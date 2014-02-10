@@ -11,7 +11,7 @@ return array(
     |
     */
 
-    'system_domain' => 'doolox.loc',
+    'system_domain' => '__DXDOMAIN__',
 
     /*
     |--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ return array(
     |
     */
 
-    'allow_user_management' => true,
+    'allow_user_management' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ return array(
     |
     */
 
-    'registration' => true,
+    'registration' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ return array(
     |
     */
 
-    'hosting' => true,
+    'hosting' => false,
 
     'namecom_user' => '',
 
@@ -56,9 +56,9 @@ return array(
 
     'namecom_url' => 'https://api.dev.name.com/api',
 
-    'private_key' => '',
+    'private_key' => '__DXPRIVATE_KEY__',
 
-    'fskey' => '',
+    'public_key' => '__DXPUBLIC_KEY__',
 
     'google_analytics_code' => '',
 

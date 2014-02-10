@@ -251,8 +251,8 @@ Route::filter('limit-size', function()
 
 Route::filter('check-install', function()
 {
-    $install_dir = base_path() . '/install/';
-    if (is_dir($install_dir)) {
+    $install_file = base_path() . '/app/storage/install';
+    if (file_exists($install_file)) {
         return Redirect::route('doolox.install');
     }
 });

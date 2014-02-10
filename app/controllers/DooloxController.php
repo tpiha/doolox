@@ -705,16 +705,84 @@ class DooloxController extends BaseController {
         $conds = array();
 
         $conds['storage'] = is_writable(base_path() . '/app/storage/');
-        $conds['install'] = is_writable(base_path() . '/install/');
         $conds['database'] = is_writable(base_path() . '/app/config/database.php');
         $conds['doolox'] = is_writable(base_path() . '/app/config/doolox.php');
         $conds['app'] = is_writable(base_path() . '/app/config/app.php');
 
-        if ($conds['storage'] && $conds['database'] && $conds['doolox'] && $conds['app'] && $conds['install']) {
+        if ($conds['storage'] && $conds['database'] && $conds['doolox'] && $conds['app']) {
             return Redirect::route('doolox.install2');
         }
 
-        return View::make('install')->with('conds', $conds);;
+        return View::make('install')->with('conds', $conds);
+    }
+
+    public function install2()
+    {
+        $app = base_path() . '/app/config/app.php';
+        $doolox = base_path() . '/app/config/doolox.php';
+        $database = base_path() . '/app/config/database.php';
+
+        $rules = array(
+            'dbhost' => 'required_if:database,mysql|required_if:database,pgsql',
+            'dbname' => 'required_if:database,mysql|required_if:database,pgsql',
+            'dbuser' => 'required_if:database,mysql|required_if:database,pgsql',
+            'dbpass' => 'required_if:database,mysql|required_if:database,pgsql',
+        );
+
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->passes()) {
+            $url = str_replace('/install2', '', Request::url());
+            $key = str_random(32);
+            $app_sample = base_path() . '/app/config/app.sample.php';
+
+            self::replace_in_file($app_sample, $app, '__DXURL__', $url);
+            self::replace_in_file($app, $app, '__DXKEY__', $key);
+
+            $server = Request::server();
+            $domain  = explode('.', $server['HTTP_HOST']);
+            $domain = $domain[1] . '.' . $domain[2];
+            $rsa = new Crypt_RSA();
+            extract($rsa->createKey());
+            $doolox_sample = base_path() . '/app/config/doolox.sample.php';
+
+            self::replace_in_file($doolox_sample, $doolox, '__DXDOMAIN__', $domain);
+            self::replace_in_file($doolox, $doolox, '__DXPRIVATE_KEY__', $privatekey);
+            self::replace_in_file($doolox, $doolox, '__DXPUBLIC_KEY__', $publickey);
+
+            $database_sample = base_path() . '/app/config/database.sample.php';
+
+            $dbtype = Input::get('database');
+            self::replace_in_file($database_sample, $database, '__DXDATABASE__', $dbtype);
+
+            if ($dbtype != 'sqlite') {
+                $dbhost = Input::get('dbhost');
+                $dbname = Input::get('dbname');
+                $dbuser = Input::get('dbuser');
+                $dbpass = Input::get('dbpass');
+
+                self::replace_in_file($database, $database, '__DXDBHOST__', $dbhost);
+                self::replace_in_file($database, $database, '__DXDBNAME__', $dbname);
+                self::replace_in_file($database, $database, '__DXDBUSER__', $dbuser);
+                self::replace_in_file($database, $database, '__DXDBPASS__', $dbpass);
+
+                Artisan::call('migrate:install', array());
+                Artisan::call('migrate', array());
+                Artisan::call('db:seed', array());
+            }
+
+            unlink(base_path() . '/app/storage/install');
+            Session::flash('success', 'You have successfully installed Doolox. You can now <a href="' . route('user.login') . '">login</a> with these credentials: admin@admin.com / admin');
+        }
+
+        return View::make('install2')->withErrors($validator);
+    }
+
+    public static function replace_in_file($from, $to, $search, $replace)
+    {
+        $str = file_get_contents($from);
+        $str = str_replace($search, $replace, $str);
+        file_put_contents($to, $str);
     }
 
 }
