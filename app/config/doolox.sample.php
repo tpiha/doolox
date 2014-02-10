@@ -11,7 +11,7 @@ return array(
     |
     */
 
-    'system_domain' => '__DXDOMAIN__',
+    'system_domain' => 'doolox.com',
 
     /*
     |--------------------------------------------------------------------------

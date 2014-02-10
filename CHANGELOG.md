@@ -23,6 +23,7 @@ Doolox Changelog
 * Self-hosted - private/public key scheme
 * Self-hosted - installation wizard
 * Bug - remember me
+* Packaging script
 
 ### v1.1 (Feb 2 2014) ###
 

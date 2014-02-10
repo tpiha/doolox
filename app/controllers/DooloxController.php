@@ -741,9 +741,7 @@ class DooloxController extends BaseController {
             self::replace_in_file($app_sample, $app, '__DXURL__', $url);
             self::replace_in_file($app, $app, '__DXKEY__', $key);
 
-            $server = Request::server();
-            $domain  = explode('.', $server['HTTP_HOST']);
-            $domain = $domain[1] . '.' . $domain[2];
+            $domain = Config::get('doolox.system_domain');
             $rsa = new Crypt_RSA();
             extract($rsa->createKey());
             $doolox_sample = base_path() . '/app/config/doolox.sample.php';

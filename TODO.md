@@ -4,6 +4,8 @@ Doolox Todo List
 ### v1.2 ###
 
 * Self-hosted - remove SaaS stuff + refactoring
+* Report Doolox Node installation success and error
+* Populate dooloxpkg on site install and add
 
 ### v1.3 ###
 
