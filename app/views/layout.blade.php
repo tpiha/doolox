@@ -91,7 +91,11 @@
 @endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right navbar-user">
-                        <li><a href="{{ route('user.logout') }}"><i class="fa fa-power-off"></i> Log Out</a></li>
+@if (Sentry::check())
+                        <li><a href="{{ route('user.logout') }}"><i class="fa fa-power-off"></i> Sign Out</a></li>
+@else
+                        <li><a href="{{ route('user.login') }}"><i class="fa fa-power-off"></i> Sign In</a></li>
+@endif
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </nav>

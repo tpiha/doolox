@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(array('before' => 'check-plan'), function()
+Route::group(array('before' => 'check-install'), function()
 {
 
     Route::get('/', array(
@@ -307,4 +307,16 @@ Route::post('paid-plan', array(
 Route::post('paid-domain', array(
     'as' => 'doolox.paid_domain',
     'uses' => 'DooloxController@paid_domain',
+));
+
+Route::get('install', array(
+    'as' => 'doolox.install',
+    'uses' => 'DooloxController@install',
+));
+
+Route::get('install2', array(
+    'as' => 'doolox.install2',
+    function() {
+        return View::make('install2');
+    }
 ));

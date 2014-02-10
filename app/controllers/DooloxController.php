@@ -700,4 +700,21 @@ class DooloxController extends BaseController {
         }
     }
 
+    public function install()
+    {
+        $conds = array();
+
+        $conds['storage'] = is_writable(base_path() . '/app/storage/');
+        $conds['install'] = is_writable(base_path() . '/install/');
+        $conds['database'] = is_writable(base_path() . '/app/config/database.php');
+        $conds['doolox'] = is_writable(base_path() . '/app/config/doolox.php');
+        $conds['app'] = is_writable(base_path() . '/app/config/app.php');
+
+        if ($conds['storage'] && $conds['database'] && $conds['doolox'] && $conds['app'] && $conds['install']) {
+            return Redirect::route('doolox.install2');
+        }
+
+        return View::make('install')->with('conds', $conds);;
+    }
+
 }
