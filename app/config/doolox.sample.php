@@ -62,4 +62,6 @@ return array(
 
     'google_analytics_code' => '',
 
+    'saas' => false,
+
 );

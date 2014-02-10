@@ -175,128 +175,138 @@ Route::filter('csrf', function()
 
 Route::filter('limit-local', function()
 {
-    $user = Sentry::getUser();
-    $group1 = Sentry::findGroupByName('Doolox Pro');
-    $group2 = Sentry::findGroupByName('Doolox Business');
-    $group3 = Sentry::findGroupByName('Doolox Unlimited');
-    $sites = Site::where('user_id', $user->id)->where('local', 1)->get();
-    if ($user->inGroup($group1)) {
-        $limit = 1;
-    }
-    else if ($user->inGroup($group2)) {
-        $limit = 50;
-    }
-    else if ($user->inGroup($group3)) {
-        $limit = 1000;
-    }
-    else {
-        $limit = 0;
-    }
-    if ($sites->count() >= $limit) {
-        Session::flash('error', 'No extra local installations available in your Doolox plan. Please <a href="' . URL::route('doolox.upgrade') . '">upgrade</a> to continue!');
-        return Redirect::route('doolox.dashboard');
+    $saas = Config::get('doolox.saas');
+    if ($saas) {
+        $user = Sentry::getUser();
+        $group1 = Sentry::findGroupByName('Doolox Pro');
+        $group2 = Sentry::findGroupByName('Doolox Business');
+        $group3 = Sentry::findGroupByName('Doolox Unlimited');
+        $sites = Site::where('user_id', $user->id)->where('local', 1)->get();
+        if ($user->inGroup($group1)) {
+            $limit = 1;
+        }
+        else if ($user->inGroup($group2)) {
+            $limit = 50;
+        }
+        else if ($user->inGroup($group3)) {
+            $limit = 1000;
+        }
+        else {
+            $limit = 0;
+        }
+        if ($sites->count() >= $limit) {
+            Session::flash('error', 'No extra local installations available in your Doolox plan. Please <a href="' . URL::route('doolox.upgrade') . '">upgrade</a> to continue!');
+            return Redirect::route('doolox.dashboard');
+        }
     }
 });
 
 Route::filter('limit-remote', function()
 {
-    $user = Sentry::getUser();
-    $group1 = Sentry::findGroupByName('Doolox Pro');
-    $group2 = Sentry::findGroupByName('Doolox Business');
-    $group3 = Sentry::findGroupByName('Doolox Unlimited');
-    $sites = Site::where('user_id', $user->id)->where('local', false)->get();
-    if ($user->inGroup($group1)) {
-        $limit = 30;
-    }
-    else if ($user->inGroup($group2)) {
-        $limit = 200;
-    }
-    else if ($user->inGroup($group3)) {
-        $limit = 10000;
-    }
-    else {
-        $limit = 5;
-    }
-    if ($sites->count() >= $limit) {
-        Session::flash('error', 'No extra remote installations available in your Doolox plan. Please upgrade to continue!');
-        return Redirect::route('doolox.dashboard');
+    $saas = Config::get('doolox.saas');
+    if ($saas) {
+        $user = Sentry::getUser();
+        $group1 = Sentry::findGroupByName('Doolox Pro');
+        $group2 = Sentry::findGroupByName('Doolox Business');
+        $group3 = Sentry::findGroupByName('Doolox Unlimited');
+        $sites = Site::where('user_id', $user->id)->where('local', false)->get();
+        if ($user->inGroup($group1)) {
+            $limit = 30;
+        }
+        else if ($user->inGroup($group2)) {
+            $limit = 200;
+        }
+        else if ($user->inGroup($group3)) {
+            $limit = 10000;
+        }
+        else {
+            $limit = 5;
+        }
+        if ($sites->count() >= $limit) {
+            Session::flash('error', 'No extra remote installations available in your Doolox plan. Please upgrade to continue!');
+            return Redirect::route('doolox.dashboard');
+        }
     }
 });
 
 Route::filter('limit-size', function()
 {
-    $user = Sentry::getUser();
-    $group1 = Sentry::findGroupByName('Doolox Pro');
-    $group2 = Sentry::findGroupByName('Doolox Business');
-    $group3 = Sentry::findGroupByName('Doolox Unlimited');
-    $user_home = base_path() . '/users/' . $user->email . '/';
-    $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
-    if ($user->inGroup($group1)) {
-        $limit = 1024;
-    }
-    else if ($user->inGroup($group2)) {
-        $limit = 51200;
-    }
-    else if ($user->inGroup($group3)) {
-        $limit = 204800;
-    }
-    else {
-        $limit = 1;
-    }
-    if ($size >= $limit) {
-        Session::flash('error', 'You don\'t have enough disk space for this action. Please upgrade to continue!');
-        return Redirect::route('doolox.dashboard');
-    }
-});
-
-Route::filter('check-install', function()
-{
-    $install_file = base_path() . '/app/storage/install';
-    if (file_exists($install_file)) {
-        return Redirect::route('doolox.install');
-    }
-});
-
-Route::filter('check-plan', function()
-{
-    $user = Sentry::getUser();
-    if ($user) {
+    $saas = Config::get('doolox.saas');
+    if ($saas) {
+        $user = Sentry::getUser();
         $group1 = Sentry::findGroupByName('Doolox Pro');
         $group2 = Sentry::findGroupByName('Doolox Business');
         $group3 = Sentry::findGroupByName('Doolox Unlimited');
-
-        $sites_local = Site::where('user_id', $user->id)->where('local', true)->get();
-        $sites_remote = Site::where('user_id', $user->id)->where('local', false)->get();
         $user_home = base_path() . '/users/' . $user->email . '/';
         $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
-
-        Session::flash('limit-installations-current', $sites_local->count());
-        Session::flash('limit-management-current', $sites_remote->count());
-        Session::flash('limit-size-current', $size);
-
         if ($user->inGroup($group1)) {
-            Session::flash('limit-installations', 1);
-            Session::flash('limit-management', 30);
-            Session::flash('limit-size', 1024);
+            $limit = 1024;
         }
         else if ($user->inGroup($group2)) {
-            Session::flash('limit-installations', 50);
-            Session::flash('limit-management', 200);
-            Session::flash('limit-size', 51200);
+            $limit = 51200;
         }
         else if ($user->inGroup($group3)) {
-            Session::flash('limit-installations', 10000);
-            Session::flash('limit-management',10000);
-            Session::flash('limit-size', 204800);
+            $limit = 204800;
         }
         else {
-            Session::flash('limit-installations', 0);
-            Session::flash('limit-management',5);
-            Session::flash('limit-size', 0);
+            $limit = 1;
         }
+        if ($size >= $limit) {
+            Session::flash('error', 'You don\'t have enough disk space for this action. Please upgrade to continue!');
+            return Redirect::route('doolox.dashboard');
+        }
+    }
+});
 
-        if (!$user->inGroup($group1) && !$user->inGroup($group2) && !$user->inGroup($group3)) {
-            Session::flash('plan-notice', 'You are using Doolox Free plan. Please <a class="btn btn-primary btn-xs" href="' . URL::route('doolox.upgrade') . '">upgrade</a> to use all Doolox features!');
+Route::filter('master-check', function()
+{
+    $saas = Config::get('doolox.saas');
+    if ($saas) {
+        $user = Sentry::getUser();
+        if ($user) {
+            $group1 = Sentry::findGroupByName('Doolox Pro');
+            $group2 = Sentry::findGroupByName('Doolox Business');
+            $group3 = Sentry::findGroupByName('Doolox Unlimited');
+
+            $sites_local = Site::where('user_id', $user->id)->where('local', true)->get();
+            $sites_remote = Site::where('user_id', $user->id)->where('local', false)->get();
+            $user_home = base_path() . '/users/' . $user->email . '/';
+            $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
+
+            Session::flash('limit-installations-current', $sites_local->count());
+            Session::flash('limit-management-current', $sites_remote->count());
+            Session::flash('limit-size-current', $size);
+
+            if ($user->inGroup($group1)) {
+                Session::flash('limit-installations', 1);
+                Session::flash('limit-management', 30);
+                Session::flash('limit-size', 1024);
+            }
+            else if ($user->inGroup($group2)) {
+                Session::flash('limit-installations', 50);
+                Session::flash('limit-management', 200);
+                Session::flash('limit-size', 51200);
+            }
+            else if ($user->inGroup($group3)) {
+                Session::flash('limit-installations', 10000);
+                Session::flash('limit-management',10000);
+                Session::flash('limit-size', 204800);
+            }
+            else {
+                Session::flash('limit-installations', 0);
+                Session::flash('limit-management',5);
+                Session::flash('limit-size', 0);
+            }
+
+            if (!$user->inGroup($group1) && !$user->inGroup($group2) && !$user->inGroup($group3)) {
+                Session::flash('plan-notice', 'You are using Doolox Free plan. Please <a class="btn btn-primary btn-xs" href="' . URL::route('doolox.upgrade') . '">upgrade</a> to use all Doolox features!');
+            }
+        }
+    }
+    else {
+        $install_file = base_path() . '/app/storage/install';
+        if (file_exists($install_file)) {
+            return Redirect::route('doolox.install');
         }
     }
 });

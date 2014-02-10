@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(array('before' => 'check-install'), function()
+Route::group(array('before' => 'master-check'), function()
 {
 
     Route::get('/', array(

@@ -72,6 +72,7 @@
                         @if(Route::currentRouteName() == 'user.account')<li class="active">@else<li>@endif
                             <a href="{{ route('user.account') }}"><i class="fa fa-user"></i> Account</a>
                         </li>
+@if (Config::get('doolox.saas'))
                         <li class="dropdown">
                             <a href="javascript: void null;" onclick="toggle_dropdown('dropdown2');"><i class="fa fa-cog"></i> Doolox Stats <b class="caret"></b></a>
                             <ul class="dropdown-menu" id="dropdown2">
@@ -88,6 +89,7 @@
 @endif
                             </ul>
                         </li>
+@endif
 @endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right navbar-user">
