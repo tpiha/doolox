@@ -21,20 +21,20 @@
 
             <div class="form-group @if ($errors->has('name')) has-error @endif">
                 {{ Form::label('name', 'Name *') }}
-                {{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+                {{ Form::text('name', Input::old('name'), array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('name'))<p class="help-block">{{ $errors->first('name') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('url')) has-error @endif">
                 {{ Form::label('url', 'URL *') }}
-                {{ Form::text('url', Input::old('url'), array('class' => 'form-control')) }}
+                {{ Form::text('url', Input::old('url'), array('class' => 'form-control', 'tabindex' => 2)) }}
                 @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
             </div>
 
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        {{ Form::checkbox('doolox_node', 'true', Input::old('doolox_node', true)) }}
+                        {{ Form::checkbox('doolox_node', 'true', Input::old('doolox_node', true), array('tabindex' => 3)) }}
                         Install <a href="https://wordpress.org/plugins/doolox-node/" target="_blank">Doolox Node</a> automatically (credentials will not be stored)
                     </label>
                 </div>
@@ -42,20 +42,20 @@
 
             <div class="form-group @if ($errors->has('username')) has-error @endif">
                 {{ Form::label('username', 'Username') }}
-                {{ Form::text('username', Input::old('username'), array('class' => 'form-control')) }}
+                {{ Form::text('username', Input::old('username'), array('class' => 'form-control', 'tabindex' => 4)) }}
                 @if ($errors->has('username'))<p class="help-block">{{ $errors->first('username') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password')) has-error @endif">
                 {{ Form::label('password', 'Password') }}
-                {{ Form::password('password', array('class' => 'form-control')) }}
+                {{ Form::password('password', array('class' => 'form-control', 'tabindex' => 5)) }}
                 @if ($errors->has('password'))<p class="help-block">{{ $errors->first('password') }}</p>@endif
             </div>
 
             <input type="hidden" name="admin_url" value="" />            
             <input type="hidden" name="user_id" value="{{ Sentry::getUser()->id }}" />
 
-            <input type="submit" class="btn btn-primary" value="Add Website" />
+            <input type="submit" class="btn btn-primary" value="Add Website" tabindex="6" />
 
         {{ Form::close() }}
     </div>

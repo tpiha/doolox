@@ -18,23 +18,23 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('email', 'Email *') }}
-                {{ Form::text('email', Input::old('email'), array('class' => 'form-control')) }}
+                {{ Form::text('email', Input::old('email'), array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password1')) has-error @endif">
                 {{ Form::label('password1', 'Password *') }}
-                {{ Form::password('password1', array('class' => 'form-control')) }}
+                {{ Form::password('password1', array('class' => 'form-control', 'tabindex' => 2)) }}
                 @if ($errors->has('password1'))<p class="help-block">{{ $errors->first('password1') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password2')) has-error @endif">
                 {{ Form::label('password2', 'Password Repeat *') }}
-                {{ Form::password('password2', array('class' => 'form-control')) }}
+                {{ Form::password('password2', array('class' => 'form-control', 'tabindex' => 3)) }}
                 @if ($errors->has('password2'))<p class="help-block">{{ $errors->first('password2') }}</p>@endif
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Add User" />
+            <input type="submit" class="btn btn-primary" value="Add User" tabindex="4" />
 
         {{ Form::close() }}
     </div>

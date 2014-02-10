@@ -39,11 +39,11 @@
 
             <div class="checkbox">
                 <label>
-                    <input name="rememberme" value="1" type="checkbox"> Remember me
+                    <input name="rememberme" value="1" type="checkbox" tabindex="3"> Remember me
                 </label>
             </div>
 
-            <input type="submit" class="btn btn-success" value="Login" />@if(Config::get('doolox.registration'))&nbsp;&nbsp;or&nbsp;&nbsp;<a href="{{ route('user.register') }}">Register</a>@endif
+            <input type="submit" class="btn btn-success" value="Login" tabindex="4" />@if(Config::get('doolox.registration'))&nbsp;&nbsp;or&nbsp;&nbsp;<a tabindex="5" href="{{ route('user.register') }}">Register</a>@endif
 
         {{ Form::close() }}
     </div>

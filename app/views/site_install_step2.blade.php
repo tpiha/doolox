@@ -21,44 +21,44 @@
 
             <div class="form-group @if ($errors->has('title')) has-error @endif">
                 {{ Form::label('title', 'Site Title *') }}
-                {{ Form::text('title', Input::old('title'), array('class' => 'form-control')) }}
+                {{ Form::text('title', Input::old('title'), array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('title'))<p class="help-block">{{ $errors->first('title') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('username')) has-error @endif">
                 {{ Form::label('username', 'Username *') }}
-                {{ Form::text('username', Input::old('username'), array('class' => 'form-control')) }}
+                {{ Form::text('username', Input::old('username'), array('class' => 'form-control', 'tabindex' => 2)) }}
                 @if ($errors->has('username'))<p class="help-block">{{ $errors->first('username') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password1')) has-error @endif">
                 {{ Form::label('password1', 'Password *') }}
-                {{ Form::password('password1', array('class' => 'form-control')) }}
+                {{ Form::password('password1', array('class' => 'form-control', 'tabindex' => 3)) }}
                 @if ($errors->has('password1'))<p class="help-block">{{ $errors->first('password1') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password2')) has-error @endif">
                 {{ Form::label('password2', 'Password Repeat *') }}
-                {{ Form::password('password2', array('class' => 'form-control')) }}
+                {{ Form::password('password2', array('class' => 'form-control', 'tabindex' => 4)) }}
                 @if ($errors->has('password2'))<p class="help-block">{{ $errors->first('password2') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('email', 'Email *') }}
-                {{ Form::text('email', Input::old('username') ? Input::old('username') : Sentry::getUser()->email, array('class' => 'form-control')) }}
+                {{ Form::text('email', Input::old('username') ? Input::old('username') : Sentry::getUser()->email, array('class' => 'form-control', 'tabindex' => 5)) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 
             <input type="hidden" name="domain" value="{{ $domain }}" />
             <input type="hidden" name="url" value="{{ $url }}" />
 
-            <input type="submit" class="btn btn-primary" value="Finish" id="submit-button" />
+            <input type="submit" class="btn btn-primary" value="Finish" id="submit-button" tabindex="6" />
 
         {{ Form::close() }}
 
         <div class="alert alert-success alert-dismissable" id="please-wait" style="display: none;">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            This action might take up to minute or two, please wait!
+            This action might take up to a minute or two, please wait!
         </div>
     </div>
 

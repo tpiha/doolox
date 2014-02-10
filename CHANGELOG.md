@@ -19,6 +19,7 @@ Doolox Changelog
 * Fix WordPress serialized database data
 * Fix pricing tooltips
 * Automatic plugin installation
+* Fix tab indexes on all forms
 
 ### v1.1 (Feb 2 2014) ###
 

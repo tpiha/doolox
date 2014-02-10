@@ -29,23 +29,23 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('email', 'Email *') }}
-                {{ Form::text('email', null, array('class' => 'form-control')) }}
+                {{ Form::text('email', null, array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password1')) has-error @endif">
                 {{ Form::label('password1', 'Password *') }}
-                {{ Form::password('password1', array('class' => 'form-control')) }}
+                {{ Form::password('password1', array('class' => 'form-control', 'tabindex' => 2)) }}
                 @if ($errors->has('password1'))<p class="help-block">{{ $errors->first('password1') }}</p>@endif
             </div>
 
             <div class="form-group @if ($errors->has('password2')) has-error @endif">
                 {{ Form::label('password2', 'Password Repeat *') }}
-                {{ Form::password('password2', array('class' => 'form-control')) }}
+                {{ Form::password('password2', array('class' => 'form-control', 'tabindex' => 3)) }}
                 @if ($errors->has('password2'))<p class="help-block">{{ $errors->first('password2') }}</p>@endif
             </div>
 
-            <input type="submit" class="btn btn-success" value="Register" />&nbsp;&nbsp;or&nbsp;&nbsp;<a href="{{ route('user.login') }}">Login</a>
+            <input type="submit" class="btn btn-success" value="Register" tabindex="4" />&nbsp;&nbsp;or&nbsp;&nbsp;<a tabindex="5" href="{{ route('user.login') }}">Login</a>
 
         {{ Form::close() }}
     </div>

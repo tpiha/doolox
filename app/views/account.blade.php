@@ -18,7 +18,7 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('email', 'Email *') }}
-                {{ Form::text('email', null, array('class' => 'form-control')) }}
+                {{ Form::text('email', null, array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('email'))<p class="help-block">{{ $errors->first('email') }}</p>@endif
             </div>
 
@@ -33,7 +33,7 @@
                 @if(Session::has('error'))<p class="help-block">{{ Session::get('error') }}</p>@endif
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Update Account" />
+            <input type="submit" class="btn btn-primary" value="Update Account" tabindex="4" />
 
         {{ Form::close() }}
     </div>

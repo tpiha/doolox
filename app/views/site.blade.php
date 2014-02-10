@@ -21,7 +21,7 @@
 
             <div class="form-group @if ($errors->has('name')) has-error @endif">
                 {{ Form::label('name', 'Name *') }}
-                {{ Form::text('name', null, array('class' => 'form-control')) }}
+                {{ Form::text('name', null, array('class' => 'form-control', 'tabindex' => 1)) }}
                 @if ($errors->has('name'))<p class="help-block">{{ $errors->first('name') }}</p>@endif
             </div>
 
@@ -33,10 +33,10 @@
 
             <div class="form-group @if ($errors->has('email')) has-error @endif">
                 {{ Form::label('admin_url', 'Alternative for wp-login.php') }}
-                {{ Form::text('admin_url', null, array('class' => 'form-control')) }}
+                {{ Form::text('admin_url', null, array('class' => 'form-control', 'tabindex' => 2)) }}
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Update Website" />
+            <input type="submit" class="btn btn-primary" value="Update Website" tabindex="3" />
 
         {{ Form::close() }}
     </div>

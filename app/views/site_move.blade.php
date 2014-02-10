@@ -36,15 +36,15 @@
 
                     <div class="form-group @if ($errors->has('name')) has-error @endif">
                         {{ Form::label('domain', 'Domain') }}
-                        {{ Form::select('domain', $domains, Input::old('domain') ? Input::old('domain') : $selected_url, array('class' => 'form-control', 'onchange' => 'update_tld();')); }}
+                        {{ Form::select('domain', $domains, Input::old('domain') ? Input::old('domain') : $selected_url, array('class' => 'form-control', 'onchange' => 'update_tld();', 'tabindex' => 1)); }}
                     </div>
 
                     <div class="form-group @if ($errors->has('url')) has-error @endif">
                         {{ Form::label('url', 'URL') }}
                         <div class="input-group">
-                            {{ Form::text('url', Input::old('url') ? '.' . Input::old('url') : '.' . $selected_url, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();')) }}
+                            {{ Form::text('url', Input::old('url') ? '.' . Input::old('url') : '.' . $selected_url, array('class' => 'form-control', 'onclick' => 'update_caret();', 'onfocus' => 'update_caret();', 'onkeyup' => 'update_caret();', 'onkeydown' => 'update_caret();', 'tabindex' => 2)) }}
                             <span class="input-group-btn" style="vertical-align: bottom;">
-                                <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_subdomain();"><i class="fa fa-search"></i></button>
+                                <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button tabindex="3" class="btn btn-default" type="button" onclick="check_subdomain();"><i class="fa fa-search"></i></button>
                             </span>
                         </div>
                         @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
@@ -56,7 +56,7 @@
                         <div id="domain-doolox" style="display: none;" class="alert alert-dismissable alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><p>This domain is already used on Doolox. You can't use it.</p></div>
                     </div>
                     <div id="owner-parent" style="display: none;" class="checkbox"><label><input type="checkbox" value="" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
-                    <input type="submit" class="btn btn-primary" value="Move Site">
+                    <input type="submit" class="btn btn-primary" value="Move Site" tabindex="4" />
                     {{ Form::close() }}
                 </div>
                 <div class="tab-pane fade" id="ftp">

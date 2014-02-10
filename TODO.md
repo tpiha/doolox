@@ -11,7 +11,6 @@ Doolox Todo List
 
 * WordPress Template Viewer
 * Unit tests
-* Fix tab indexes on all forms
 * Tools (Install New WordPress website on FTP server)
 * Recovering forgotten password
 * Monitoring

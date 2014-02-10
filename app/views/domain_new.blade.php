@@ -19,9 +19,9 @@
             <div class="form-group @if ($errors->has('url')) has-error @endif">
                 {{ Form::label('url', 'Domain *') }}
                 <div class="input-group">
-                    {{ Form::text('url', Input::old('url'), array('class' => 'form-control')) }}
+                    {{ Form::text('url', Input::old('url'), array('class' => 'form-control', 'tabindex' => 1)) }}
                     <span class="input-group-btn" style="vertical-align: bottom;">
-                        <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
+                        <img src="{{ url() }}/images/ajax-loader.gif" class="domain-ajax-loader" id="ajax-loader" alt="" /><button tabindex="2" class="btn btn-default" type="button" onclick="check_domain();"><i class="fa fa-search"></i></button>
                     </span>
                 </div>
                 @if ($errors->has('url'))<p class="help-block">{{ $errors->first('url') }}</p>@endif
@@ -36,22 +36,22 @@
             <div id="owner-parent" style="display: none; margin-bottom: 20px;" class="checkbox"><label><input type="checkbox" value="1" name="owner" id="id_owner">Are you the owner of this domain?</label></div>
 
             <div class="form-group">
-                <label>Configuration Type <a href="https://www.doolox.com/how-to-add-your-existing-domain-to-doolox/" target="_blank"><i class="fa fa-question"></i></a></label>
+                <label>Configuration Type <a tabindex="3" href="https://www.doolox.com/how-to-add-your-existing-domain-to-doolox/" target="_blank"><i class="fa fa-question"></i></a></label>
                 <div class="radio" style="margin-top: 0px;">
                     <label>
-                        {{ Form::radio('type', 1, true) }}
+                        {{ Form::radio('type', 1, true, array('tabindex' => 4)) }}
                         Host your domain by yourself and set CNAME record (Free)
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        {{ Form::radio('type', 2) }}
+                        {{ Form::radio('type', 2, false) }}
                         Let us buy and setup a domain and email for you ($15.- annually)
                     </label>
                 </div>
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Add Domain" />
+            <input type="submit" class="btn btn-primary" value="Add Domain" tabindex="5" />
 
         {{ Form::close() }}
 
