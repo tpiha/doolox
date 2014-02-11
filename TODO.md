@@ -3,8 +3,6 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Report Doolox Node installation success and error
-* Populate dooloxpkg on site install and add
 * Check requirements in installation wizard (php5-curl, php5-mcrypt, php5-sqlite | php5-mysql | php5-pgsql)
 * Self-hosted - remove SaaS stuff + refactoring
 

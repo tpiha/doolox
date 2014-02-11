@@ -24,6 +24,9 @@ Doolox Changelog
 * Self-hosted - installation wizard
 * Bug - remember me
 * Packaging script
+* Fb & WP cover image
+* Report Doolox Node installation success and error
+* Populate dooloxpkg on site install and add (general public key)
 
 ### v1.1 (Feb 2 2014) ###
 
