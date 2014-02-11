@@ -40,6 +40,9 @@
                         PostgreSQL
                     </label>
                 </div>
+                @if ($errors->has('database'))<div class="form-group has-error">
+                <p class="help-block">{{ $errors->first('database') }}</p>
+                </div>@endif
             </div>
 
             <div id="dbdata" style="display: none;">

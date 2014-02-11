@@ -3,7 +3,6 @@ Doolox Todo List
 
 ### v1.2 ###
 
-* Check requirements in installation wizard (php5-curl, php5-mcrypt, php5-sqlite | php5-mysql | php5-pgsql)
 * Self-hosted - remove SaaS stuff + refactoring
 
 ### v1.3 ###

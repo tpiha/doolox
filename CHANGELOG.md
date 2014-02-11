@@ -27,6 +27,7 @@ Doolox Changelog
 * Fb & WP cover image
 * Report Doolox Node installation success and error
 * Populate dooloxpkg on site install and add (general public key)
+* Check requirements in installation wizard (php5-curl, php5-mcrypt, php5-sqlite | php5-mysql | php5-pgsql)
 
 ### v1.1 (Feb 2 2014) ###
 

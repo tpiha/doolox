@@ -749,8 +749,13 @@ class DooloxController extends BaseController {
         $conds['database'] = is_writable(base_path() . '/app/config/database.php');
         $conds['doolox'] = is_writable(base_path() . '/app/config/doolox.php');
         $conds['app'] = is_writable(base_path() . '/app/config/app.php');
+        $conds['mcrypt'] = extension_loaded('mcrypt');
+        $conds['curl'] = extension_loaded('curl');
+        $conds['sqlite'] = extension_loaded('pdo_sqlite');
+        $conds['mysql'] = extension_loaded('pdo_mysql');
+        $conds['pgsql'] = extension_loaded('pdo_pgsql');
 
-        if ($conds['storage'] && $conds['database'] && $conds['doolox'] && $conds['app']) {
+        if ($conds['storage'] && $conds['database'] && $conds['doolox'] && $conds['app'] && $conds['mcrypt'] && $conds['curl']) {
             return Redirect::route('doolox.install2');
         }
 
@@ -763,14 +768,24 @@ class DooloxController extends BaseController {
         $doolox = base_path() . '/app/config/doolox.php';
         $database = base_path() . '/app/config/database.php';
 
+        Validator::extend('extension_check', function($attribute, $value, $parameters)
+        {
+            return extension_loaded('pdo_' . $value);
+        });
+
+        $messages = array(
+            'extension_check' => 'You need to enable PHP extension for the chosen database type.',
+        );
+
         $rules = array(
             'dbhost' => 'required_if:database,mysql|required_if:database,pgsql',
             'dbname' => 'required_if:database,mysql|required_if:database,pgsql',
             'dbuser' => 'required_if:database,mysql|required_if:database,pgsql',
             'dbpass' => 'required_if:database,mysql|required_if:database,pgsql',
+            'database' => 'extension_check',
         );
 
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->passes()) {
             $url = str_replace('/install2', '', Request::url());

@@ -11,6 +11,31 @@
 </div>
 <div class="row">
     <div class="col-lg-6">
+
+@if ($conds['mcrypt'])
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong>mcrypt</strong> PHP extension is a requirement and it is enabled.
+        </div>
+@else
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong>mcrypt</strong> PHP extension is a requirement, please enable it.
+        </div>
+@endif
+
+@if ($conds['curl'])
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong>curl</strong> PHP extension is a requirement and it is enabled.
+        </div>
+@else
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong>curl</strong> PHP extension is a requirement, please enable it.
+        </div>
+@endif
+
 @if ($conds['storage'])
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
