@@ -13,5 +13,6 @@ Doolox Todo List
 * Recovering forgotten password
 * Monitoring
 * Backup
+* Updates
 * Depolyment (Synkee integration)
 * Ftp servers management (?)
