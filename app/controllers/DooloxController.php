@@ -2,6 +2,11 @@
 
 class DooloxController extends BaseController {
 
+    /**
+     * Doolox dashboard
+     *
+     * @return View object
+     */
 	public function dashboard()
     {
         $rsa = new Crypt_RSA();
@@ -20,6 +25,12 @@ class DooloxController extends BaseController {
 		return View::make('dashboard')->with('sites', $sites);
 	}
 
+    /**
+     * Edit Doolox website
+     *
+     * @param integer $id - Site object id
+     * @return View object
+     */
     public function site($id)
     {
         $validator = null;
@@ -42,6 +53,11 @@ class DooloxController extends BaseController {
         return View::make('site')->with('site', $site)->withErrors($validator);
     }
 
+    /**
+     * Add new remote Doolox website
+     *
+     * @return View object
+     */
     public function site_new()
     {
         Validator::extend('wpurl', function($attribute, $value, $parameters)
@@ -86,7 +102,7 @@ class DooloxController extends BaseController {
             $user->getSites()->attach($site);
 
             if (Input::get('doolox_node')) {
-                $install = self::install_doolox_node($input['url'], Input::get('username'), Input::get('password'));
+                $install = Doolox::install_doolox_node($input['url'], Input::get('username'), Input::get('password'));
                 if ($install) {
                     Session::flash('success', 'New website successfully added with successfull Doolox Node installation.');
                 }
@@ -106,6 +122,12 @@ class DooloxController extends BaseController {
         return View::make('site_new')->withErrors($validator);
     }
 
+    /**
+     * Delete Doolox website
+     *
+     * @param integer $id - Site object id
+     * @return View object
+     */
     public function site_delete($id)
     {
         $site = Site::findOrFail((int) $id);
@@ -119,6 +141,13 @@ class DooloxController extends BaseController {
         return Redirect::route('doolox.dashboard');
     }
 
+    /**
+     * Remove user from Doolox website owners
+     *
+     * @param integer $id - Site object id
+     * @param integer $user_id - User object id
+     * @return View object
+     */
     public function site_rmuser($id, $user_id)
     {
         $site = Site::find($id);
@@ -128,6 +157,12 @@ class DooloxController extends BaseController {
         return Redirect::route('doolox.dashboard');
     }
 
+    /**
+     * Add user to Doolox website owners
+     *
+     * @param integer $id - Site object id
+     * @return View object
+     */
     public function site_adduser($id)
     {
         if (Input::get('email')) {
@@ -149,6 +184,11 @@ class DooloxController extends BaseController {
         }
     }
 
+    /**
+     * Install new website on Doolox
+     *
+     * @return View object
+     */
     public function site_install()
     {
         $domains = array();
@@ -163,6 +203,11 @@ class DooloxController extends BaseController {
         return View::make('site_install')->with(array('domains' => $domains, 'selected_url' => $selected_url));
     }
 
+    /**
+     * Install new website on Doolox (post request)
+     *
+     * @return View object
+     */
     public function site_install_post()
     {
         $domains = Sentry::getUser()->getDomains()->get();
@@ -214,6 +259,11 @@ class DooloxController extends BaseController {
         return View::make('site_install')->withErrors($validator)->with(array('domains' => $_domains, 'selected_url' => $selected_url));
     }
 
+    /**
+     * Install new website on Doolox (step 2)
+     *
+     * @return View object
+     */
     public function site_install_step2()
     {
         $domain = Input::get('domain');
@@ -245,16 +295,16 @@ class DooloxController extends BaseController {
             $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $d->id, 'subdomain' => $subdomain));
             $user->getSites()->attach($site);
 
-            self::get_wordpress(Sentry::getUser(), $url);
+            Doolox::get_wordpress(Sentry::getUser(), $url);
             $dbname = 'doolox' . $user->id . '_db' . $site->id;
             $dbpass = str_random(32);
-            self::create_database($dbname, $dbname, $dbpass);
-            self::create_wp_config($user, $url, $dbname, $dbpass);
+            Doolox::create_database($dbname, $dbname, $dbpass);
+            Doolox::create_wp_config($user, $url, $dbname, $dbpass);
             try {
-                self::install_wordpress($url, $title, $username, $password, $email);
+                Doolox::install_wordpress($url, $title, $username, $password, $email);
             }
             catch (Exception $e) {}
-            $install = self::install_doolox_node('http://' . $url . '/', $username, $password);
+            $install = Doolox::install_doolox_node('http://' . $url . '/', $username, $password);
             if ($install) {
                 Session::flash('success', 'New website successfully installed with successfull Doolox Node installation.');
             }
@@ -269,310 +319,12 @@ class DooloxController extends BaseController {
         return View::make('site_install_step2')->with(array('domain' => $domain, 'url' => $url))->withErrors($validator);
     }
 
-    public function check_subdomain($domain)
-    {
-        // $taken = array('blog', 'wiki', 'admin', '');
-        if ($domain != '.' . Config::get('doolox.system_domain')) {
-            $domain = explode('.', $domain);
-            $subdomain = $domain[0];
-            $domain = $domain[1] . '.' . $domain[2];
-            $d = Domain::where('url', $domain)->first();
-            if (Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
-                return Response::json(array('free' => false, 'status' => 3));
-            }
-            else {
-                return Response::json(array('free' => true, 'status' => 0));
-            }
-        }
-        else {
-            return Response::json(array('free' => false, 'status' => 1));
-        }
-    }
-
-    public function check_domain($domain)
-    {
-        $da = DooloxController::is_domain_available($domain, Sentry::getUser());
-        return Response::json(array('free' => $da[0], 'status' => $da[1]));
-    }
-
-    public static function is_domain_available($domain, $user)
-    {
-        $domain = explode('.', $domain);
-        try {
-            $subdomain = $domain[2];
-            $tld = $subdomain;
-            $subdomain = $domain[0];
-            $domain = $domain[1];
-        }
-        catch (Exception $e) {
-            $subdomain = '';
-            try {
-                $tld = $domain[1];
-                $domain = $domain[0];
-            }
-            catch (Exception $e) {
-                // no dots
-                return array(false, 1);
-            }
-        }
-
-        // check allowed characters
-        if ($tld == Str::slug($tld) && $domain == Str::slug($domain) && $subdomain == Str::slug($subdomain)) {
-
-            $domain = join(array($domain, $tld), '.');
-
-            if ($domain != Config::get('doolox.system_domain')) {
-                if (Domain::where('url', $domain)->count()) {
-                    return array(false, 3);
-                }
-                else if (in_array($tld, array('com', 'net', 'org'))) {
-                    if (self::namecom_is_available($domain)) {
-                        Log::debug("Name.com - domain available: $domain");
-                        return array(true, 0);
-                    }
-                    else {
-                        return array(false, 2);
-                    }
-                }
-                else {
-                    $ip = gethostbyname($domain);
-                    if ($ip == $domain) {
-                        return array(false, 2);
-                    }
-                    else {
-                        return array(true, 0);
-                    }
-                }                    
-            }
-            else {
-                return array(false, 3);
-            }
-        }
-        else {
-            return array(false, 1);
-        }
-    }
-
-    public static function namecom_is_available($domain)
-    {
-        require_once(base_path() . "/tools/namecom_api.php");
-        $api = new NameComApi();
-        $api->baseUrl(Config::get('doolox.namecom_url'));
-        $api->username(Config::get('doolox.namecom_user'));
-        $api->apiToken(Config::get('doolox.namecom_token'));
-        $response = $api->check_domain($domain);
-        return $response->domains->{$domain}->avail;
-    }
-
-    public static function create_database($database, $username, $password)
-    {
-        DB::connection('managemysql')->statement("CREATE DATABASE $database");
-        DB::connection('managemysql')->statement("GRANT ALL ON $database.* TO '$username'@'localhost' IDENTIFIED BY '$password'");
-        DB::connection('managemysql')->statement("FLUSH PRIVILEGES");
-    }
-
-    public static function drop_database($dbname)
-    {
-        DB::connection('managemysql')->statement("DROP USER $dbname@localhost");
-        DB::connection('managemysql')->statement("DROP DATABASE $dbname");
-        DB::connection('managemysql')->statement("FLUSH PRIVILEGES");
-    }
-
-    public static function install_wordpress ($url, $title, $username, $password, $email)
-    {
-        $data = array(
-            'weblog_title' => $title,
-            'user_name' => $username,
-            'admin_password' => $password,
-            'admin_password2' => $password,
-            'admin_email' => $email,
-            'blog_public' => 1,
-        );
-        $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array('timeout' => 90), $data);
-    }
-
-    public static function get_wordpress($user, $domain)
-    {
-        $source = base_path() . '/wordpress';
-        $dest = base_path() . '/users/' . $user->email . '/' . $domain;
-
-        mkdir($dest);
-
-        foreach (
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::SELF_FIRST) as $item
-            ) {
-            if ($item->isDir()) {
-                mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-            } else {
-                copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-            }
-        }
-
-        symlink($dest, base_path() . '/websites/' . $domain);
-    }
-
-    public static function create_wp_config($user, $domain, $dbname, $dbpass)
-    {
-        $source = base_path() . '/tools/wp-config.php';
-        $dest = base_path() . '/users/' . $user->email . '/' . $domain . '/wp-config.php';
-        $wpconfig = file_get_contents($source);
-
-        $wpconfig = str_replace('###DB_NAME###', $dbname, $wpconfig);
-        $wpconfig = str_replace('###DB_USER###', $dbname, $wpconfig);
-        $wpconfig = str_replace('###DB_PASSWORD###', $dbpass, $wpconfig);
-        $wpconfig = str_replace('###DB_HOST###', 'localhost', $wpconfig);
-
-        $wpconfig = str_replace('###AUTH_KEY###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###SECURE_AUTH_KEY###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###LOGGED_IN_KEY###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###LOGGED_IN_KEY###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###AUTH_SALT###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###SECURE_AUTH_SALT###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###LOGGED_IN_SALT###', str_random(32), $wpconfig);
-        $wpconfig = str_replace('###NONCE_SALT###', str_random(32), $wpconfig);
-
-        file_put_contents($dest, $wpconfig);
-    }
-
-    public static function install_doolox_node($url, $username, $password)
-    {
-        Log::debug($url . ' ' . $username . ' ' . $password);
-        $headers = array();
-        $options = array();
-
-        $session = new Requests_Session($url);
-
-        $data = array('log' => $username, 'pwd' => $password);
-        $request = $session->post('wp-login.php', array(), $data);
-
-        if (strpos($request->url, 'wp-login.php') === false) {
-            $request = $session->get('wp-admin/plugin-install.php?tab=search&s=doolox+node&plugin-search-input=Search+Plugins', $headers, $options);
-            $start = strpos($request->body, 'update.php?action=install-plugin&amp;plugin=doolox-node');
-
-            if ($start !== false) {
-                $end = strpos($request->body, '"', $start);
-                $length = $end - $start;
-                $link = substr($request->body, $start, $length);
-                $link = str_replace($url, '', $link);
-                $link = str_replace('&amp;', '&', $link);
-                $request = $session->get('wp-admin/' . $link, $headers, $options);
-
-                $start = strpos($request->body, 'plugins.php?action=activate&amp;plugin=doolox-node%2Fdoolox.php');
-                if ($start !== false) {
-                    $end = strpos($request->body, '"', $start);
-                    $length = $end - $start;
-                    $link = substr($request->body, $start, $length);
-                    $link = str_replace($url, '', $link);
-                    $link = str_replace('&amp;', '&', $link);
-                    $request = $session->get('wp-admin/' . $link, $headers, $options);
-
-                    $request = $session->get('wp-admin/options-general.php?page=doolox-settings', $headers, $options);
-                    $start = strpos($request->body, 'options.php?_wpnonce=');
-                    $end = strpos($request->body, '"', $start);
-                    $length = $end - $start;
-                    $action = substr($request->body, $start, $length);
-
-                    Log::debug($action . ' ' . $start . ' ' . $end);
-
-                    $hidden = '<input type="hidden" id="_wpnonce" name="_wpnonce" value="';
-                    $start = strpos($request->body, $hidden) + strlen($hidden);
-                    $end = strpos($request->body, '"', $start);
-                    $length = $end - $start;
-                    $_wpnonce = substr($request->body, $start, $length);
-
-                    Log::debug($_wpnonce . ' ' . $start . ' ' . $end);
-
-                    $data = array(
-                        'option_page' => 'doolox-settings',
-                        'action' => 'update',
-                        '_wpnonce' => $_wpnonce,
-                        '_wp_http_referer' => '/wp-admin/options-general.php?page=doolox-settings',
-                        'submit' => 'Save Changes',
-                        'dooloxpkg' => Config::get('doolox.public_key')
-                    );
-
-                    $request = $session->post('wp-admin/' . $action, array(), $data);
-
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            return false;
-        }
-    }
-
-    public function wpcipher_connect($id, $username) {
-        $site = Site::find($id);
-        $rsa = new Crypt_RSA();
-
-        if ($site->private_key) {
-            $privatekey = $site->private_key;
-            $publickey = $site->public_key;
-        }
-        else {
-            extract($rsa->createKey());
-            $site->private_key = $privatekey;
-            $site->public_key = $publickey;
-            $site->save();
-        }
-
-        $rsa->loadKey(Config::get('doolox.private_key'));
-
-        $data = array(
-            'id' => $site->id,
-            'action' => 'connect',
-            'username' => $username,
-            'public_key' => $publickey,
-            'rand' => str_random(32),
-            'url' => Config::get('app.url')
-        );
-
-        $data = json_encode($data);
-        $data = base64_encode($data);
-        $data = $rsa->encrypt($data);
-        $data = base64_encode($data);
-        $data = urlencode($data);
-
-        return Response::json(array('cipher' => $data));
-    }
-
-    public function wpcipher_login($id) {
-        $site = Site::find($id);
-
-        $rsa = new Crypt_RSA();
-        $rsa->loadKey($site->private_key);
-
-        $data = array(
-            'id' => (string) $site->id,
-            'action' => 'login',
-            'rand' => str_random(32),
-        );
-
-        $data = json_encode($data);
-        $data = base64_encode($data);
-        $data = $rsa->encrypt($data);
-        $data = base64_encode($data);
-        $data = urlencode($data);
-
-        return Response::json(array('cipher' => $data));
-    }
-
-    public function connected() {
-        $site_id = Input::get('id');
-        $site = Site::find($site_id);
-        $site->connected = true;
-        $site->save();
-    }
-
+    /**
+     * Move Doolox website
+     *
+     * @param integer $id - Site object id
+     * @return View or Redirect object
+     */
     public function site_move($id)
     {
         $site = Site::find($id);
@@ -593,6 +345,12 @@ class DooloxController extends BaseController {
         }
     }
 
+    /**
+     * Move Doolox website (post request)
+     *
+     * @param integer $id - Site object id
+     * @return View object
+     */
     public function site_move_post($id)
     {
         $domains = Sentry::getUser()->getDomains()->get();
@@ -642,30 +400,140 @@ class DooloxController extends BaseController {
         return View::make('site_move')->withErrors($validator)->with(array('domains' => $_domains, 'selected_url' => $selected_url, 'site' => $site));
     }
 
-    public static function folder_size($dir){
-        $count_size = 0;
-        $count = 0;
-        $dir_array = scandir($dir);
-        foreach($dir_array as $key=>$filename) {
-            if($filename!=".." && $filename!=".") {
-                if(is_dir($dir."/".$filename)) {
-                    $new_foldersize = self::folder_size($dir."/".$filename);
-                    $count_size = $count_size + $new_foldersize;
-                } else if(is_file($dir."/".$filename)) {
-                    $count_size = $count_size + filesize($dir."/".$filename);
-                    $count++;
-                }
+    /**
+     * Check subdomain on Doolox (new installation purposes)
+     *
+     * @param string $domain - full domain (with subdomain)
+     * @return JSON object
+     */
+    public function check_subdomain($domain)
+    {
+        // $taken = array('blog', 'wiki', 'admin', '');
+        if ($domain != '.' . Config::get('doolox.system_domain')) {
+            $domain = explode('.', $domain);
+            $subdomain = $domain[0];
+            $domain = $domain[1] . '.' . $domain[2];
+            $d = Domain::where('url', $domain)->first();
+            if (Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
+                return Response::json(array('free' => false, 'status' => 3));
             }
-
+            else {
+                return Response::json(array('free' => true, 'status' => 0));
+            }
         }
-        return $count_size;
+        else {
+            return Response::json(array('free' => false, 'status' => 1));
+        }
     }
 
+    /**
+     * Check domain on Doolox (new domain purposes)
+     *
+     * @param string $domain - full domain (with subdomain)
+     * @return JSON object
+     */
+    public function check_domain($domain)
+    {
+        $da = Doolox::is_domain_available($domain);
+        return Response::json(array('free' => $da[0], 'status' => $da[1]));
+    }
+
+    /**
+     * Get data for connecting to Doolox Node
+     *
+     * @param integer $id - Site object id
+     * @param string $username - WordPress website username
+     * @return JSON object
+     */
+    public function wpcipher_connect($id, $username) {
+        $site = Site::find($id);
+        $rsa = new Crypt_RSA();
+
+        if ($site->private_key) {
+            $privatekey = $site->private_key;
+            $publickey = $site->public_key;
+        }
+        else {
+            extract($rsa->createKey());
+            $site->private_key = $privatekey;
+            $site->public_key = $publickey;
+            $site->save();
+        }
+
+        $rsa->loadKey(Config::get('doolox.private_key'));
+
+        $data = array(
+            'id' => $site->id,
+            'action' => 'connect',
+            'username' => $username,
+            'public_key' => $publickey,
+            'rand' => str_random(32),
+            'url' => Config::get('app.url')
+        );
+
+        $data = json_encode($data);
+        $data = base64_encode($data);
+        $data = $rsa->encrypt($data);
+        $data = base64_encode($data);
+        $data = urlencode($data);
+
+        return Response::json(array('cipher' => $data));
+    }
+
+    /**
+     * Get data for sign in to Doolox Node
+     *
+     * @param integer $id - Site object id
+     * @return JSON object
+     */
+    public function wpcipher_login($id) {
+        $site = Site::find($id);
+
+        $rsa = new Crypt_RSA();
+        $rsa->loadKey($site->private_key);
+
+        $data = array(
+            'id' => (string) $site->id,
+            'action' => 'login',
+            'rand' => str_random(32),
+        );
+
+        $data = json_encode($data);
+        $data = base64_encode($data);
+        $data = $rsa->encrypt($data);
+        $data = base64_encode($data);
+        $data = urlencode($data);
+
+        return Response::json(array('cipher' => $data));
+    }
+
+    /**
+     * Doolox website connected handler (called from Doolox Node)
+     *
+     * @return void
+     */
+    public function connected() {
+        $site_id = Input::get('id');
+        $site = Site::find($site_id);
+        $site->connected = true;
+        $site->save();
+    }
+
+    /**
+     * Upgrade Doolox plan on SaaS version
+     *
+     * @return View object
+     */
     public function upgrade()
     {
         return View::make('upgrade');
     }
 
+    /**
+     * Doolox plan paid handler (called by FastSpring)
+     *
+     * @return void
+     */
     public function paid_plan() {
         $privatekey = Config::get('doolox.fskey');
         $secdata = $_REQUEST['security_data'];
@@ -691,6 +559,11 @@ class DooloxController extends BaseController {
         }
     }
 
+    /**
+     * Doolox domain paid handler (called by FastSpring)
+     *
+     * @return void
+     */
     public function paid_domain() {
         require_once(base_path() . "/tools/namecom_api.php");
 
@@ -741,6 +614,11 @@ class DooloxController extends BaseController {
         }
     }
 
+    /**
+     * Install self-hosted Doolox app (ckeckup step)
+     *
+     * @return View object
+     */
     public function install()
     {
         $conds = array();
@@ -762,6 +640,11 @@ class DooloxController extends BaseController {
         return View::make('install')->with('conds', $conds);
     }
 
+    /**
+     * Install self-hosted Doolox app (database step)
+     *
+     * @return View object
+     */
     public function install2()
     {
         $app = base_path() . '/app/config/app.php';
@@ -792,22 +675,22 @@ class DooloxController extends BaseController {
             $key = str_random(32);
             $app_sample = base_path() . '/app/config/app.sample.php';
 
-            self::replace_in_file($app_sample, $app, '__DXURL__', $url);
-            self::replace_in_file($app, $app, '__DXKEY__', $key);
+            Doolox::replace_in_file($app_sample, $app, '__DXURL__', $url);
+            Doolox::replace_in_file($app, $app, '__DXKEY__', $key);
 
             $domain = Config::get('doolox.system_domain');
             $rsa = new Crypt_RSA();
             extract($rsa->createKey());
             $doolox_sample = base_path() . '/app/config/doolox.sample.php';
 
-            self::replace_in_file($doolox_sample, $doolox, '__DXDOMAIN__', $domain);
-            self::replace_in_file($doolox, $doolox, '__DXPRIVATE_KEY__', $privatekey);
-            self::replace_in_file($doolox, $doolox, '__DXPUBLIC_KEY__', $publickey);
+            Doolox::replace_in_file($doolox_sample, $doolox, '__DXDOMAIN__', $domain);
+            Doolox::replace_in_file($doolox, $doolox, '__DXPRIVATE_KEY__', $privatekey);
+            Doolox::replace_in_file($doolox, $doolox, '__DXPUBLIC_KEY__', $publickey);
 
             $database_sample = base_path() . '/app/config/database.sample.php';
 
             $dbtype = Input::get('database');
-            self::replace_in_file($database_sample, $database, '__DXDATABASE__', $dbtype);
+            Doolox::replace_in_file($database_sample, $database, '__DXDATABASE__', $dbtype);
 
             if ($dbtype != 'sqlite') {
                 $dbhost = Input::get('dbhost');
@@ -815,10 +698,10 @@ class DooloxController extends BaseController {
                 $dbuser = Input::get('dbuser');
                 $dbpass = Input::get('dbpass');
 
-                self::replace_in_file($database, $database, '__DXDBHOST__', $dbhost);
-                self::replace_in_file($database, $database, '__DXDBNAME__', $dbname);
-                self::replace_in_file($database, $database, '__DXDBUSER__', $dbuser);
-                self::replace_in_file($database, $database, '__DXDBPASS__', $dbpass);
+                Doolox::replace_in_file($database, $database, '__DXDBHOST__', $dbhost);
+                Doolox::replace_in_file($database, $database, '__DXDBNAME__', $dbname);
+                Doolox::replace_in_file($database, $database, '__DXDBUSER__', $dbuser);
+                Doolox::replace_in_file($database, $database, '__DXDBPASS__', $dbpass);
 
                 Artisan::call('migrate:install', array());
                 Artisan::call('migrate', array());
@@ -830,13 +713,6 @@ class DooloxController extends BaseController {
         }
 
         return View::make('install2')->withErrors($validator);
-    }
-
-    public static function replace_in_file($from, $to, $search, $replace)
-    {
-        $str = file_get_contents($from);
-        $str = str_replace($search, $replace, $str);
-        file_put_contents($to, $str);
     }
 
 }

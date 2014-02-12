@@ -238,7 +238,7 @@ Route::filter('limit-size', function()
         $group2 = Sentry::findGroupByName('Doolox Business');
         $group3 = Sentry::findGroupByName('Doolox Unlimited');
         $user_home = base_path() . '/users/' . $user->email . '/';
-        $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
+        $size = ((int) (Doolox::folder_size($user_home) / 1024 / 1024));
         if ($user->inGroup($group1)) {
             $limit = 1024;
         }
@@ -271,7 +271,7 @@ Route::filter('master-check', function()
             $sites_local = Site::where('user_id', $user->id)->where('local', true)->get();
             $sites_remote = Site::where('user_id', $user->id)->where('local', false)->get();
             $user_home = base_path() . '/users/' . $user->email . '/';
-            $size = ((int) (DooloxController::folder_size($user_home) / 1024 / 1024));
+            $size = ((int) (Doolox::folder_size($user_home) / 1024 / 1024));
 
             Session::flash('limit-installations-current', $sites_local->count());
             Session::flash('limit-management-current', $sites_remote->count());

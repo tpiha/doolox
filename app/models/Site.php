@@ -153,7 +153,7 @@ class Site extends Eloquent {
             if ($site->local) {
                 $dbname = 'doolox' . $site->getOwner()->first()->id . '_db' . $site->id;
                 try {
-                    DooloxController::drop_database($dbname);
+                    Doolox::drop_database($dbname);
                 }
                 catch (Exception $e){
                     Log::error("Couldn't delete database: $dbname");

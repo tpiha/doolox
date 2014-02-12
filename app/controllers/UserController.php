@@ -2,6 +2,11 @@
 
 class UserController extends BaseController {
 
+    /**
+     * Doolox sign in form
+     *
+     * @return View object
+     */
 	public function login()
     {
         $email = Input::get('email');
@@ -30,6 +35,11 @@ class UserController extends BaseController {
         return View::make('login')->withErrors($validator);
 	}
 
+    /**
+     * Doolox user account page
+     *
+     * @return View object
+     */
     public function account()
     {
         $user = Sentry::getUser();
@@ -93,6 +103,11 @@ class UserController extends BaseController {
         return View::make('account')->with('user', $user)->withErrors($validator);
     }
 
+    /**
+     * Doolox user management page
+     *
+     * @return View object
+     */
     public function manage_users()
     {
         $user = Sentry::getUser();
@@ -105,6 +120,11 @@ class UserController extends BaseController {
         return View::make('manage_users')->with('users', $users);
     }
 
+    /**
+     * Doolox new user page
+     *
+     * @return View object
+     */
     public function user_new()
     {
         $user = Sentry::getUser();
@@ -129,6 +149,12 @@ class UserController extends BaseController {
         return View::make('user_new')->withErrors($validator);
     }
 
+    /**
+     * Delete Doolox user
+     *
+     * @param integer $id - Doolox User object id
+     * @return Redirect object
+     */
     public function user_delete($id)
     {
         $user = User::findOrFail((int) $id);
@@ -149,6 +175,12 @@ class UserController extends BaseController {
         }
     }
 
+    /**
+     * Update Doolox user
+     *
+     * @param integer $id - Doolox User object id
+     * @return View/Redirect object
+     */
     public function user_update($id)
     {
         $user = User::findOrFail((int) $id);
@@ -178,6 +210,11 @@ class UserController extends BaseController {
         }
     }
 
+    /**
+     * Register new Doolox user (post request)
+     *
+     * @return View/Redirect object
+     */
     public function register_post()
     {
         if (!Config::get('doolox.registration')) {
@@ -229,6 +266,13 @@ class UserController extends BaseController {
         return View::make('user_register')->withErrors($validator);
     }
 
+    /**
+     * Activate Doolox user
+     *
+     * @param integer $user_id - Doolox User object id
+     * @param string $code - Doolox User activation code
+     * @return View object
+     */
     public function activate($user_id, $code)
     {
         $user = Sentry::findUserById($user_id);

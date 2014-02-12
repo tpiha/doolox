@@ -2,6 +2,11 @@
 
 class DomainController extends BaseController {
 
+    /**
+     * Add new domain on Doolox
+     *
+     * @return View object
+     */
 	public function domain_new()
     {
         Validator::extend('domainvalid', function($attribute, $value, $parameters)
@@ -35,7 +40,7 @@ class DomainController extends BaseController {
         Validator::extend('domainavailable', function($attribute, $value, $parameters)
         {
             $owner = (bool) Input::get('owner', 0);
-            $av = DooloxController::is_domain_available($value, Sentry::getUser());
+            $av = Doolox::is_domain_available($value);
             if ($owner) {
                 return true;
             }
@@ -50,7 +55,7 @@ class DomainController extends BaseController {
 
         Validator::extend('domainused', function($attribute, $value, $parameters)
         {
-            $av = DooloxController::is_domain_available($value, Sentry::getUser());            
+            $av = Doolox::is_domain_available($value);            
             if ((int) $av[1] == 3) {
                 return false;
             }
@@ -104,6 +109,11 @@ class DomainController extends BaseController {
         return View::make('domain_new')->withErrors($validator);
     }
 
+    /**
+     * Delete domain from Doolox
+     *
+     * @return Redirect object
+     */
     public function domain_delete($id)
     {
         $user = Sentry::getUser();

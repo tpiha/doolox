@@ -37,6 +37,7 @@
 
         {{ Form::close() }}
     </div>
+@if(Config::get('doolox.saas'))
     <div class="col-lg-6">
         <h4>Doolox Plan</h4>
         <div class="well">
@@ -46,5 +47,6 @@
             <a class="btn btn-primary btn-lg" href="{{ route('doolox.upgrade') }}">Upgrade Doolox Plan</a>
         </div>
     </div>
+@endif
 </div>
 @stop
