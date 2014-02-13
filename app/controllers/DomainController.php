@@ -94,7 +94,7 @@ class DomainController extends BaseController {
             $domain = join(array($domain, $tld), '.');
 
             $domain = Domain::create(array('user_id' => Sentry::getUser()->id, 'url' => $domain));
-            if ($type == 1) {
+            if ($type == 1 || !Config::get('doolox.saas')) {
                 Session::flash('success', 'New Doolox domain successfully added.');
                 return Redirect::route('domain.index');
             }
