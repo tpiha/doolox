@@ -35,7 +35,7 @@ class Install extends Migration {
             $table->boolean('local')->default(0);
             $table->string('subdomain')->nullable();
             $table->integer('domain_id')->unsigned()->nullable();
-            $table->boolean('connected')->default(0);;
+            $table->boolean('connected')->default(0);
             $table->string('private_key', 1023)->nullable();
             $table->string('public_key', 1023)->nullable();
 

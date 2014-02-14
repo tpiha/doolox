@@ -1,7 +1,11 @@
 Doolox Changelog
 ================
 
-### v1.2 ###
+### v1.2.1 ###
+
+* WordPress Template Viewer
+
+### v1.2 (Feb 13 2014) ###
 
 * Create connecting tutorial
 * WordPress download caching
