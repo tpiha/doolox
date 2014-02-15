@@ -125,5 +125,8 @@
             })();
         </script>
 @endif
+
+{{ Config::get('doolox.zopim') }}
+
     </body>
 </html>

@@ -4,8 +4,9 @@ Doolox Changelog
 ### v1.2.1 ###
 
 * WordPress Template Viewer
+* Put Zopim on Doolox website
 
-### v1.2 (Feb 13 2014) ###
+### v1.2.0 (Feb 13 2014) ###
 
 * Create connecting tutorial
 * WordPress download caching
@@ -33,7 +34,7 @@ Doolox Changelog
 * Populate dooloxpkg on site install and add (general public key)
 * Check requirements in installation wizard (php5-curl, php5-mcrypt, php5-sqlite | php5-mysql | php5-pgsql)
 
-### v1.1 (Feb 2 2014) ###
+### v1.1.0 (Feb 2 2014) ###
 
 * Option to remember a logged in user
 * Integrated Laravel Cpanel
@@ -66,7 +67,7 @@ Doolox Changelog
 * Forms validation checkup (leading/trailing slashes, http://, ...)
 * Downloads page
 
-### v1.0 (Jan 19 2014) ###
+### v1.0.0 (Jan 19 2014) ###
 
 * First version
 * Custom filter for checking ownership
