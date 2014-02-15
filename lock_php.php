@@ -1,5 +1,5 @@
 <?php
-    $path = '/var/www/doolox/users/';
+    $path = '/var/www/doolox-new/users/';
     $cd = getcwd();
     $user = str_replace($path, '', $cd);
     $user = explode('/', $user);
