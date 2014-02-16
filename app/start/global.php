@@ -55,7 +55,8 @@ App::error(function(Exception $exception, $code)
         $data = array('exception' => $exception);
         Mail::send('emails.error', $data, function($message)
         {
-            $message->from(Config::get('mail.from')['address']);
+            $from = Config::get('mail.from');
+            $message->from($from['address']);
             $message->to(Config::get('doolox.error_email'))->subject('[Error] ' . Config::get('app.url'));
         });
         Log::info('Error Email sent to ' . Config::get('doolox.error_email'));
