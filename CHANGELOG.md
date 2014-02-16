@@ -8,6 +8,7 @@ Doolox Changelog
 * Lock PHP to user's home folder
 * Error reporting to mail
 * Fix documentation
+* Bug - check strlen for subdomain when installing new website
 
 ### v1.2.0 (Feb 13 2014) ###
 
