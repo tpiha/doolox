@@ -6,6 +6,8 @@ Doolox Changelog
 * WordPress Template Viewer
 * Put Zopim on Doolox website
 * Lock PHP to user's home folder
+* Error reporting to mail
+* Fix documentation
 
 ### v1.2.0 (Feb 13 2014) ###
 

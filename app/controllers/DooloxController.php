@@ -218,7 +218,7 @@ class DooloxController extends BaseController {
             $subdomain = $domain[0];
             $domain = $domain[1] . '.' . $domain[2];
             $d = Domain::where('url', $domain)->first();
-            if (Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
+            if (!strlen($subdomain) || Site::where('domain_id', $d->id)->where('subdomain', $subdomain)->count()) {
                 return false;
             }
             else {
