@@ -9,7 +9,6 @@ class DooloxController extends BaseController {
      */
 	public function dashboard()
     {
-fdsaf
         $rsa = new Crypt_RSA();
         $rsa->loadKey(Config::get('doolox.private_key'));
         $user = Sentry::getUser();
