@@ -3,7 +3,6 @@ Doolox Todo List
 
 ### v1.2.1 ###
 
-* Lock PHP to user's home folder
 * Bug - change the way of WordPress installation when new domain in question
 * Self-hosted - remove SaaS stuff + refactoring
 * Error reporting to mail

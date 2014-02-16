@@ -50,6 +50,17 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 App::error(function(Exception $exception, $code)
 {
 	Log::error($exception);
+
+    if (Config::getEnvironment() == 'production') {
+        $data = array('exception' => $exception);
+        Mail::send('emails.error', $data, function($message)
+        {
+            $message->from(Config::get('mail.from')['address']);
+            $message->to(Config::get('doolox.error_email'))->subject('[Error] ' . Config::get('app.url'));
+        });
+        Log::info('Error Email sent to ' . Config::get('doolox.error_email'));
+        // return Response::view('errors.500', array(), 500);
+    }
 });
 
 /*
