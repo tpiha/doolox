@@ -1,1 +1,1 @@
-{{ $exception }}
+{{ nl2br((string) $exception) }}
