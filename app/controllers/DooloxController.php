@@ -292,19 +292,26 @@ class DooloxController extends BaseController {
             $d = Domain::where('url', $domain)->first();
 
             $user = Sentry::getUser();
-            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $d->id, 'subdomain' => $subdomain));
+            $temp_subdomain = '___' . (string) $user->id . '___';
+            $temp_url = $temp_subdomain . '.' . Config::get('doolox.system_domain');
+            $temp_domain = Domain::where('url', Config::get('doolox.system_domain'))->first();
+            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $temp_url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $temp_domain->id, 'subdomain' => $temp_subdomain));
             $user->getSites()->attach($site);
 
-            Doolox::get_wordpress(Sentry::getUser(), $url);
+            Doolox::get_wordpress(Sentry::getUser(), $temp_url);
             $dbname = 'doolox' . $user->id . '_db' . $site->id;
             $dbpass = str_random(32);
             Doolox::create_database($dbname, $dbname, $dbpass);
-            Doolox::create_wp_config($user, $url, $dbname, $dbpass);
+            Doolox::create_wp_config($user, $temp_url, $dbname, $dbpass);
             try {
-                Doolox::install_wordpress($url, $title, $username, $password, $email);
+                Doolox::install_wordpress($temp_url, $title, $username, $password, $email);
             }
             catch (Exception $e) {}
-            $install = Doolox::install_doolox_node('http://' . $url . '/', $username, $password);
+
+            $install = Doolox::install_doolox_node('http://' . $temp_url . '/', $username, $password);
+
+            $site->change_domain($url);
+
             if ($install) {
                 Session::flash('success', 'New website successfully installed with successfull Doolox Node installation.');
             }

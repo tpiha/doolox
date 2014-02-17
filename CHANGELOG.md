@@ -9,6 +9,7 @@ Doolox Changelog
 * Error reporting to mail
 * Fix documentation
 * Bug - check strlen for subdomain when installing new website
+* Bug - change the way of WordPress installation when new domain in question
 
 ### v1.2.0 (Feb 13 2014) ###
 
