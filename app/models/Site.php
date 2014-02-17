@@ -75,6 +75,8 @@ class Site extends Eloquent {
         $this->save();
 
         $this->db_replace($old_url, $new_url);
+
+        apc_clear_cache();
     }
 
     public function change_email($email) {
