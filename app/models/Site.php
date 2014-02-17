@@ -94,6 +94,8 @@ class Site extends Eloquent {
         symlink($new_path . $url, $link);
 
         $this->db_replace($old_email, $new_email);
+
+        apc_clear_cache();
     }
 
     public function db_replace($old, $new)

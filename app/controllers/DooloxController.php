@@ -292,7 +292,7 @@ class DooloxController extends BaseController {
             $d = Domain::where('url', $domain)->first();
 
             $user = Sentry::getUser();
-            $temp_subdomain = 'doolox' . (string) $user->id;
+            $temp_subdomain = md5($user->id);
             $temp_url = $temp_subdomain . '.' . Config::get('doolox.system_domain');
             $temp_domain = Domain::where('url', Config::get('doolox.system_domain'))->first();
             $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $temp_url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $temp_domain->id, 'subdomain' => $temp_subdomain));
