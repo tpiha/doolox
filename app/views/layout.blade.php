@@ -126,7 +126,9 @@
         </script>
 @endif
 
+@if(App::environment() == 'production')
 {{ Config::get('doolox.zopim') }}
+@endif
 
     </body>
 </html>
