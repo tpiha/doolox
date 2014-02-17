@@ -65,8 +65,8 @@ class Site extends Eloquent {
 
         $d = Domain::where('url', $domain)->first();
 
-        rename($old_path, $new_path);
         unlink($old_link);
+        rename($old_path, $new_path);
         symlink($new_path, $new_link);
 
         $this->url = 'http://' . $new_url . '/';
@@ -87,8 +87,8 @@ class Site extends Eloquent {
         $new_path = base_path() . '/users/' . $new_email . '/';
         $link = base_path() . '/websites/' . $url;
 
-        rename($old_path, $new_path);
         unlink($link);
+        rename($old_path, $new_path);
         symlink($new_path . $url, $link);
 
         $this->db_replace($old_email, $new_email);
