@@ -247,6 +247,7 @@ class DooloxController extends BaseController {
         );
         $validator = Validator::make(Input::all(), $rules, $messages);
         if ($validator->passes()) {
+            Log::debug('[site_install_post] Validator pass: ' . Input::get('domain') . ' ' . Input::get('url'));
             return Redirect::route('doolox.site_install_step2')->with(array('domain' => Input::get('domain'), 'url' => Input::get('url')));
         }
         $_domains = array();
@@ -272,6 +273,8 @@ class DooloxController extends BaseController {
         $url = str_replace('http://', '', $url);
         $url = str_replace('https://', '', $url);
 
+        Log::debug('[site_install_step2] URL: ' . $url);
+
         $rules = array(
             'url' => 'required|not_in:' . Config::get('doolox.system_domain') . ',',
             'title' => 'required',
@@ -284,10 +287,13 @@ class DooloxController extends BaseController {
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
+            Log::debug('[site_install_step2] Validator passed');
             $title = Input::get('title');
             $username = Input::get('username');
             $password = Input::get('password1');
             $email = Input::get('email');
+
+            Log::debug('[site_install_step2] Input data: ' . $title . ' ' . $username . ' ' . $email);
 
             $subdomain = str_replace('.' . $domain, '', $url);
             $d = Domain::where('url', $domain)->first();
@@ -299,9 +305,12 @@ class DooloxController extends BaseController {
             $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $temp_url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $temp_domain->id, 'subdomain' => $temp_subdomain));
             $user->getSites()->attach($site);
 
+            Log::debug('[site_install_step2] Temp URL:' . $temp_url);
+
             Doolox::get_wordpress(Sentry::getUser(), $temp_url);
             $dbname = 'doolox' . $user->id . '_db' . $site->id;
             $dbpass = str_random(32);
+            Log::debug('[site_install_step2] Database name: ' . $dbname);
             Doolox::create_database($dbname, $dbname, $dbpass);
             Doolox::create_wp_config($user, $temp_url, $dbname, $dbpass);
             try {
@@ -310,7 +319,7 @@ class DooloxController extends BaseController {
             catch (Exception $e) {}
 
             $install = Doolox::install_doolox_node('http://' . $temp_url . '/', $username, $password);
-            Log::debug('Site ID: ' . $site->id);
+            Log::debug('[site_install_step2] Install: ' . $install);
             Doolox::connect_doolox_node('http://' . $temp_url . '/', $site->id, $username);
 
             $site->change_domain($url);

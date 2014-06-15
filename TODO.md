@@ -3,7 +3,8 @@ Doolox Todo List
 
 ### v1.2.1 ###
 
-* Automatically activate Doolox Node plugin when adding new website
+* Put logging EVERYWHERE
+* Automatically activate Doolox Node plugin when adding new website (or connecting existing one)
 
 ### v1.2.2 ###
 

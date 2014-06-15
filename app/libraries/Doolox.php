@@ -123,6 +123,7 @@ class Doolox {
      */
     public static function install_wordpress($url, $title, $username, $password, $email)
     {
+        Log::debug('[install_wordpress]: ' . $url . ' ' . $title . ' ' . $username . ' ' . $email);
         $data = array(
             'weblog_title' => $title,
             'user_name' => $username,
@@ -132,6 +133,7 @@ class Doolox {
             'blog_public' => 1,
         );
         $response = Requests::post('http://' . $url . '/wp-admin/install.php?step=2', array('timeout' => 90), $data);
+        Log::debug('[install_wordpress]: response status: ' . $response->status_code);
     }
 
     /**
@@ -160,7 +162,11 @@ class Doolox {
             }
         }
 
-        symlink($dest, base_path() . '/websites/' . $domain);
+        $link = base_path() . '/websites/' . $domain;
+
+        Log::debug('[get_wordpress] Symlink: ' . $dest . ' ' . $link);
+
+        symlink($dest, $link);
     }
 
     /**
@@ -205,7 +211,7 @@ class Doolox {
      */
     public static function install_doolox_node($url, $username, $password)
     {
-        Log::debug($url . ' ' . $username . ' ' . $password);
+        Log::debug('[install_doolox_node] Input data: '. $url . ' ' . $username . ' ' . $password);
         $headers = array();
         $options = array(
             'verify' => false
@@ -217,16 +223,19 @@ class Doolox {
         $request = $session->post('wp-login.php', $headers, $data, $options);
 
         if (strpos($request->url, 'wp-login.php') === false) {
+            Log::debug('[install_doolox_node] Successfull login');
             $request = $session->get('wp-admin/plugin-install.php?tab=search&s=doolox+node&plugin-search-input=Search+Plugins', $headers, $options);
             $start = strpos($request->body, 'update.php?action=install-plugin&amp;plugin=doolox-node');
 
             if ($start !== false) {
+                Log::debug('[install_doolox_node] Found plugin');
                 $end = strpos($request->body, '"', $start);
                 $length = $end - $start;
                 $link = substr($request->body, $start, $length);
                 $link = str_replace($url, '', $link);
                 $link = str_replace('&amp;', '&', $link);
                 $request = $session->get('wp-admin/' . $link, $headers, $options);
+                Log::debug('[install_doolox_node] Installed plugin: ' . $link);
 
                 $start = strpos($request->body, 'plugins.php?action=activate&amp;plugin=doolox-node%2Fdoolox.php');
                 if ($start !== false) {
@@ -236,6 +245,7 @@ class Doolox {
                     $link = str_replace($url, '', $link);
                     $link = str_replace('&amp;', '&', $link);
                     $request = $session->get('wp-admin/' . $link, $headers, $options);
+                    Log::debug('[install_doolox_node] Activated plugin');
 
                     $request = $session->get('wp-admin/options-general.php?page=doolox-settings', $headers, $options);
                     $start = strpos($request->body, 'options.php?_wpnonce=');
@@ -243,7 +253,7 @@ class Doolox {
                     $length = $end - $start;
                     $action = substr($request->body, $start, $length);
 
-                    Log::debug($action . ' ' . $start . ' ' . $end);
+                    Log::debug('[install_doolox_node] Final action: ' . $action);
 
                     $hidden = '<input type="hidden" id="_wpnonce" name="_wpnonce" value="';
                     $start = strpos($request->body, $hidden) + strlen($hidden);
@@ -251,7 +261,7 @@ class Doolox {
                     $length = $end - $start;
                     $_wpnonce = substr($request->body, $start, $length);
 
-                    Log::debug($_wpnonce . ' ' . $start . ' ' . $end);
+                    Log::debug('[install_doolox_node] _wpnonce: ' . $_wpnonce);
 
                     $data = array(
                         'option_page' => 'doolox-settings',
@@ -264,23 +274,30 @@ class Doolox {
 
                     $request = $session->post('wp-admin/' . $action, $headers, $data, $options);
 
+                    Log::debug('[install_doolox_node] Final response: ' . $request->status_code);
+
                     return true;
                 }
                 else {
+                    Log::debug('[install_doolox_node] Plugin not activated');
                     return false;
                 }
             }
             else {
+                Log::debug('[install_doolox_node] Plugin not found');
                 return false;
             }
         }
         else {
+            Log::debug('[install_doolox_node] Unsuccessfull login');
             return false;
         }
     }
 
     public static function get_connect_cihper($id, $username) {
+        Log::debug('[get_connect_cihper] Input data: ' . $id . ' ' . $username);
         $site = Site::find($id);
+        Log::debug('[get_connect_cihper] Site: ' . $site->title);
         $rsa = new Crypt_RSA();
 
         if ($site->private_key) {
@@ -311,17 +328,20 @@ class Doolox {
         $data = base64_encode($data);
         $data = urlencode($data);
 
+        Log::debug('[get_connect_cihper] Cipher: ' . $data);
+
         return $data;
     }
 
     public static function connect_doolox_node($url, $site_id, $username) {
-        Log::debug($url . " " . $site_id . " " . $username);
+        Log::debug('[connect_doolox_node] Input data: ' . $url . ' ' . $site_id . ' ' . $username);
         $cipher = self::get_connect_cihper($site_id, $username);
         $session = new Requests_Session($url);
         $data = array(
             'data' => $cipher,
         );
         $request = $session->post('wp-login.php', array(), $data, array('verify' => false));
+        Log::debug('[connect_doolox_node] Final response status: ' . $request->status_code);
     }
 
     /**
