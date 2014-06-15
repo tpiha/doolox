@@ -207,12 +207,14 @@ class Doolox {
     {
         Log::debug($url . ' ' . $username . ' ' . $password);
         $headers = array();
-        $options = array();
+        $options = array(
+            'verify' => false
+        );
 
         $session = new Requests_Session($url);
 
         $data = array('log' => $username, 'pwd' => $password);
-        $request = $session->post('wp-login.php', array(), $data);
+        $request = $session->post('wp-login.php', $headers, $data, $options);
 
         if (strpos($request->url, 'wp-login.php') === false) {
             $request = $session->get('wp-admin/plugin-install.php?tab=search&s=doolox+node&plugin-search-input=Search+Plugins', $headers, $options);
@@ -260,7 +262,7 @@ class Doolox {
                         'dooloxpkg' => Config::get('doolox.public_key')
                     );
 
-                    $request = $session->post('wp-admin/' . $action, array(), $data);
+                    $request = $session->post('wp-admin/' . $action, $headers, $data, $options);
 
                     return true;
                 }
@@ -275,6 +277,51 @@ class Doolox {
         else {
             return false;
         }
+    }
+
+    public static function get_connect_cihper($id, $username) {
+        $site = Site::find($id);
+        $rsa = new Crypt_RSA();
+
+        if ($site->private_key) {
+            $privatekey = $site->private_key;
+            $publickey = $site->public_key;
+        }
+        else {
+            extract($rsa->createKey());
+            $site->private_key = $privatekey;
+            $site->public_key = $publickey;
+            $site->save();
+        }
+
+        $rsa->loadKey(Config::get('doolox.private_key'));
+
+        $data = array(
+            'id' => $site->id,
+            'action' => 'connect',
+            'username' => $username,
+            'public_key' => $publickey,
+            'rand' => str_random(32),
+            'url' => Config::get('app.url')
+        );
+
+        $data = json_encode($data);
+        $data = base64_encode($data);
+        $data = $rsa->encrypt($data);
+        $data = base64_encode($data);
+        $data = urlencode($data);
+
+        return $data;
+    }
+
+    public static function connect_doolox_node($url, $site_id, $username) {
+        Log::debug($url . " " . $site_id . " " . $username);
+        $cipher = self::get_connect_cihper($site_id, $username);
+        $session = new Requests_Session($url);
+        $data = array(
+            'data' => $cipher,
+        );
+        $request = $session->post('wp-login.php', array(), $data, array('verify' => false));
     }
 
     /**

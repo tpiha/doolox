@@ -103,6 +103,7 @@ class DooloxController extends BaseController {
 
             if (Input::get('doolox_node')) {
                 $install = Doolox::install_doolox_node($input['url'], Input::get('username'), Input::get('password'));
+                Doolox::connect_doolox_node($input['url'], $site->id, Input::get('username'));
                 if ($install) {
                     Session::flash('success', 'New website successfully added with successfull Doolox Node installation.');
                 }
@@ -309,6 +310,8 @@ class DooloxController extends BaseController {
             catch (Exception $e) {}
 
             $install = Doolox::install_doolox_node('http://' . $temp_url . '/', $username, $password);
+            Log::debug('Site ID: ' . $site->id);
+            Doolox::connect_doolox_node('http://' . $temp_url . '/', $site->id, $username);
 
             $site->change_domain($url);
 
@@ -453,37 +456,7 @@ class DooloxController extends BaseController {
      * @return JSON object
      */
     public function wpcipher_connect($id, $username) {
-        $site = Site::find($id);
-        $rsa = new Crypt_RSA();
-
-        if ($site->private_key) {
-            $privatekey = $site->private_key;
-            $publickey = $site->public_key;
-        }
-        else {
-            extract($rsa->createKey());
-            $site->private_key = $privatekey;
-            $site->public_key = $publickey;
-            $site->save();
-        }
-
-        $rsa->loadKey(Config::get('doolox.private_key'));
-
-        $data = array(
-            'id' => $site->id,
-            'action' => 'connect',
-            'username' => $username,
-            'public_key' => $publickey,
-            'rand' => str_random(32),
-            'url' => Config::get('app.url')
-        );
-
-        $data = json_encode($data);
-        $data = base64_encode($data);
-        $data = $rsa->encrypt($data);
-        $data = base64_encode($data);
-        $data = urlencode($data);
-
+        $data = Doolox::get_connect_cihper($id, $username);
         return Response::json(array('cipher' => $data));
     }
 

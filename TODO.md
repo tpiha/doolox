@@ -3,8 +3,14 @@ Doolox Todo List
 
 ### v1.2.1 ###
 
+* Automatically activate Doolox Node plugin when adding new website
+
+### v1.2.2 ###
+
 * Self-hosted - remove SaaS stuff + refactoring
 * Unit tests
+* Put link on Synkee
+* Template administration interface
 
 ### v1.3.0 ###
 
@@ -17,3 +23,4 @@ Doolox Todo List
 * Updates
 * Depolyment (Synkee integration)
 * Ftp servers management (?)
+* Website testing environment
