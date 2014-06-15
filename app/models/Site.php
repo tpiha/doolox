@@ -76,7 +76,7 @@ class Site extends Eloquent {
 
         $this->db_replace($old_url, $new_url);
 
-        // apc_clear_cache();
+        apc_clear_cache();
     }
 
     public function change_email($email) {
@@ -95,7 +95,7 @@ class Site extends Eloquent {
 
         $this->db_replace($old_email, $new_email);
 
-        // apc_clear_cache();
+        apc_clear_cache();
     }
 
     public function db_replace($old, $new)
