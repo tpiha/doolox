@@ -3,11 +3,10 @@ Doolox Todo List
 
 ### v1.2.1 ###
 
-* Make usage stats more decent
+* Unit tests
 * Enable different locale WordPress installation
 * Log EVERYTHING EVERYWHERE
 * Self-hosted - remove SaaS stuff + refactoring
-* Unit tests
 * Template administration interface
 
 ### v1.3.0 ###

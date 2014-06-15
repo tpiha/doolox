@@ -14,6 +14,7 @@ Doolox Changelog
 * Put link on Synkee
 * Repair new users email subscription
 * Remove hardcoded wp-login.php
+* Make usage stats more decent
 
 ### v1.2.0 (Feb 13 2014) ###
 

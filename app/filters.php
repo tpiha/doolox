@@ -281,21 +281,33 @@ Route::filter('master-check', function()
                 Session::flash('limit-installations', 1);
                 Session::flash('limit-management', 30);
                 Session::flash('limit-size', 1024);
+                Session::flash('percentage-installations', round($sites_local->count() / 1, 2) * 100);
+                Session::flash('percentage-management', round($sites_remote->count() / 30, 2) * 100);
+                Session::flash('percentage-size', round($size / 1024, 2) * 100);
             }
             else if ($user->inGroup($group2)) {
                 Session::flash('limit-installations', 50);
                 Session::flash('limit-management', 200);
                 Session::flash('limit-size', 51200);
+                Session::flash('percentage-installations', round($sites_local->count() / 50, 2) * 100);
+                Session::flash('percentage-management', round($sites_remote->count() / 200, 2) * 100);
+                Session::flash('percentage-size', round($size / 51200, 2) * 100);
             }
             else if ($user->inGroup($group3)) {
                 Session::flash('limit-installations', 10000);
                 Session::flash('limit-management',10000);
                 Session::flash('limit-size', 204800);
+                Session::flash('percentage-installations', round($sites_local->count() / 10000, 2) * 100);
+                Session::flash('percentage-management', round($sites_remote->count() / 10000, 2) * 100);
+                Session::flash('percentage-size', round($size / 204800, 2) * 100);
             }
             else {
                 Session::flash('limit-installations', 0);
                 Session::flash('limit-management',5);
                 Session::flash('limit-size', 0);
+                Session::flash('percentage-installations', round($sites_local->count() / 0, 2) * 100);
+                Session::flash('percentage-management', round($sites_remote->count() / 5, 2) * 100);
+                Session::flash('percentage-size', round($size / 0, 2) * 100);
             }
 
             if (!$user->inGroup($group1) && !$user->inGroup($group2) && !$user->inGroup($group3)) {

@@ -72,27 +72,26 @@
                         @if(Route::currentRouteName() == 'user.account')<li class="active">@else<li>@endif
                             <a href="{{ route('user.account') }}"><i class="fa fa-user"></i> Account</a>
                         </li>
+@endif
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right navbar-user">
 @if (Config::get('doolox.saas'))
-                        <li class="dropdown">
-                            <a href="javascript: void null;" onclick="toggle_dropdown('dropdown2');"><i class="fa fa-cog"></i> Doolox Stats <b class="caret"></b></a>
-                            <ul class="dropdown-menu" id="dropdown2">
-                                <li>
-                                    <span>Management:  {{ Session::get('limit-management-current') }} / {{ Session::get('limit-management') }}</span>
-                                </li>
+                        <li class="dropdown alerts-dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell"></i> Usage Stats <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-stats">
+                                <li>Management:  {{ Session::get('limit-management-current') }} / {{ Session::get('limit-management') }}</li>
+                                <li><div class="progress"><div class="progress-bar progress-bar-info" style="width: {{ Session::get('percentage-management') }}%;"></div></div></li>
 @if (Config::get('doolox.hosting'))
-                                <li>
-                                    <span>Installations: {{ Session::get('limit-installations-current') }} / {{ Session::get('limit-installations') }}</span>
-                                </li>
-                                <li>
-                                    <span>Disc: {{ Session::get('limit-size-current') }} / {{ Session::get('limit-size') }} (MB)</span>
-                                </li>
+                                <li>Installations: {{ Session::get('limit-installations-current') }} / {{ Session::get('limit-installations') }}</li>
+                                <li><div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ Session::get('percentage-installations') }}%;"></div></div></li>
+                                <li>Disc: {{ Session::get('limit-size-current') }} / {{ Session::get('limit-size') }} (MB)</li>
+                                <li><div class="progress"><div class="progress-bar progress-bar-danger" style="width: {{ Session::get('percentage-size') }}%;"></div></div></li>
 @endif
                             </ul>
                         </li>
 @endif
-@endif
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right navbar-user">
 @if (Sentry::check())
                         <li><a href="{{ route('user.logout') }}"><i class="fa fa-power-off"></i> Sign Out</a></li>
 @else

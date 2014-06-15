@@ -48,6 +48,7 @@ class DooloxTest extends TestCase {
             'email' => 'admin@admin.com',
             'password' => 'admin',
         );
+
         $crawler = $this->action('POST', 'user.login', $post_data);
         $this->assertRedirectedToRoute('doolox.dashboard');
 
