@@ -3,14 +3,11 @@ Doolox Todo List
 
 ### v1.2.1 ###
 
-* Put logging EVERYWHERE
-* Automatically activate Doolox Node plugin when adding new website (or connecting existing one)
-
-### v1.2.2 ###
-
+* Make usage stats more decent
+* Enable different locale WordPress installation
+* Log EVERYTHING EVERYWHERE
 * Self-hosted - remove SaaS stuff + refactoring
 * Unit tests
-* Put link on Synkee
 * Template administration interface
 
 ### v1.3.0 ###
@@ -25,3 +22,4 @@ Doolox Todo List
 * Depolyment (Synkee integration)
 * Ftp servers management (?)
 * Website testing environment
+* Website clone option

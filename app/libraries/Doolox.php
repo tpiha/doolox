@@ -209,7 +209,7 @@ class Doolox {
      * @param string $password - admin password
      * @return boolean - true if successfull, else false
      */
-    public static function install_doolox_node($url, $username, $password)
+    public static function install_doolox_node($url, $username, $password, $wplogin)
     {
         Log::debug('[install_doolox_node] Input data: '. $url . ' ' . $username . ' ' . $password);
         $headers = array();
@@ -220,9 +220,9 @@ class Doolox {
         $session = new Requests_Session($url);
 
         $data = array('log' => $username, 'pwd' => $password);
-        $request = $session->post('wp-login.php', $headers, $data, $options);
+        $request = $session->post($wplogin, $headers, $data, $options);
 
-        if (strpos($request->url, 'wp-login.php') === false) {
+        if (strpos($request->url, $wplogin) === false) {
             Log::debug('[install_doolox_node] Successfull login');
             $request = $session->get('wp-admin/plugin-install.php?tab=search&s=doolox+node&plugin-search-input=Search+Plugins', $headers, $options);
             $start = strpos($request->body, 'update.php?action=install-plugin&amp;plugin=doolox-node');
@@ -335,14 +335,14 @@ class Doolox {
         return $data;
     }
 
-    public static function connect_doolox_node($url, $site_id, $username) {
+    public static function connect_doolox_node($url, $site_id, $username, $wplogin) {
         Log::debug('[connect_doolox_node] Input data: ' . $url . ' ' . $site_id . ' ' . $username);
         $cipher = self::get_connect_cihper($site_id, $username);
         $session = new Requests_Session($url);
         $data = array(
             'data' => $cipher,
         );
-        $request = $session->post('wp-login.php', array(), $data, array('verify' => false));
+        $request = $session->post($wplogin, array(), $data, array('verify' => false));
         Log::debug('[connect_doolox_node] Final response status: ' . $request->status_code);
     }
 

@@ -10,6 +10,10 @@ Doolox Changelog
 * Fix documentation
 * Bug - check strlen for subdomain when installing new website
 * Bug - change the way of WordPress installation when new domain in question
+* Automatically activate Doolox Node plugin when adding new website (or connecting existing one)
+* Put link on Synkee
+* Repair new users email subscription
+* Remove hardcoded wp-login.php
 
 ### v1.2.0 (Feb 13 2014) ###
 

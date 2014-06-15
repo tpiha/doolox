@@ -102,8 +102,14 @@ class DooloxController extends BaseController {
             $user->getSites()->attach($site);
 
             if (Input::get('doolox_node')) {
-                $install = Doolox::install_doolox_node($input['url'], Input::get('username'), Input::get('password'));
-                Doolox::connect_doolox_node($input['url'], $site->id, Input::get('username'));
+                if (strlen($input['admin_url'])) {
+                    $wplogin = $input['admin_url'];
+                }
+                else {
+                    $wplogin = 'wp-login.php';
+                }
+                $install = Doolox::install_doolox_node($input['url'], Input::get('username'), Input::get('password'), $wplogin);
+                Doolox::connect_doolox_node($input['url'], $site->id, Input::get('username'), $wplogin);
                 if ($install) {
                     Session::flash('success', 'New website successfully added with successfull Doolox Node installation.');
                 }
@@ -302,7 +308,7 @@ class DooloxController extends BaseController {
             $temp_subdomain = 'doolox-' . (string) $user->id;
             $temp_url = $temp_subdomain . '.' . Config::get('doolox.system_domain');
             $temp_domain = Domain::where('url', Config::get('doolox.system_domain'))->first();
-            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $temp_url . '/', 'local' => true, 'admin_url' => '', 'domain_id' => $temp_domain->id, 'subdomain' => $temp_subdomain));
+            $site = Site::create(array('user_id' => $user->id, 'name' => $title, 'url' => 'http://' . $temp_url . '/', 'local' => true, 'admin_url' => null, 'domain_id' => $temp_domain->id, 'subdomain' => $temp_subdomain));
             $user->getSites()->attach($site);
 
             Log::debug('[site_install_step2] Temp URL:' . $temp_url);
@@ -318,9 +324,9 @@ class DooloxController extends BaseController {
             }
             catch (Exception $e) {}
 
-            $install = Doolox::install_doolox_node('http://' . $temp_url . '/', $username, $password);
+            $install = Doolox::install_doolox_node('http://' . $temp_url . '/', $username, $password, 'wp-login.php');
             Log::debug('[site_install_step2] Install: ' . $install);
-            Doolox::connect_doolox_node('http://' . $temp_url . '/', $site->id, $username);
+            Doolox::connect_doolox_node('http://' . $temp_url . '/', $site->id, $username, 'wp-login.php');
 
             $site->change_domain($url);
 
