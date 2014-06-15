@@ -297,7 +297,7 @@ class Doolox {
     public static function get_connect_cihper($id, $username) {
         Log::debug('[get_connect_cihper] Input data: ' . $id . ' ' . $username);
         $site = Site::find($id);
-        Log::debug('[get_connect_cihper] Site: ' . $site->title);
+        Log::debug('[get_connect_cihper] Site: ' . $site->name);
         $rsa = new Crypt_RSA();
 
         if ($site->private_key) {
@@ -321,6 +321,8 @@ class Doolox {
             'rand' => str_random(32),
             'url' => Config::get('app.url')
         );
+
+        Log::debug('[get_connect_cihper] URL: ' . Config::get('app.url'));
 
         $data = json_encode($data);
         $data = base64_encode($data);
