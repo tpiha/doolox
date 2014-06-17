@@ -538,7 +538,7 @@ class DooloxController extends BaseController {
             $product = Input::get('SubscriptionPath');
             $user_id = (int) Input::get('SubscriptionReferrer');
 
-            if ($product == '/pro1month') {
+            if ($product == '/pro1month' || $product == '/naklikajstart') {
                 $group = Sentry::findGroupByName('Doolox Pro');
             }
             else if ($product == '/business1month') {

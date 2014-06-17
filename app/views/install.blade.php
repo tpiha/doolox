@@ -1,5 +1,10 @@
 @extends('layout')
 
+@section('meta')
+<title>Doolox Installation Wizard</title>
+<meta name="description" content="Doolox Installation Wizard / Doolox is a free and Open Source WordPress management tool and website builder available both as a SaaS and for download.">
+@stop
+
 @section('content')
 <div class="row">
     <div class="col-lg-12">

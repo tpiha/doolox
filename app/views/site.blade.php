@@ -1,5 +1,10 @@
 @extends('layout')
 
+@section('meta')
+<title>Doolox Update Website</title>
+<meta name="description" content="Doolox Update Website / Doolox is a free and Open Source WordPress management tool and website builder available both as a SaaS and for download.">
+@stop
+
 @section('content')
 <div class="row">
     <div class="col-lg-12">
