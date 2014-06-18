@@ -15,6 +15,9 @@ Doolox Changelog
 * Repair new users email subscription
 * Remove hardcoded wp-login.php
 * Make usage stats more decent
+* SEO - remove duplicate title tags
+* SEO - remove duplicate description tags
+* check on SSL problems on the website
 
 ### v1.2.0 (Feb 13 2014) ###
 

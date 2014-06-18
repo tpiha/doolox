@@ -305,9 +305,9 @@ Route::filter('master-check', function()
                 Session::flash('limit-installations', 0);
                 Session::flash('limit-management',5);
                 Session::flash('limit-size', 0);
-                Session::flash('percentage-installations', round($sites_local->count() / 0, 2) * 100);
+                Session::flash('percentage-installations', round(1, 2) * 100);
                 Session::flash('percentage-management', round($sites_remote->count() / 5, 2) * 100);
-                Session::flash('percentage-size', round($size / 0, 2) * 100);
+                Session::flash('percentage-size', round(1, 2) * 100);
             }
 
             if (!$user->inGroup($group1) && !$user->inGroup($group2) && !$user->inGroup($group3)) {

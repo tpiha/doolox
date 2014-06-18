@@ -3,13 +3,11 @@ Doolox Todo List
 
 ### v1.2.1 ###
 
-* seo - remove duplicate title tags
-* seo - remove duplicate description tags
+* Template administration interface
 * Unit tests
 * Enable different locale WordPress installation
 * Log EVERYTHING EVERYWHERE
 * Self-hosted - remove SaaS stuff + refactoring
-* Template administration interface
 
 ### v1.3.0 ###
 
