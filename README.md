@@ -21,3 +21,7 @@ php artisan db:seed
 ```
 
 You can now login on [http://localhost/doolox/](http://localhost/doolox/)
+
+## Links
+
+[![Hypercommit](https://img.shields.io/badge/Hypercommit-DB2475)](https://hypercommit.com/doolox)
